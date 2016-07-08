@@ -120,6 +120,8 @@
     <Compile Include="Configuration.cs" />
     <Compile Include="Handlers\ContactHandler.cs" />
     <Compile Include="Handlers\DataHostHandler.cs" />
+    <Compile Include="Handlers\OrganizationSystemHandler.cs" />
+    <Compile Include="Handlers\OrganizationHandler.cs" />
     <Compile Include="Handlers\ObjectiveHandler.cs" />
     <Compile Include="Handlers\MediaHandler.cs" />
     <Compile Include="Handlers\LakeHandler.cs" />
@@ -128,6 +130,7 @@
     <Compile Include="Handlers\DivisionHandler.cs" />
     <Compile Include="Handlers\DataManagerHandler.cs" />
     <Compile Include="Resources\DataManagerResource.cs" />
+    <Compile Include="Resources\OrganizationResource.cs" />
     <Compile Include="Security\SiGLAuthenticationProvider.cs" />
     <Compile Include="Security\SiGLAuthorizerContributer.cs" />
     <Compile Include="Handlers\SiGLHandlerBase.cs" />

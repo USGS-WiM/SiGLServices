@@ -347,7 +347,65 @@ namespace SiGLServices.Test
             bool success = this.DELETERequest<objective_type>(host + Configuration.objectiveResource + "/299", basicAuth);
             Assert.IsTrue(success);
         }//end method
-        
+        [TestMethod]
+        public void OrganizationRequest()
+        {
+            //GET LIST
+            List<organization> RequestList = this.GETRequest<List<organization>>(host + Configuration.organizationResource);
+            Assert.IsNotNull(RequestList, RequestList.Count.ToString());
+
+            //POST
+            organization postObj;
+            postObj = this.POSTRequest<organization>(host + Configuration.organizationResource, new organization() { organization_name = "post-test" }, basicAuth);
+            Assert.IsNotNull(postObj, "ID: " + postObj.organization_id.ToString());
+
+            //GET POSTed item
+            organization RequestObj = this.GETRequest<organization>(host + Configuration.organizationResource + "/" + postObj.organization_id, basicAuth);
+            Assert.IsNotNull(RequestObj);
+
+            //PUT POSTed item
+            postObj.organization_name = "put-test";
+            organization putObj = this.PUTRequest<organization>(host + Configuration.organizationResource + "/" + postObj.organization_id, postObj, basicAuth);
+            Assert.IsNotNull(RequestObj);
+
+            //Delete POSTed item
+            bool success = this.DELETERequest<organization>(host + Configuration.organizationResource + "/" + postObj.organization_id, basicAuth);
+            Assert.IsTrue(success);
+        }//end method
+        [TestMethod]
+        public void OrganizationSystemRequest()
+        {
+            //GET LIST of organization_system
+            List<organization_system> RequestList = this.GETRequest<List<organization_system>>(host + Configuration.organizationSystemResource);
+            Assert.IsNotNull(RequestList, RequestList.Count.ToString());
+
+            //GET LIST of organizationResources (test in browser instead)
+            //GET LIST of project OrganizationResources (test in browser)
+
+            //POST (organization_system)
+            organization_system postObj;
+            postObj = this.POSTRequest<organization_system>(host + Configuration.organizationSystemResource, new organization_system() { org_id = 1, div_id=44,sec_id=1 }, basicAuth);
+            Assert.IsNotNull(postObj, "ID: " + postObj.organization_system_id.ToString());
+
+            //POST (projectOrganization)
+            List<organization_system> postProjOrg;
+            postProjOrg = this.POSTRequest<organization_system, List<organization_system>>(host + Configuration.projectResource + "/1/addOrganization?OrganizationId=1&DivisionId=44&SectionId=1", null, basicAuth);
+            Assert.IsNotNull(postProjOrg, postProjOrg.Count.ToString());
+
+            //GET POSTed item (organization_system)
+            organization_system RequestObj = this.GETRequest<organization_system>(host + Configuration.organizationSystemResource + "/" + postObj.organization_system_id, basicAuth);
+            Assert.IsNotNull(RequestObj);
+
+            //GET item (organizationResource) Test in browser instead         
+
+            // NO PUT            
+            // No Delete POSTed item
+
+            //Delete projectCooperator
+            bool success = this.DELETERequest<organization_system>(host + Configuration.projectResource + "/removeOrganization?OrgSystemId=" + postProjOrg[0].organization_system_id, basicAuth);
+            Assert.IsTrue(success);
+        }//end method
+
         #endregion
     }
 }

@@ -14,7 +14,7 @@ namespace SiGLDB
                     (string.IsNullOrEmpty(other.email) || string.Equals(this.email, other.email, StringComparison.OrdinalIgnoreCase)) &&
                     (string.IsNullOrEmpty(other.phone) || string.Equals(this.phone, other.phone, StringComparison.OrdinalIgnoreCase)) &&
                     (string.IsNullOrEmpty(other.science_base_id) || string.Equals(this.science_base_id, other.science_base_id, StringComparison.OrdinalIgnoreCase)) &&
-                    (!other.organization_system_id.HasValue || DateTime.Equals(this.organization_system_id, other.organization_system_id));
+                    (!other.organization_system_id.HasValue || other.organization_system_id <= 0 || this.organization_system_id == other.organization_system_id);
         }
         public override bool Equals(object obj)
         {
@@ -60,7 +60,7 @@ namespace SiGLDB
             return string.Equals(this.host_name, other.host_name, StringComparison.OrdinalIgnoreCase) &&
                   (string.Equals(this.portal_url, other.portal_url, StringComparison.OrdinalIgnoreCase)) &&
                   (string.Equals(this.description, other.description, StringComparison.OrdinalIgnoreCase)) &&
-                  (!other.project_id.HasValue || DateTime.Equals(this.project_id, other.project_id));
+                  (!other.project_id.HasValue || other.project_id <= 0 || this.project_id == other.project_id);
         }
 
         public override bool Equals(object obj)
@@ -81,7 +81,7 @@ namespace SiGLDB
         public bool Equals(division other)
         {
             return string.Equals(this.division_name, other.division_name, StringComparison.OrdinalIgnoreCase) &&                  
-                  (!other.org_id.HasValue || DateTime.Equals(this.org_id, other.org_id));
+                  (!other.org_id.HasValue || other.org_id <= 0 || this.org_id == other.org_id);
         }
 
         public override bool Equals(object obj)
@@ -195,6 +195,48 @@ namespace SiGLDB
         public override int GetHashCode()
         {
             return (this.objective).GetHashCode();
+        }
+    }
+    public partial class organization : IEquatable<organization>
+    {
+        public bool Equals(organization other)
+        {
+            return string.Equals(this.organization_name, other.organization_name, StringComparison.OrdinalIgnoreCase);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != GetType()) return false;
+            return Equals(obj as organization);
+        }
+
+        public override int GetHashCode()
+        {
+            return (this.organization_name).GetHashCode();
+        }
+    }
+    public partial class organization_system : IEquatable<organization_system>
+    {
+        public bool Equals(organization_system other)
+        {
+            return (other.org_id <= 0 || this.org_id == other.org_id) &&
+                    (!other.div_id.HasValue || other.div_id <= 0 || this.div_id == other.div_id) &&
+                    (!other.sec_id.HasValue || other.sec_id <= 0 || this.sec_id == other.sec_id);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != GetType()) return false;
+            return Equals(obj as organization_system);
+        }
+
+        public override int GetHashCode()
+        {
+            return (this.org_id).GetHashCode();
         }
     }
 }

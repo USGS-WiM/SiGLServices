@@ -43,11 +43,11 @@ namespace SiGLDB
     {
         public List<Link> Links { get; set; }
     }
-    public partial class ORGANIZATION : IHypermedia
+    public partial class organization : IHypermedia
     {
         public List<Link> Links { get; set; }
     }
-    public partial class ORGANIZATION_SYSTEM : IHypermedia
+    public partial class organization_system : IHypermedia
     {
         public List<Link> Links { get; set; }
     }
