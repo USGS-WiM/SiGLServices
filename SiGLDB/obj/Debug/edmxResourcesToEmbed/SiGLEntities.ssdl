@@ -182,10 +182,9 @@
     <Key>
       <PropertyRef Name="publication_id" />
     </Key>
-    <Property Name="publication_id" Type="int4" Nullable="false" />
+    <Property Name="publication_id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="title" Type="varchar" MaxLength="2000" />
     <Property Name="url" Type="varchar" MaxLength="2000" />
-    <Property Name="citation" Type="varchar" MaxLength="1000" />
     <Property Name="science_base_id" Type="varchar" MaxLength="100" />
     <Property Name="description" Type="varchar" MaxLength="4000" />
   </EntityType>

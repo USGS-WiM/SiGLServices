@@ -23,7 +23,6 @@ namespace SiGLDB
         public int publication_id { get; set; }
         public string title { get; set; }
         public string url { get; set; }
-        public string citation { get; set; }
         public string science_base_id { get; set; }
         public string description { get; set; }
     

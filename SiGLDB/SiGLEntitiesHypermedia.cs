@@ -51,7 +51,15 @@ namespace SiGLDB
     {
         public List<Link> Links { get; set; }
     }
-    public partial class PARAMETER_TYPE : IHypermedia
+    public partial class parameter_type : IHypermedia
+    {
+        public List<Link> Links { get; set; }
+    }
+    public partial class proj_status : IHypermedia
+    {
+        public List<Link> Links { get; set; }
+    }
+    public partial class proj_duration : IHypermedia
     {
         public List<Link> Links { get; set; }
     }
@@ -78,15 +86,7 @@ namespace SiGLDB
     public partial class PROJECT_PUBLICATIONS : IHypermedia
     {
         public List<Link> Links { get; set; }
-    }
-    public partial class PROJ_DURATION : IHypermedia
-    {
-        public List<Link> Links { get; set; }
-    }
-    public partial class PROJ_STATUS : IHypermedia
-    {
-        public List<Link> Links { get; set; }
-    }
+    }   
     public partial class PUBLICATION : IHypermedia
     {
         public List<Link> Links { get; set; }
