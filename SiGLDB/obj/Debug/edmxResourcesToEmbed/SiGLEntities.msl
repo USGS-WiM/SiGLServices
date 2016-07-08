@@ -204,7 +204,6 @@
         <MappingFragment StoreEntitySet="publication">
           <ScalarProperty Name="description" ColumnName="description" />
           <ScalarProperty Name="science_base_id" ColumnName="science_base_id" />
-          <ScalarProperty Name="citation" ColumnName="citation" />
           <ScalarProperty Name="url" ColumnName="url" />
           <ScalarProperty Name="title" ColumnName="title" />
           <ScalarProperty Name="publication_id" ColumnName="publication_id" />

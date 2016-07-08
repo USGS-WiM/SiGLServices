@@ -388,7 +388,6 @@
     <Property Name="publication_id" Type="Int32" Nullable="false" />
     <Property Name="title" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
     <Property Name="url" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
-    <Property Name="citation" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
     <Property Name="science_base_id" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
     <Property Name="description" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" />
     <NavigationProperty Name="project_publication" Relationship="SiGLEntitiesModel.publicationproject_publication" FromRole="publication" ToRole="project_publication" />

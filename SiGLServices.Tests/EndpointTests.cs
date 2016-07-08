@@ -405,7 +405,158 @@ namespace SiGLServices.Test
             bool success = this.DELETERequest<organization_system>(host + Configuration.projectResource + "/removeOrganization?OrgSystemId=" + postProjOrg[0].organization_system_id, basicAuth);
             Assert.IsTrue(success);
         }//end method
+        [TestMethod]
+        public void ParameterRequest()
+        {
+            //GET LIST
+            List<parameter_type> RequestList = this.GETRequest<List<parameter_type>>(host + Configuration.parameterResource);
+            Assert.IsNotNull(RequestList, RequestList.Count.ToString());
 
+            //GET site parameters
+            List<parameter_type> siteParamList = this.GETRequest<List<parameter_type>>(host + Configuration.siteResource + "/1301/" + Configuration.parameterResource);
+            Assert.IsNotNull(siteParamList, siteParamList.Count.ToString());
+
+            //POST
+            parameter_type postObj;
+            postObj = this.POSTRequest<parameter_type>(host + Configuration.parameterResource, new parameter_type() { parameter_group = "post-test", parameter="posttest" }, basicAuth);
+            Assert.IsNotNull(postObj, "ID: " + postObj.parameter_type_id.ToString());
+
+            //GET POSTed item
+            parameter_type RequestObj = this.GETRequest<parameter_type>(host + Configuration.parameterResource + "/" + postObj.parameter_type_id);
+            Assert.IsNotNull(RequestObj);
+
+            //GET parametersByGroupName item (Test in browser)
+            //ParameterGroups RequestPObj = this.GETRequest<ParameterGroups>(host + Configuration.parameterResource + "?GroupNames=Physical");
+            //Assert.IsNotNull(RequestPObj);
+
+            //POST siteParameter
+            List<parameter_type> siteParameterResp;
+            siteParameterResp = this.POSTRequest<parameter_type, List<parameter_type>>(host + Configuration.siteResource + "/1301/addParameter?ParameterTypeId=" + RequestObj.parameter_type_id, null, basicAuth);
+            Assert.IsNotNull(siteParameterResp, siteParameterResp.Count.ToString());
+            
+            //PUT POSTed item
+            RequestObj.parameter = "puttest";
+            parameter_type putObj = this.PUTRequest<parameter_type>(host + Configuration.parameterResource + "/" + RequestObj.parameter_type_id, RequestObj, basicAuth);
+            Assert.IsNotNull(RequestObj);
+
+            //Delete POSTed item "/Sites/{siteId}/removeNetworkName?NetworkNameId={networkNameId}"
+            bool siteParametersuccess = this.DELETERequest<parameter_type>(host + Configuration.siteResource + "/1301/removeParameterType?ParameterTypeId=" + RequestObj.parameter_type_id, basicAuth);
+            Assert.IsTrue(siteParametersuccess);
+
+            //Delete POSTed item
+            bool success = this.DELETERequest<parameter_type>(host + Configuration.parameterResource + "/" + RequestObj.parameter_type_id, basicAuth);
+            Assert.IsTrue(success);
+        }//end method
+        [TestMethod]
+        public void ProjStatusRequest()
+        {
+            //GET LIST
+            List<proj_status> RequestList = this.GETRequest<List<proj_status>>(host + Configuration.projStatusResource);
+            Assert.IsNotNull(RequestList, RequestList.Count.ToString());
+
+            //POST
+            proj_status postObj;
+            postObj = this.POSTRequest<proj_status>(host + Configuration.projStatusResource, new proj_status() { status_value = "post-test" }, basicAuth);
+            Assert.IsNotNull(postObj, "ID: " + postObj.proj_status_id.ToString());
+
+            //GET POSTed item
+            proj_status RequestObj = this.GETRequest<proj_status>(host + Configuration.projStatusResource + "/" + postObj.proj_status_id, basicAuth);
+            Assert.IsNotNull(RequestObj);
+
+            //GET project proj_status
+            proj_status projStat = this.GETRequest<proj_status>(host + Configuration.projectResource + "/681/projStatus", basicAuth);
+            Assert.IsNotNull(projStat);
+
+            //PUT POSTed item
+            postObj.status_value = "put-test";
+            proj_status putObj = this.PUTRequest<proj_status>(host + Configuration.projStatusResource + "/" + postObj.proj_status_id, postObj, basicAuth);
+            Assert.IsNotNull(RequestObj);
+
+            //Delete POSTed item
+            bool success = this.DELETERequest<proj_status>(host + Configuration.projStatusResource + "/" + postObj.proj_status_id, basicAuth);
+            Assert.IsTrue(success);
+        }//end method
+        [TestMethod]
+        public void ProjDurationRequest()
+        {
+            //GET LIST
+            List<proj_duration> RequestList = this.GETRequest<List<proj_duration>>(host + Configuration.projDurationResource);
+            Assert.IsNotNull(RequestList, RequestList.Count.ToString());
+
+            //POST
+            proj_duration postObj;
+            postObj = this.POSTRequest<proj_duration>(host + Configuration.projDurationResource, new proj_duration() { duration_value = "post-test" }, basicAuth);
+            Assert.IsNotNull(postObj, "ID: " + postObj.proj_duration_id.ToString());
+
+            //GET POSTed item
+            proj_duration RequestObj = this.GETRequest<proj_duration>(host + Configuration.projDurationResource + "/" + postObj.proj_duration_id, basicAuth);
+            Assert.IsNotNull(RequestObj);
+
+            //GET project proj_duration
+            proj_duration projDuration = this.GETRequest<proj_duration>(host + Configuration.projectResource + "/1512/projDuration", basicAuth);
+            Assert.IsNotNull(projDuration);
+
+            //PUT POSTed item
+            postObj.duration_value = "put-test";
+            proj_duration putObj = this.PUTRequest<proj_duration>(host + Configuration.projDurationResource + "/" + postObj.proj_duration_id, postObj, basicAuth);
+            Assert.IsNotNull(RequestObj);
+
+            //Delete POSTed item
+            bool success = this.DELETERequest<proj_duration>(host + Configuration.projDurationResource + "/" + postObj.proj_duration_id, basicAuth);
+            Assert.IsTrue(success);
+        }//end method
+        [TestMethod]
+        public void ProjectRequest()
+        { }
+        [TestMethod]
+        public void PublicationRequest()
+        {
+            //GET LIST
+            List<publication> RequestList = this.GETRequest<List<publication>>(host + Configuration.publicationResource);
+            Assert.IsNotNull(RequestList, RequestList.Count.ToString());
+
+            //GET project publications
+            List<publication> projPublicationList = this.GETRequest<List<publication>>(host + Configuration.projectResource + "/1450/" + Configuration.publicationResource);
+            Assert.IsNotNull(projPublicationList, projPublicationList.Count.ToString());
+
+            //POST
+            publication postObj;
+            postObj = this.POSTRequest<publication>(host + Configuration.publicationResource, new publication() { description = "post-test" }, basicAuth);
+            Assert.IsNotNull(postObj, "ID: " + postObj.publication_id.ToString());
+
+            //GET POSTed item
+            publication RequestObj = this.GETRequest<publication>(host + Configuration.publicationResource + "/" + postObj.publication_id, basicAuth);
+            Assert.IsNotNull(RequestObj);
+
+            //POST projPublication
+            List<publication> projPubResp;
+            projPubResp = this.POSTRequest<publication, List<publication>>(host + Configuration.projectResource + "/1450/addPublication?PublicationId=" + postObj.publication_id, null, basicAuth);
+            Assert.IsNotNull(projPubResp, projPubResp.Count.ToString());
+
+            //PUT POSTed item
+            RequestObj.description = "put-test";
+            publication putObj = this.PUTRequest<publication>(host + Configuration.publicationResource + "/" + RequestObj.publication_id, RequestObj, basicAuth);
+            Assert.IsNotNull(RequestObj);
+
+            //Delete POSTed item 
+            bool projPubsuccess = this.DELETERequest<publication>(host + Configuration.projectResource + "/1450/removePublication?PublicationId=" + RequestObj.publication_id, basicAuth);
+            Assert.IsTrue(projPubsuccess);
+
+            //Delete POSTed item
+            bool success = this.DELETERequest<publication>(host + Configuration.publicationResource + "/" + RequestObj.publication_id, basicAuth);
+            Assert.IsTrue(success);
+        }//end method
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         #endregion
     }
 }
