@@ -59,9 +59,12 @@ namespace SiGLServices
         public static string objectiveResource = "Objectives";
         public static string organizationResource = "Organizations";
         public static string organizationSystemResource = "OrganizationSystems";
-
-
+        public static string parameterResource = "Parameters";
+        public static string projStatusResource = "ProjectStatus";
+        public static string projDurationResource = "ProjectDuration";
         public static string projectResource = "Projects";
+        public static string publicationResource = "Publications";
+
         public static string orgSystemResource = "OrganizationSystems";
         public static string siteResource = "Sites";
         
@@ -93,6 +96,11 @@ namespace SiGLServices
                 AddOBJECTIVE_Resources();
                 AddORGANIZATION_Resources();
                 AddORGANIZATION_SYSTEM_Resources();
+                AddPARAMETER_Resources();
+                AddPROJ_STATUS_Resources();
+                AddPROJ_DURATION_Resources();
+                AddPROJECT_Resources();
+                AddPUBLICATION_Resources();
             }//End using OpenRastaConfiguration.Manual
         }
 
@@ -313,8 +321,92 @@ namespace SiGLServices
                 .And.TranscodedBy<JsonEntityDotNetCodec>(null).ForMediaType("application/json;q=0.9").ForExtension("json")
                 .And.TranscodedBy<CsvDotNetCodec>(null).ForMediaType("text/csv").ForExtension("csv");
 
-        }        
-        
+        }
+        private void AddPARAMETER_Resources() //(12)
+        {
+            ResourceSpace.Has.ResourcesOfType<List<parameter_type>>()
+                .AtUri(parameterResource)
+                .And.AtUri(siteResource + "/{siteId}/addParameter?ParameterTypeId={parameterTypeId}").Named("AddSiteParameter")
+                .And.AtUri(siteResource + "/{siteId}/" + parameterResource).Named("GetSiteParameters")
+                .HandledBy<ParameterHandler>()
+                .TranscodedBy<UTF8EntityXmlSerializerCodec>(null).ForMediaType("application/xml;q=1").ForExtension("xml")
+                .And.TranscodedBy<JsonEntityDotNetCodec>(null).ForMediaType("application/json;q=0.9").ForExtension("json")
+                .And.TranscodedBy<CsvDotNetCodec>(null).ForMediaType("text/csv").ForExtension("csv");
+
+            ResourceSpace.Has.ResourcesOfType<ParameterGroups>()
+                .AtUri(parameterResource + "?GroupNames={groupNames}").Named("GetParametersByGroupName")               
+                .HandledBy<ParameterHandler>()
+                .TranscodedBy<UTF8EntityXmlSerializerCodec>(null).ForMediaType("application/xml;q=1").ForExtension("xml")
+                .And.TranscodedBy<JsonDotNetCodec>(null).ForMediaType("application/json;q=0.9").ForExtension("json")
+                .And.TranscodedBy<CsvDotNetCodec>(null).ForMediaType("text/csv").ForExtension("csv");
+
+            ResourceSpace.Has.ResourcesOfType<parameter_type>()
+                .AtUri(parameterResource + "/{entityId}")
+                .And.AtUri(siteResource + "/{siteId}/removeParameterType?ParameterTypeId={parameterTypeId}").Named("RemoveSiteParameter")
+                .HandledBy<ParameterHandler>()
+                .TranscodedBy<UTF8EntityXmlSerializerCodec>(null).ForMediaType("application/xml;q=1").ForExtension("xml")
+                .And.TranscodedBy<JsonEntityDotNetCodec>(null).ForMediaType("application/json;q=0.9").ForExtension("json")
+                .And.TranscodedBy<CsvDotNetCodec>(null).ForMediaType("text/csv").ForExtension("csv");
+        }
+        private void AddPROJ_STATUS_Resources() //(13)
+        {
+            ResourceSpace.Has.ResourcesOfType<List<proj_status>>()
+                .AtUri(projStatusResource)
+                .HandledBy<ProjStatusHandler>()
+                .TranscodedBy<UTF8EntityXmlSerializerCodec>(null).ForMediaType("application/xml;q=1").ForExtension("xml")
+                .And.TranscodedBy<JsonEntityDotNetCodec>(null).ForMediaType("application/json;q=0.9").ForExtension("json")
+                .And.TranscodedBy<CsvDotNetCodec>(null).ForMediaType("text/csv").ForExtension("csv");
+
+            ResourceSpace.Has.ResourcesOfType<proj_status>()
+                .AtUri(projStatusResource + "/{entityId}")
+                .And.AtUri(projectResource + "/{projectId}/projStatus").Named("GetProjectStatus")
+                .HandledBy<ProjStatusHandler>()
+                .TranscodedBy<UTF8EntityXmlSerializerCodec>(null).ForMediaType("application/xml;q=1").ForExtension("xml")
+                .And.TranscodedBy<JsonEntityDotNetCodec>(null).ForMediaType("application/json;q=0.9").ForExtension("json")
+                .And.TranscodedBy<CsvDotNetCodec>(null).ForMediaType("text/csv").ForExtension("csv");
+
+        }
+        private void AddPROJ_DURATION_Resources() //(13)
+        {
+            ResourceSpace.Has.ResourcesOfType<List<proj_duration>>()
+                .AtUri(projDurationResource)
+                .HandledBy<ProjDurationHandler>()
+                .TranscodedBy<UTF8EntityXmlSerializerCodec>(null).ForMediaType("application/xml;q=1").ForExtension("xml")
+                .And.TranscodedBy<JsonEntityDotNetCodec>(null).ForMediaType("application/json;q=0.9").ForExtension("json")
+                .And.TranscodedBy<CsvDotNetCodec>(null).ForMediaType("text/csv").ForExtension("csv");
+
+            ResourceSpace.Has.ResourcesOfType<proj_duration>()
+                .AtUri(projDurationResource + "/{entityId}")
+                .And.AtUri(projectResource + "/{projectId}/projDuration").Named("GetProjectDuration")
+                .HandledBy<ProjDurationHandler>()
+                .TranscodedBy<UTF8EntityXmlSerializerCodec>(null).ForMediaType("application/xml;q=1").ForExtension("xml")
+                .And.TranscodedBy<JsonEntityDotNetCodec>(null).ForMediaType("application/json;q=0.9").ForExtension("json")
+                .And.TranscodedBy<CsvDotNetCodec>(null).ForMediaType("text/csv").ForExtension("csv");
+        }
+        private void AddPROJECT_Resources() //(14)
+        {
+            //DO MONDAY
+        }
+        private void AddPUBLICATION_Resources() //(15)
+        {
+            ResourceSpace.Has.ResourcesOfType<List<publication>>()
+                .AtUri(publicationResource)
+                .And.AtUri(projectResource + "/{projectId}/addPublication?PublicationId={publicationId}").Named("AddProjectPublication")
+                .And.AtUri(projectResource + "/{projectId}/" + publicationResource).Named("GetProjectPublications")
+                .HandledBy<PublicationHandler>()
+                .TranscodedBy<UTF8EntityXmlSerializerCodec>(null).ForMediaType("application/xml;q=1").ForExtension("xml")
+                .And.TranscodedBy<JsonEntityDotNetCodec>(null).ForMediaType("application/json;q=0.9").ForExtension("json")
+                .And.TranscodedBy<CsvDotNetCodec>(null).ForMediaType("text/csv").ForExtension("csv");
+
+            ResourceSpace.Has.ResourcesOfType<publication>()
+                .AtUri(publicationResource + "/{entityId}")
+                .And.AtUri(projectResource + "/{projectId}/removePublication?PublicationId={publicationId}").Named("RemoveProjectPublication")
+                .HandledBy<PublicationHandler>()
+                .TranscodedBy<UTF8EntityXmlSerializerCodec>(null).ForMediaType("application/xml;q=1").ForExtension("xml")
+                .And.TranscodedBy<JsonEntityDotNetCodec>(null).ForMediaType("application/json;q=0.9").ForExtension("json")
+                .And.TranscodedBy<CsvDotNetCodec>(null).ForMediaType("text/csv").ForExtension("csv");
+        }
+
         #endregion
 
     }//End class Configuration

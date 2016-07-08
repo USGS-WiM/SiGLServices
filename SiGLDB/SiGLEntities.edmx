@@ -187,10 +187,9 @@
           <Key>
             <PropertyRef Name="publication_id" />
           </Key>
-          <Property Name="publication_id" Type="int4" Nullable="false" />
+          <Property Name="publication_id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="title" Type="varchar" MaxLength="2000" />
           <Property Name="url" Type="varchar" MaxLength="2000" />
-          <Property Name="citation" Type="varchar" MaxLength="1000" />
           <Property Name="science_base_id" Type="varchar" MaxLength="100" />
           <Property Name="description" Type="varchar" MaxLength="4000" />
         </EntityType>
@@ -704,7 +703,6 @@ warning 6005: The data type 'geometry' is currently not supported for the target
           <Property Name="publication_id" Type="Int32" Nullable="false" />
           <Property Name="title" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
           <Property Name="url" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
-          <Property Name="citation" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
           <Property Name="science_base_id" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="description" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="project_publication" Relationship="SiGLEntitiesModel.publicationproject_publication" FromRole="publication" ToRole="project_publication" />
@@ -1406,7 +1404,6 @@ warning 6005: The data type 'geometry' is currently not supported for the target
               <MappingFragment StoreEntitySet="publication">
                 <ScalarProperty Name="description" ColumnName="description" />
                 <ScalarProperty Name="science_base_id" ColumnName="science_base_id" />
-                <ScalarProperty Name="citation" ColumnName="citation" />
                 <ScalarProperty Name="url" ColumnName="url" />
                 <ScalarProperty Name="title" ColumnName="title" />
                 <ScalarProperty Name="publication_id" ColumnName="publication_id" />

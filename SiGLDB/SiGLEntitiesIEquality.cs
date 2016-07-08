@@ -239,5 +239,66 @@ namespace SiGLDB
             return (this.org_id).GetHashCode();
         }
     }
+    public partial class parameter_type : IEquatable<parameter_type>
+    {
+        public bool Equals(parameter_type other)
+        {
+            return (string.Equals(this.parameter, other.parameter, StringComparison.OrdinalIgnoreCase) &&
+                    string.Equals(this.parameter_group, other.parameter_group, StringComparison.OrdinalIgnoreCase));
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != GetType()) return false;
+            return Equals(obj as parameter_type);
+        }
+
+        public override int GetHashCode()
+        {
+            return (this.parameter + this.parameter_group).GetHashCode();
+        }
+    }
+    public partial class proj_status : IEquatable<proj_status>
+    {
+        public bool Equals(proj_status other)
+        {
+            return (string.Equals(this.status_value, other.status_value, StringComparison.OrdinalIgnoreCase));
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != GetType()) return false;
+            return Equals(obj as proj_status);
+        }
+
+        public override int GetHashCode()
+        {
+            return (this.status_value).GetHashCode();
+        }
+    }
+    public partial class proj_duration : IEquatable<proj_duration>
+    {
+        public bool Equals(proj_duration other)
+        {
+            return (string.Equals(this.duration_value, other.duration_value, StringComparison.OrdinalIgnoreCase));
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != GetType()) return false;
+            return Equals(obj as proj_duration);
+        }
+
+        public override int GetHashCode()
+        {
+            return (this.duration_value).GetHashCode();
+        }
+    }
 }
 
