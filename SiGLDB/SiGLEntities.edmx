@@ -1,0 +1,1532 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="SiGLEntitiesModel.Store" Provider="Npgsql" ProviderManifestToken="9.4.5" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="contact">
+          <Key>
+            <PropertyRef Name="contact_id" />
+          </Key>
+          <Property Name="contact_id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="200" />
+          <Property Name="email" Type="varchar" MaxLength="50" />
+          <Property Name="phone" Type="varchar" MaxLength="30" />
+          <Property Name="organization_system_id" Type="int4" />
+          <Property Name="science_base_id" Type="varchar" MaxLength="200" />
+        </EntityType>
+        <EntityType Name="data_host">
+          <Key>
+            <PropertyRef Name="data_host_id" />
+          </Key>
+          <Property Name="data_host_id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="host_name" Type="varchar" MaxLength="255" />
+          <Property Name="portal_url" Type="varchar" MaxLength="255" />
+          <Property Name="project_id" Type="int4" />
+          <Property Name="description" Type="varchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="data_manager">
+          <Key>
+            <PropertyRef Name="data_manager_id" />
+          </Key>
+          <Property Name="data_manager_id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="username" Type="varchar" MaxLength="60" Nullable="false" />
+          <Property Name="fname" Type="varchar" MaxLength="100" />
+          <Property Name="lname" Type="varchar" MaxLength="100" />
+          <Property Name="organization_system_id" Type="int4" />
+          <Property Name="phone" Type="varchar" MaxLength="30" />
+          <Property Name="email" Type="varchar" MaxLength="100" />
+          <Property Name="role_id" Type="int4" Nullable="false" />
+          <Property Name="password" Type="varchar" MaxLength="8000" Nullable="false" />
+          <Property Name="salt" Type="varchar" MaxLength="8000" Nullable="false" />
+          <Property Name="reset_flag" Type="int4" />
+        </EntityType>
+        <EntityType Name="division">
+          <Key>
+            <PropertyRef Name="division_id" />
+          </Key>
+          <Property Name="division_id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="division_name" Type="varchar" MaxLength="500" />
+          <Property Name="org_id" Type="int4" />
+        </EntityType>
+        <EntityType Name="frequency_type">
+          <Key>
+            <PropertyRef Name="frequency_type_id" />
+          </Key>
+          <Property Name="frequency_type_id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="frequency" Type="varchar" MaxLength="60" />
+        </EntityType>
+        <EntityType Name="keyword">
+          <Key>
+            <PropertyRef Name="keyword_id" />
+          </Key>
+          <Property Name="keyword_id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="term" Type="varchar" MaxLength="200" />
+        </EntityType>
+        <EntityType Name="lake_type">
+          <Key>
+            <PropertyRef Name="lake_type_id" />
+          </Key>
+          <Property Name="lake_type_id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="lake" Type="varchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="media_type">
+          <Key>
+            <PropertyRef Name="media_type_id" />
+          </Key>
+          <Property Name="media_type_id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="media" Type="varchar" MaxLength="200" />
+        </EntityType>
+        <EntityType Name="objective_type">
+          <Key>
+            <PropertyRef Name="objective_type_id" />
+          </Key>
+          <Property Name="objective_type_id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="objective" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="organization">
+          <Key>
+            <PropertyRef Name="organization_id" />
+          </Key>
+          <Property Name="organization_id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="organization_name" Type="varchar" MaxLength="250" />
+        </EntityType>
+        <EntityType Name="organization_system">
+          <Key>
+            <PropertyRef Name="organization_system_id" />
+          </Key>
+          <Property Name="organization_system_id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="org_id" Type="int4" Nullable="false" />
+          <Property Name="div_id" Type="int4" />
+          <Property Name="sec_id" Type="int4" />
+          <Property Name="science_base_id" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="parameter_type">
+          <Key>
+            <PropertyRef Name="parameter_type_id" />
+          </Key>
+          <Property Name="parameter_type_id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="parameter" Type="varchar" MaxLength="75" />
+          <Property Name="parameter_group" Type="varchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="proj_duration">
+          <Key>
+            <PropertyRef Name="proj_duration_id" />
+          </Key>
+          <Property Name="proj_duration_id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="duration_value" Type="varchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="proj_status">
+          <Key>
+            <PropertyRef Name="proj_status_id" />
+          </Key>
+          <Property Name="proj_status_id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="status_value" Type="varchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="project">
+          <Key>
+            <PropertyRef Name="project_id" />
+          </Key>
+          <Property Name="project_id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="255" />
+          <Property Name="start_date" Type="timestamp" />
+          <Property Name="end_date" Type="timestamp" />
+          <Property Name="url" Type="varchar" MaxLength="255" />
+          <Property Name="additional_info" Type="varchar" MaxLength="2000" />
+          <Property Name="data_manager_id" Type="int4" Nullable="false" />
+          <Property Name="science_base_id" Type="varchar" MaxLength="40" />
+          <Property Name="description" Type="varchar" MaxLength="4000" />
+          <Property Name="proj_status_id" Type="int4" />
+          <Property Name="proj_duration_id" Type="int4" />
+          <Property Name="ready_flag" Type="int4" />
+          <Property Name="created_stamp" Type="timestamp" />
+          <Property Name="last_edited_stamp" Type="timestamp" />
+        </EntityType>
+        <EntityType Name="project_contacts">
+          <Key>
+            <PropertyRef Name="project_contacts_id" />
+          </Key>
+          <Property Name="project_contacts_id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="project_id" Type="int4" />
+          <Property Name="contact_id" Type="int4" />
+        </EntityType>
+        <EntityType Name="project_cooperators">
+          <Key>
+            <PropertyRef Name="project_cooperator_id" />
+          </Key>
+          <Property Name="project_cooperator_id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="project_id" Type="int4" />
+          <Property Name="organization_system_id" Type="int4" />
+        </EntityType>
+        <EntityType Name="project_keywords">
+          <Key>
+            <PropertyRef Name="project_keywords_id" />
+          </Key>
+          <Property Name="project_keywords_id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="project_id" Type="int4" />
+          <Property Name="keyword_id" Type="int4" />
+        </EntityType>
+        <EntityType Name="project_objectives">
+          <Key>
+            <PropertyRef Name="project_objectives_id" />
+          </Key>
+          <Property Name="project_objectives_id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="project_id" Type="int4" />
+          <Property Name="objective_id" Type="int4" />
+        </EntityType>
+        <EntityType Name="project_publication">
+          <Key>
+            <PropertyRef Name="project_publication_id" />
+          </Key>
+          <Property Name="project_publication_id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="project_id" Type="int4" />
+          <Property Name="publication_id" Type="int4" />
+        </EntityType>
+        <EntityType Name="publication">
+          <Key>
+            <PropertyRef Name="publication_id" />
+          </Key>
+          <Property Name="publication_id" Type="int4" Nullable="false" />
+          <Property Name="title" Type="varchar" MaxLength="2000" />
+          <Property Name="url" Type="varchar" MaxLength="2000" />
+          <Property Name="citation" Type="varchar" MaxLength="1000" />
+          <Property Name="science_base_id" Type="varchar" MaxLength="100" />
+          <Property Name="description" Type="varchar" MaxLength="4000" />
+        </EntityType>
+        <EntityType Name="resource_type">
+          <Key>
+            <PropertyRef Name="resource_type_id" />
+          </Key>
+          <Property Name="resource_type_id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="resource_name" Type="varchar" MaxLength="60" />
+        </EntityType>
+        <EntityType Name="role">
+          <Key>
+            <PropertyRef Name="role_id" />
+          </Key>
+          <Property Name="role_id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="role_name" Type="varchar" MaxLength="255" />
+          <Property Name="role_description" Type="varchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="section">
+          <Key>
+            <PropertyRef Name="section_id" />
+          </Key>
+          <Property Name="section_id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="section_name" Type="varchar" MaxLength="500" />
+          <Property Name="div_id" Type="int4" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6005: The data type 'geometry' is currently not supported for the target Entity Framework version; the column 'geom' in the table 'pgtest.lampadmin.site' was excluded.-->
+        <EntityType Name="site">
+          <Key>
+            <PropertyRef Name="site_id" />
+          </Key>
+          <Property Name="site_id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="start_date" Type="timestamp" />
+          <Property Name="end_date" Type="timestamp" />
+          <Property Name="project_id" Type="int4" />
+          <Property Name="sample_platform" Type="varchar" MaxLength="255" />
+          <Property Name="additional_info" Type="varchar" MaxLength="1000" />
+          <Property Name="name" Type="varchar" MaxLength="255" />
+          <Property Name="description" Type="varchar" MaxLength="255" />
+          <Property Name="latitude" Type="float8" Nullable="false" />
+          <Property Name="longitude" Type="float8" Nullable="false" />
+          <Property Name="waterbody" Type="varchar" MaxLength="255" />
+          <Property Name="status_type_id" Type="int4" />
+          <Property Name="lake_type_id" Type="int4" />
+          <Property Name="country" Type="varchar" MaxLength="25" />
+          <Property Name="state_province" Type="varchar" MaxLength="50" />
+          <Property Name="watershed_huc8" Type="varchar" MaxLength="8" />
+          <Property Name="url" Type="varchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="site_frequency">
+          <Key>
+            <PropertyRef Name="site_frequency_id" />
+          </Key>
+          <Property Name="site_frequency_id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="site_id" Type="int4" Nullable="false" />
+          <Property Name="frequency_type_id" Type="int4" Nullable="false" />
+        </EntityType>
+        <EntityType Name="site_media">
+          <Key>
+            <PropertyRef Name="site_media_id" />
+          </Key>
+          <Property Name="site_media_id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="site_id" Type="int4" Nullable="false" />
+          <Property Name="media_type_id" Type="int4" Nullable="false" />
+        </EntityType>
+        <EntityType Name="site_parameters">
+          <Key>
+            <PropertyRef Name="site_parameters_id" />
+          </Key>
+          <Property Name="site_parameters_id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="site_id" Type="int4" Nullable="false" />
+          <Property Name="parameter_type_id" Type="int4" Nullable="false" />
+        </EntityType>
+        <EntityType Name="site_resource">
+          <Key>
+            <PropertyRef Name="site_resource_id" />
+          </Key>
+          <Property Name="site_resource_id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="site_id" Type="int4" Nullable="false" />
+          <Property Name="resource_type_id" Type="int4" Nullable="false" />
+        </EntityType>
+        <EntityType Name="status_type">
+          <Key>
+            <PropertyRef Name="status_id" />
+          </Key>
+          <Property Name="status_id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="status" Type="varchar" MaxLength="60" />
+        </EntityType>
+        <EntityContainer Name="SiGLEntitiesModelStoreContainer">
+          <EntitySet Name="contact" EntityType="Self.contact" Schema="lampadmin" store:Type="Tables" />
+          <EntitySet Name="data_host" EntityType="Self.data_host" Schema="lampadmin" store:Type="Tables" />
+          <EntitySet Name="data_manager" EntityType="Self.data_manager" Schema="lampadmin" store:Type="Tables" />
+          <EntitySet Name="division" EntityType="Self.division" Schema="lampadmin" store:Type="Tables" />
+          <EntitySet Name="frequency_type" EntityType="Self.frequency_type" Schema="lampadmin" store:Type="Tables" />
+          <EntitySet Name="keyword" EntityType="Self.keyword" Schema="lampadmin" store:Type="Tables" />
+          <EntitySet Name="lake_type" EntityType="Self.lake_type" Schema="lampadmin" store:Type="Tables" />
+          <EntitySet Name="media_type" EntityType="Self.media_type" Schema="lampadmin" store:Type="Tables" />
+          <EntitySet Name="objective_type" EntityType="Self.objective_type" Schema="lampadmin" store:Type="Tables" />
+          <EntitySet Name="organization" EntityType="Self.organization" Schema="lampadmin" store:Type="Tables" />
+          <EntitySet Name="organization_system" EntityType="Self.organization_system" Schema="lampadmin" store:Type="Tables" />
+          <EntitySet Name="parameter_type" EntityType="Self.parameter_type" Schema="lampadmin" store:Type="Tables" />
+          <EntitySet Name="proj_duration" EntityType="Self.proj_duration" Schema="lampadmin" store:Type="Tables" />
+          <EntitySet Name="proj_status" EntityType="Self.proj_status" Schema="lampadmin" store:Type="Tables" />
+          <EntitySet Name="project" EntityType="Self.project" Schema="lampadmin" store:Type="Tables" />
+          <EntitySet Name="project_contacts" EntityType="Self.project_contacts" Schema="lampadmin" store:Type="Tables" />
+          <EntitySet Name="project_cooperators" EntityType="Self.project_cooperators" Schema="lampadmin" store:Type="Tables" />
+          <EntitySet Name="project_keywords" EntityType="Self.project_keywords" Schema="lampadmin" store:Type="Tables" />
+          <EntitySet Name="project_objectives" EntityType="Self.project_objectives" Schema="lampadmin" store:Type="Tables" />
+          <EntitySet Name="project_publication" EntityType="Self.project_publication" Schema="lampadmin" store:Type="Tables" />
+          <EntitySet Name="publication" EntityType="Self.publication" Schema="lampadmin" store:Type="Tables" />
+          <EntitySet Name="resource_type" EntityType="Self.resource_type" Schema="lampadmin" store:Type="Tables" />
+          <EntitySet Name="role" EntityType="Self.role" Schema="lampadmin" store:Type="Tables" />
+          <EntitySet Name="section" EntityType="Self.section" Schema="lampadmin" store:Type="Tables" />
+          <EntitySet Name="site" EntityType="Self.site" Schema="lampadmin" store:Type="Tables" />
+          <EntitySet Name="site_frequency" EntityType="Self.site_frequency" Schema="lampadmin" store:Type="Tables" />
+          <EntitySet Name="site_media" EntityType="Self.site_media" Schema="lampadmin" store:Type="Tables" />
+          <EntitySet Name="site_parameters" EntityType="Self.site_parameters" Schema="lampadmin" store:Type="Tables" />
+          <EntitySet Name="site_resource" EntityType="Self.site_resource" Schema="lampadmin" store:Type="Tables" />
+          <EntitySet Name="status_type" EntityType="Self.status_type" Schema="lampadmin" store:Type="Tables" />
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="SiGLEntitiesModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="SiGLEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="contacts" EntityType="SiGLEntitiesModel.contact" />
+          <EntitySet Name="data_host" EntityType="SiGLEntitiesModel.data_host" />
+          <EntitySet Name="data_manager" EntityType="SiGLEntitiesModel.data_manager" />
+          <EntitySet Name="divisions" EntityType="SiGLEntitiesModel.division" />
+          <EntitySet Name="frequency_type" EntityType="SiGLEntitiesModel.frequency_type" />
+          <EntitySet Name="keywords" EntityType="SiGLEntitiesModel.keyword" />
+          <EntitySet Name="lake_type" EntityType="SiGLEntitiesModel.lake_type" />
+          <EntitySet Name="media_type" EntityType="SiGLEntitiesModel.media_type" />
+          <EntitySet Name="objective_type" EntityType="SiGLEntitiesModel.objective_type" />
+          <EntitySet Name="organizations" EntityType="SiGLEntitiesModel.organization" />
+          <EntitySet Name="organization_system" EntityType="SiGLEntitiesModel.organization_system" />
+          <EntitySet Name="parameter_type" EntityType="SiGLEntitiesModel.parameter_type" />
+          <EntitySet Name="proj_duration" EntityType="SiGLEntitiesModel.proj_duration" />
+          <EntitySet Name="proj_status" EntityType="SiGLEntitiesModel.proj_status" />
+          <EntitySet Name="projects" EntityType="SiGLEntitiesModel.project" />
+          <EntitySet Name="project_contacts" EntityType="SiGLEntitiesModel.project_contacts" />
+          <EntitySet Name="project_cooperators" EntityType="SiGLEntitiesModel.project_cooperators" />
+          <EntitySet Name="project_keywords" EntityType="SiGLEntitiesModel.project_keywords" />
+          <EntitySet Name="project_objectives" EntityType="SiGLEntitiesModel.project_objectives" />
+          <EntitySet Name="project_publication" EntityType="SiGLEntitiesModel.project_publication" />
+          <EntitySet Name="publications" EntityType="SiGLEntitiesModel.publication" />
+          <EntitySet Name="resource_type" EntityType="SiGLEntitiesModel.resource_type" />
+          <EntitySet Name="roles" EntityType="SiGLEntitiesModel.role" />
+          <EntitySet Name="sections" EntityType="SiGLEntitiesModel.section" />
+          <EntitySet Name="sites" EntityType="SiGLEntitiesModel.site" />
+          <EntitySet Name="site_frequency" EntityType="SiGLEntitiesModel.site_frequency" />
+          <EntitySet Name="site_media" EntityType="SiGLEntitiesModel.site_media" />
+          <EntitySet Name="site_parameters" EntityType="SiGLEntitiesModel.site_parameters" />
+          <EntitySet Name="site_resource" EntityType="SiGLEntitiesModel.site_resource" />
+          <EntitySet Name="status_type" EntityType="SiGLEntitiesModel.status_type" />
+          <AssociationSet Name="status_typesite" Association="SiGLEntitiesModel.status_typesite">
+            <End Role="status_type" EntitySet="status_type" />
+            <End Role="site" EntitySet="sites" />
+          </AssociationSet>
+          <AssociationSet Name="lake_typesite" Association="SiGLEntitiesModel.lake_typesite">
+            <End Role="lake_type" EntitySet="lake_type" />
+            <End Role="site" EntitySet="sites" />
+          </AssociationSet>
+          <AssociationSet Name="media_typesite_media" Association="SiGLEntitiesModel.media_typesite_media">
+            <End Role="media_type" EntitySet="media_type" />
+            <End Role="site_media" EntitySet="site_media" />
+          </AssociationSet>
+          <AssociationSet Name="resource_typesite_resource" Association="SiGLEntitiesModel.resource_typesite_resource">
+            <End Role="resource_type" EntitySet="resource_type" />
+            <End Role="site_resource" EntitySet="site_resource" />
+          </AssociationSet>
+          <AssociationSet Name="objective_typeproject_objectives" Association="SiGLEntitiesModel.objective_typeproject_objectives">
+            <End Role="objective_type" EntitySet="objective_type" />
+            <End Role="project_objectives" EntitySet="project_objectives" />
+          </AssociationSet>
+          <AssociationSet Name="site_parameterssite" Association="SiGLEntitiesModel.site_parameterssite">
+            <End Role="site_parameters" EntitySet="site_parameters" />
+            <End Role="site" EntitySet="sites" />
+          </AssociationSet>
+          <AssociationSet Name="site_mediasite" Association="SiGLEntitiesModel.site_mediasite">
+            <End Role="site_media" EntitySet="site_media" />
+            <End Role="site" EntitySet="sites" />
+          </AssociationSet>
+          <AssociationSet Name="site_parametersparameter_type" Association="SiGLEntitiesModel.site_parametersparameter_type">
+            <End Role="site_parameters" EntitySet="site_parameters" />
+            <End Role="parameter_type" EntitySet="parameter_type" />
+          </AssociationSet>
+          <AssociationSet Name="sitesite_resource" Association="SiGLEntitiesModel.sitesite_resource">
+            <End Role="site" EntitySet="sites" />
+            <End Role="site_resource" EntitySet="site_resource" />
+          </AssociationSet>
+          <AssociationSet Name="sitesite_frequency" Association="SiGLEntitiesModel.sitesite_frequency">
+            <End Role="site" EntitySet="sites" />
+            <End Role="site_frequency" EntitySet="site_frequency" />
+          </AssociationSet>
+          <AssociationSet Name="frequency_typesite_frequency" Association="SiGLEntitiesModel.frequency_typesite_frequency">
+            <End Role="frequency_type" EntitySet="frequency_type" />
+            <End Role="site_frequency" EntitySet="site_frequency" />
+          </AssociationSet>
+          <AssociationSet Name="projectsite" Association="SiGLEntitiesModel.projectsite">
+            <End Role="project" EntitySet="projects" />
+            <End Role="site" EntitySet="sites" />
+          </AssociationSet>
+          <AssociationSet Name="project_objectivesproject" Association="SiGLEntitiesModel.project_objectivesproject">
+            <End Role="project_objectives" EntitySet="project_objectives" />
+            <End Role="project" EntitySet="projects" />
+          </AssociationSet>
+          <AssociationSet Name="projectproject_contacts" Association="SiGLEntitiesModel.projectproject_contacts">
+            <End Role="project" EntitySet="projects" />
+            <End Role="project_contacts" EntitySet="project_contacts" />
+          </AssociationSet>
+          <AssociationSet Name="proj_durationproject" Association="SiGLEntitiesModel.proj_durationproject">
+            <End Role="proj_duration" EntitySet="proj_duration" />
+            <End Role="project" EntitySet="projects" />
+          </AssociationSet>
+          <AssociationSet Name="projectproject_cooperators" Association="SiGLEntitiesModel.projectproject_cooperators">
+            <End Role="project" EntitySet="projects" />
+            <End Role="project_cooperators" EntitySet="project_cooperators" />
+          </AssociationSet>
+          <AssociationSet Name="data_hostproject" Association="SiGLEntitiesModel.data_hostproject">
+            <End Role="data_host" EntitySet="data_host" />
+            <End Role="project" EntitySet="projects" />
+          </AssociationSet>
+          <AssociationSet Name="proj_statusproject" Association="SiGLEntitiesModel.proj_statusproject">
+            <End Role="proj_status" EntitySet="proj_status" />
+            <End Role="project" EntitySet="projects" />
+          </AssociationSet>
+          <AssociationSet Name="projectproject_publication" Association="SiGLEntitiesModel.projectproject_publication">
+            <End Role="project" EntitySet="projects" />
+            <End Role="project_publication" EntitySet="project_publication" />
+          </AssociationSet>
+          <AssociationSet Name="projectproject_keywords" Association="SiGLEntitiesModel.projectproject_keywords">
+            <End Role="project" EntitySet="projects" />
+            <End Role="project_keywords" EntitySet="project_keywords" />
+          </AssociationSet>
+          <AssociationSet Name="data_managerproject" Association="SiGLEntitiesModel.data_managerproject">
+            <End Role="data_manager" EntitySet="data_manager" />
+            <End Role="project" EntitySet="projects" />
+          </AssociationSet>
+          <AssociationSet Name="roledata_manager" Association="SiGLEntitiesModel.roledata_manager">
+            <End Role="role" EntitySet="roles" />
+            <End Role="data_manager" EntitySet="data_manager" />
+          </AssociationSet>
+          <AssociationSet Name="contactproject_contacts" Association="SiGLEntitiesModel.contactproject_contacts">
+            <End Role="contact" EntitySet="contacts" />
+            <End Role="project_contacts" EntitySet="project_contacts" />
+          </AssociationSet>
+          <AssociationSet Name="organization_systemcontact" Association="SiGLEntitiesModel.organization_systemcontact">
+            <End Role="organization_system" EntitySet="organization_system" />
+            <End Role="contact" EntitySet="contacts" />
+          </AssociationSet>
+          <AssociationSet Name="organizationorganization_system" Association="SiGLEntitiesModel.organizationorganization_system">
+            <End Role="organization" EntitySet="organizations" />
+            <End Role="organization_system" EntitySet="organization_system" />
+          </AssociationSet>
+          <AssociationSet Name="divisionorganization" Association="SiGLEntitiesModel.divisionorganization">
+            <End Role="division" EntitySet="divisions" />
+            <End Role="organization" EntitySet="organizations" />
+          </AssociationSet>
+          <AssociationSet Name="sectiondivision" Association="SiGLEntitiesModel.sectiondivision">
+            <End Role="section" EntitySet="sections" />
+            <End Role="division" EntitySet="divisions" />
+          </AssociationSet>
+          <AssociationSet Name="sectionorganization_system" Association="SiGLEntitiesModel.sectionorganization_system">
+            <End Role="section" EntitySet="sections" />
+            <End Role="organization_system" EntitySet="organization_system" />
+          </AssociationSet>
+          <AssociationSet Name="divisionorganization_system" Association="SiGLEntitiesModel.divisionorganization_system">
+            <End Role="division" EntitySet="divisions" />
+            <End Role="organization_system" EntitySet="organization_system" />
+          </AssociationSet>
+          <AssociationSet Name="organization_systemproject_cooperators" Association="SiGLEntitiesModel.organization_systemproject_cooperators">
+            <End Role="organization_system" EntitySet="organization_system" />
+            <End Role="project_cooperators" EntitySet="project_cooperators" />
+          </AssociationSet>
+          <AssociationSet Name="publicationproject_publication" Association="SiGLEntitiesModel.publicationproject_publication">
+            <End Role="publication" EntitySet="publications" />
+            <End Role="project_publication" EntitySet="project_publication" />
+          </AssociationSet>
+          <AssociationSet Name="keywordproject_keywords" Association="SiGLEntitiesModel.keywordproject_keywords">
+            <End Role="keyword" EntitySet="keywords" />
+            <End Role="project_keywords" EntitySet="project_keywords" />
+          </AssociationSet>
+          </EntityContainer>
+        <EntityType Name="contact">
+          <Key>
+            <PropertyRef Name="contact_id" />
+          </Key>
+          <Property Name="contact_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="phone" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="organization_system_id" Type="Int32" />
+          <Property Name="science_base_id" Type="String" />
+          <NavigationProperty Name="project_contacts" Relationship="SiGLEntitiesModel.contactproject_contacts" FromRole="contact" ToRole="project_contacts" />
+          <NavigationProperty Name="organization_system" Relationship="SiGLEntitiesModel.organization_systemcontact" FromRole="contact" ToRole="organization_system" />
+        </EntityType>
+        <EntityType Name="data_host">
+          <Key>
+            <PropertyRef Name="data_host_id" />
+          </Key>
+          <Property Name="data_host_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="host_name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="portal_url" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="project_id" Type="Int32" />
+          <Property Name="description" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="project" Relationship="SiGLEntitiesModel.data_hostproject" FromRole="data_host" ToRole="project" />
+        </EntityType>
+        <EntityType Name="data_manager">
+          <Key>
+            <PropertyRef Name="data_manager_id" />
+          </Key>
+          <Property Name="data_manager_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="username" Type="String" Nullable="false" MaxLength="60" FixedLength="false" Unicode="true" />
+          <Property Name="fname" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="lname" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="organization_system_id" Type="Int32" />
+          <Property Name="phone" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="email" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="role_id" Type="Int32" Nullable="false" />
+          <Property Name="password" Type="String" Nullable="false" MaxLength="8000" FixedLength="false" Unicode="true" />
+          <Property Name="salt" Type="String" Nullable="false" MaxLength="8000" FixedLength="false" Unicode="true" />
+          <Property Name="reset_flag" Type="Int32" />
+          <NavigationProperty Name="projects" Relationship="SiGLEntitiesModel.data_managerproject" FromRole="data_manager" ToRole="project" />
+          <NavigationProperty Name="role" Relationship="SiGLEntitiesModel.roledata_manager" FromRole="data_manager" ToRole="role" />
+        </EntityType>
+        <EntityType Name="division">
+          <Key>
+            <PropertyRef Name="division_id" />
+          </Key>
+          <Property Name="division_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="division_name" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="org_id" Type="Int32" />
+          <NavigationProperty Name="organization" Relationship="SiGLEntitiesModel.divisionorganization" FromRole="division" ToRole="organization" />
+          <NavigationProperty Name="sections" Relationship="SiGLEntitiesModel.sectiondivision" FromRole="division" ToRole="section" />
+          <NavigationProperty Name="organization_system" Relationship="SiGLEntitiesModel.divisionorganization_system" FromRole="division" ToRole="organization_system" />
+        </EntityType>
+        <EntityType Name="frequency_type">
+          <Key>
+            <PropertyRef Name="frequency_type_id" />
+          </Key>
+          <Property Name="frequency_type_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="frequency" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="site_frequency" Relationship="SiGLEntitiesModel.frequency_typesite_frequency" FromRole="frequency_type" ToRole="site_frequency" />
+        </EntityType>
+        <EntityType Name="keyword">
+          <Key>
+            <PropertyRef Name="keyword_id" />
+          </Key>
+          <Property Name="keyword_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="term" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="project_keywords" Relationship="SiGLEntitiesModel.keywordproject_keywords" FromRole="keyword" ToRole="project_keywords" />
+        </EntityType>
+        <EntityType Name="lake_type">
+          <Key>
+            <PropertyRef Name="lake_type_id" />
+          </Key>
+          <Property Name="lake_type_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="lake" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="sites" Relationship="SiGLEntitiesModel.lake_typesite" FromRole="lake_type" ToRole="site" />
+        </EntityType>
+        <EntityType Name="media_type">
+          <Key>
+            <PropertyRef Name="media_type_id" />
+          </Key>
+          <Property Name="media_type_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="media" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="site_media" Relationship="SiGLEntitiesModel.media_typesite_media" FromRole="media_type" ToRole="site_media" />
+        </EntityType>
+        <EntityType Name="objective_type">
+          <Key>
+            <PropertyRef Name="objective_type_id" />
+          </Key>
+          <Property Name="objective_type_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="objective" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="project_objectives" Relationship="SiGLEntitiesModel.objective_typeproject_objectives" FromRole="objective_type" ToRole="project_objectives" />
+        </EntityType>
+        <EntityType Name="organization">
+          <Key>
+            <PropertyRef Name="organization_id" />
+          </Key>
+          <Property Name="organization_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="organization_name" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="organization_system" Relationship="SiGLEntitiesModel.organizationorganization_system" FromRole="organization" ToRole="organization_system" />
+          <NavigationProperty Name="divisions" Relationship="SiGLEntitiesModel.divisionorganization" FromRole="organization" ToRole="division" />
+        </EntityType>
+        <EntityType Name="organization_system">
+          <Key>
+            <PropertyRef Name="organization_system_id" />
+          </Key>
+          <Property Name="organization_system_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="org_id" Type="Int32" Nullable="false" />
+          <Property Name="div_id" Type="Int32" />
+          <Property Name="sec_id" Type="Int32" />
+          <Property Name="science_base_id" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="contacts" Relationship="SiGLEntitiesModel.organization_systemcontact" FromRole="organization_system" ToRole="contact" />
+          <NavigationProperty Name="organization" Relationship="SiGLEntitiesModel.organizationorganization_system" FromRole="organization_system" ToRole="organization" />
+          <NavigationProperty Name="section" Relationship="SiGLEntitiesModel.sectionorganization_system" FromRole="organization_system" ToRole="section" />
+          <NavigationProperty Name="division" Relationship="SiGLEntitiesModel.divisionorganization_system" FromRole="organization_system" ToRole="division" />
+          <NavigationProperty Name="project_cooperators" Relationship="SiGLEntitiesModel.organization_systemproject_cooperators" FromRole="organization_system" ToRole="project_cooperators" />
+        </EntityType>
+        <EntityType Name="parameter_type">
+          <Key>
+            <PropertyRef Name="parameter_type_id" />
+          </Key>
+          <Property Name="parameter_type_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="parameter" Type="String" MaxLength="75" FixedLength="false" Unicode="true" />
+          <Property Name="parameter_group" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="site_parameters" Relationship="SiGLEntitiesModel.site_parametersparameter_type" FromRole="parameter_type" ToRole="site_parameters" />
+        </EntityType>
+        <EntityType Name="proj_duration">
+          <Key>
+            <PropertyRef Name="proj_duration_id" />
+          </Key>
+          <Property Name="proj_duration_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="duration_value" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="projects" Relationship="SiGLEntitiesModel.proj_durationproject" FromRole="proj_duration" ToRole="project" />
+        </EntityType>
+        <EntityType Name="proj_status">
+          <Key>
+            <PropertyRef Name="proj_status_id" />
+          </Key>
+          <Property Name="proj_status_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="status_value" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="projects" Relationship="SiGLEntitiesModel.proj_statusproject" FromRole="proj_status" ToRole="project" />
+        </EntityType>
+        <EntityType Name="project">
+          <Key>
+            <PropertyRef Name="project_id" />
+          </Key>
+          <Property Name="project_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="start_date" Type="DateTime" Precision="6" />
+          <Property Name="end_date" Type="DateTime" Precision="6" />
+          <Property Name="url" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="additional_info" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
+          <Property Name="data_manager_id" Type="Int32" Nullable="false" />
+          <Property Name="science_base_id" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
+          <Property Name="description" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" />
+          <Property Name="proj_status_id" Type="Int32" />
+          <Property Name="proj_duration_id" Type="Int32" />
+          <Property Name="ready_flag" Type="Int32" />
+          <Property Name="created_stamp" Type="DateTime" Precision="6" />
+          <Property Name="last_edited_stamp" Type="DateTime" Precision="6" />
+          <NavigationProperty Name="sites" Relationship="SiGLEntitiesModel.projectsite" FromRole="project" ToRole="site" />
+          <NavigationProperty Name="project_objectives" Relationship="SiGLEntitiesModel.project_objectivesproject" FromRole="project" ToRole="project_objectives" />
+          <NavigationProperty Name="project_contacts" Relationship="SiGLEntitiesModel.projectproject_contacts" FromRole="project" ToRole="project_contacts" />
+          <NavigationProperty Name="proj_duration" Relationship="SiGLEntitiesModel.proj_durationproject" FromRole="project" ToRole="proj_duration" />
+          <NavigationProperty Name="project_cooperators" Relationship="SiGLEntitiesModel.projectproject_cooperators" FromRole="project" ToRole="project_cooperators" />
+          <NavigationProperty Name="data_host" Relationship="SiGLEntitiesModel.data_hostproject" FromRole="project" ToRole="data_host" />
+          <NavigationProperty Name="proj_status" Relationship="SiGLEntitiesModel.proj_statusproject" FromRole="project" ToRole="proj_status" />
+          <NavigationProperty Name="project_publication" Relationship="SiGLEntitiesModel.projectproject_publication" FromRole="project" ToRole="project_publication" />
+          <NavigationProperty Name="project_keywords" Relationship="SiGLEntitiesModel.projectproject_keywords" FromRole="project" ToRole="project_keywords" />
+          <NavigationProperty Name="data_manager" Relationship="SiGLEntitiesModel.data_managerproject" FromRole="project" ToRole="data_manager" />
+        </EntityType>
+        <EntityType Name="project_contacts">
+          <Key>
+            <PropertyRef Name="project_contacts_id" />
+          </Key>
+          <Property Name="project_contacts_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="project_id" Type="Int32" />
+          <Property Name="contact_id" Type="Int32" />
+          <NavigationProperty Name="project" Relationship="SiGLEntitiesModel.projectproject_contacts" FromRole="project_contacts" ToRole="project" />
+          <NavigationProperty Name="contact" Relationship="SiGLEntitiesModel.contactproject_contacts" FromRole="project_contacts" ToRole="contact" />
+        </EntityType>
+        <EntityType Name="project_cooperators">
+          <Key>
+            <PropertyRef Name="project_cooperator_id" />
+          </Key>
+          <Property Name="project_cooperator_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="project_id" Type="Int32" />
+          <Property Name="organization_system_id" Type="Int32" />
+          <NavigationProperty Name="project" Relationship="SiGLEntitiesModel.projectproject_cooperators" FromRole="project_cooperators" ToRole="project" />
+          <NavigationProperty Name="organization_system" Relationship="SiGLEntitiesModel.organization_systemproject_cooperators" FromRole="project_cooperators" ToRole="organization_system" />
+        </EntityType>
+        <EntityType Name="project_keywords">
+          <Key>
+            <PropertyRef Name="project_keywords_id" />
+          </Key>
+          <Property Name="project_keywords_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="project_id" Type="Int32" />
+          <Property Name="keyword_id" Type="Int32" />
+          <NavigationProperty Name="project" Relationship="SiGLEntitiesModel.projectproject_keywords" FromRole="project_keywords" ToRole="project" />
+          <NavigationProperty Name="keyword" Relationship="SiGLEntitiesModel.keywordproject_keywords" FromRole="project_keywords" ToRole="keyword" />
+        </EntityType>
+        <EntityType Name="project_objectives">
+          <Key>
+            <PropertyRef Name="project_objectives_id" />
+          </Key>
+          <Property Name="project_objectives_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="project_id" Type="Int32" />
+          <Property Name="objective_id" Type="Int32" />
+          <NavigationProperty Name="objective_type" Relationship="SiGLEntitiesModel.objective_typeproject_objectives" FromRole="project_objectives" ToRole="objective_type" />
+          <NavigationProperty Name="project" Relationship="SiGLEntitiesModel.project_objectivesproject" FromRole="project_objectives" ToRole="project" />
+        </EntityType>
+        <EntityType Name="project_publication">
+          <Key>
+            <PropertyRef Name="project_publication_id" />
+          </Key>
+          <Property Name="project_publication_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="project_id" Type="Int32" />
+          <Property Name="publication_id" Type="Int32" />
+          <NavigationProperty Name="project" Relationship="SiGLEntitiesModel.projectproject_publication" FromRole="project_publication" ToRole="project" />
+          <NavigationProperty Name="publication" Relationship="SiGLEntitiesModel.publicationproject_publication" FromRole="project_publication" ToRole="publication" />
+        </EntityType>
+        <EntityType Name="publication">
+          <Key>
+            <PropertyRef Name="publication_id" />
+          </Key>
+          <Property Name="publication_id" Type="Int32" Nullable="false" />
+          <Property Name="title" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
+          <Property Name="url" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
+          <Property Name="citation" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="science_base_id" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="description" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="project_publication" Relationship="SiGLEntitiesModel.publicationproject_publication" FromRole="publication" ToRole="project_publication" />
+        </EntityType>
+        <EntityType Name="resource_type">
+          <Key>
+            <PropertyRef Name="resource_type_id" />
+          </Key>
+          <Property Name="resource_type_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="resource_name" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="site_resource" Relationship="SiGLEntitiesModel.resource_typesite_resource" FromRole="resource_type" ToRole="site_resource" />
+        </EntityType>
+        <EntityType Name="role">
+          <Key>
+            <PropertyRef Name="role_id" />
+          </Key>
+          <Property Name="role_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="role_name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="role_description" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="data_manager" Relationship="SiGLEntitiesModel.roledata_manager" FromRole="role" ToRole="data_manager" />
+        </EntityType>
+        <EntityType Name="section">
+          <Key>
+            <PropertyRef Name="section_id" />
+          </Key>
+          <Property Name="section_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="section_name" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="div_id" Type="Int32" />
+          <NavigationProperty Name="division" Relationship="SiGLEntitiesModel.sectiondivision" FromRole="section" ToRole="division" />
+          <NavigationProperty Name="organization_system" Relationship="SiGLEntitiesModel.sectionorganization_system" FromRole="section" ToRole="organization_system" />
+        </EntityType>
+        <EntityType Name="site">
+          <Key>
+            <PropertyRef Name="site_id" />
+          </Key>
+          <Property Name="site_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="start_date" Type="DateTime" Precision="6" />
+          <Property Name="end_date" Type="DateTime" Precision="6" />
+          <Property Name="project_id" Type="Int32" />
+          <Property Name="sample_platform" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="additional_info" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="description" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="latitude" Type="Double" Nullable="false" />
+          <Property Name="longitude" Type="Double" Nullable="false" />
+          <Property Name="waterbody" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="status_type_id" Type="Int32" />
+          <Property Name="lake_type_id" Type="Int32" />
+          <Property Name="country" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
+          <Property Name="state_province" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="watershed_huc8" Type="String" MaxLength="8" FixedLength="false" Unicode="true" />
+          <Property Name="url" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="status_type" Relationship="SiGLEntitiesModel.status_typesite" FromRole="site" ToRole="status_type" />
+          <NavigationProperty Name="lake_type" Relationship="SiGLEntitiesModel.lake_typesite" FromRole="site" ToRole="lake_type" />
+          <NavigationProperty Name="site_parameters" Relationship="SiGLEntitiesModel.site_parameterssite" FromRole="site" ToRole="site_parameters" />
+          <NavigationProperty Name="site_media" Relationship="SiGLEntitiesModel.site_mediasite" FromRole="site" ToRole="site_media" />
+          <NavigationProperty Name="site_resource" Relationship="SiGLEntitiesModel.sitesite_resource" FromRole="site" ToRole="site_resource" />
+          <NavigationProperty Name="site_frequency" Relationship="SiGLEntitiesModel.sitesite_frequency" FromRole="site" ToRole="site_frequency" />
+          <NavigationProperty Name="project" Relationship="SiGLEntitiesModel.projectsite" FromRole="site" ToRole="project" />
+        </EntityType>
+        <EntityType Name="site_frequency">
+          <Key>
+            <PropertyRef Name="site_frequency_id" />
+          </Key>
+          <Property Name="site_frequency_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="site_id" Type="Int32" Nullable="false" />
+          <Property Name="frequency_type_id" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="site" Relationship="SiGLEntitiesModel.sitesite_frequency" FromRole="site_frequency" ToRole="site" />
+          <NavigationProperty Name="frequency_type" Relationship="SiGLEntitiesModel.frequency_typesite_frequency" FromRole="site_frequency" ToRole="frequency_type" />
+        </EntityType>
+        <EntityType Name="site_media">
+          <Key>
+            <PropertyRef Name="site_media_id" />
+          </Key>
+          <Property Name="site_media_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="site_id" Type="Int32" Nullable="false" />
+          <Property Name="media_type_id" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="media_type" Relationship="SiGLEntitiesModel.media_typesite_media" FromRole="site_media" ToRole="media_type" />
+          <NavigationProperty Name="site" Relationship="SiGLEntitiesModel.site_mediasite" FromRole="site_media" ToRole="site" />
+        </EntityType>
+        <EntityType Name="site_parameters">
+          <Key>
+            <PropertyRef Name="site_parameters_id" />
+          </Key>
+          <Property Name="site_parameters_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="site_id" Type="Int32" Nullable="false" />
+          <Property Name="parameter_type_id" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="site" Relationship="SiGLEntitiesModel.site_parameterssite" FromRole="site_parameters" ToRole="site" />
+          <NavigationProperty Name="parameter_type" Relationship="SiGLEntitiesModel.site_parametersparameter_type" FromRole="site_parameters" ToRole="parameter_type" />
+        </EntityType>
+        <EntityType Name="site_resource">
+          <Key>
+            <PropertyRef Name="site_resource_id" />
+          </Key>
+          <Property Name="site_resource_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="site_id" Type="Int32" Nullable="false" />
+          <Property Name="resource_type_id" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="resource_type" Relationship="SiGLEntitiesModel.resource_typesite_resource" FromRole="site_resource" ToRole="resource_type" />
+          <NavigationProperty Name="site" Relationship="SiGLEntitiesModel.sitesite_resource" FromRole="site_resource" ToRole="site" />
+        </EntityType>
+        <EntityType Name="status_type">
+          <Key>
+            <PropertyRef Name="status_id" />
+          </Key>
+          <Property Name="status_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="status" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="sites" Relationship="SiGLEntitiesModel.status_typesite" FromRole="status_type" ToRole="site" />
+        </EntityType>
+        <Association Name="status_typesite">
+          <End Type="SiGLEntitiesModel.status_type" Role="status_type" Multiplicity="0..1" />
+          <End Type="SiGLEntitiesModel.site" Role="site" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="status_type">
+              <PropertyRef Name="status_id" />
+            </Principal>
+            <Dependent Role="site">
+              <PropertyRef Name="status_type_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="lake_typesite">
+          <End Type="SiGLEntitiesModel.lake_type" Role="lake_type" Multiplicity="0..1" />
+          <End Type="SiGLEntitiesModel.site" Role="site" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="lake_type">
+              <PropertyRef Name="lake_type_id" />
+            </Principal>
+            <Dependent Role="site">
+              <PropertyRef Name="lake_type_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="media_typesite_media">
+          <End Type="SiGLEntitiesModel.media_type" Role="media_type" Multiplicity="1" />
+          <End Type="SiGLEntitiesModel.site_media" Role="site_media" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="media_type">
+              <PropertyRef Name="media_type_id" />
+            </Principal>
+            <Dependent Role="site_media">
+              <PropertyRef Name="media_type_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="resource_typesite_resource">
+          <End Type="SiGLEntitiesModel.resource_type" Role="resource_type" Multiplicity="1" />
+          <End Type="SiGLEntitiesModel.site_resource" Role="site_resource" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="resource_type">
+              <PropertyRef Name="resource_type_id" />
+            </Principal>
+            <Dependent Role="site_resource">
+              <PropertyRef Name="resource_type_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="objective_typeproject_objectives">
+          <End Type="SiGLEntitiesModel.objective_type" Role="objective_type" Multiplicity="0..1" />
+          <End Type="SiGLEntitiesModel.project_objectives" Role="project_objectives" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="objective_type">
+              <PropertyRef Name="objective_type_id" />
+            </Principal>
+            <Dependent Role="project_objectives">
+              <PropertyRef Name="objective_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="site_parameterssite">
+          <End Type="SiGLEntitiesModel.site_parameters" Role="site_parameters" Multiplicity="*" />
+          <End Type="SiGLEntitiesModel.site" Role="site" Multiplicity="1" />
+          <ReferentialConstraint>
+            <Principal Role="site">
+              <PropertyRef Name="site_id" />
+            </Principal>
+            <Dependent Role="site_parameters">
+              <PropertyRef Name="site_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="site_mediasite">
+          <End Type="SiGLEntitiesModel.site_media" Role="site_media" Multiplicity="*" />
+          <End Type="SiGLEntitiesModel.site" Role="site" Multiplicity="1" />
+          <ReferentialConstraint>
+            <Principal Role="site">
+              <PropertyRef Name="site_id" />
+            </Principal>
+            <Dependent Role="site_media">
+              <PropertyRef Name="site_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="site_parametersparameter_type">
+          <End Type="SiGLEntitiesModel.site_parameters" Role="site_parameters" Multiplicity="*" />
+          <End Type="SiGLEntitiesModel.parameter_type" Role="parameter_type" Multiplicity="1" />
+          <ReferentialConstraint>
+            <Principal Role="parameter_type">
+              <PropertyRef Name="parameter_type_id" />
+            </Principal>
+            <Dependent Role="site_parameters">
+              <PropertyRef Name="parameter_type_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="sitesite_resource">
+          <End Type="SiGLEntitiesModel.site" Role="site" Multiplicity="1" />
+          <End Type="SiGLEntitiesModel.site_resource" Role="site_resource" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="site">
+              <PropertyRef Name="site_id" />
+            </Principal>
+            <Dependent Role="site_resource">
+              <PropertyRef Name="site_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="sitesite_frequency">
+          <End Type="SiGLEntitiesModel.site" Role="site" Multiplicity="1" />
+          <End Type="SiGLEntitiesModel.site_frequency" Role="site_frequency" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="site">
+              <PropertyRef Name="site_id" />
+            </Principal>
+            <Dependent Role="site_frequency">
+              <PropertyRef Name="site_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="frequency_typesite_frequency">
+          <End Type="SiGLEntitiesModel.frequency_type" Role="frequency_type" Multiplicity="1" />
+          <End Type="SiGLEntitiesModel.site_frequency" Role="site_frequency" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="frequency_type">
+              <PropertyRef Name="frequency_type_id" />
+            </Principal>
+            <Dependent Role="site_frequency">
+              <PropertyRef Name="frequency_type_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="projectsite">
+          <End Type="SiGLEntitiesModel.project" Role="project" Multiplicity="0..1" />
+          <End Type="SiGLEntitiesModel.site" Role="site" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="project">
+              <PropertyRef Name="project_id" />
+            </Principal>
+            <Dependent Role="site">
+              <PropertyRef Name="project_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="project_objectivesproject">
+          <End Type="SiGLEntitiesModel.project_objectives" Role="project_objectives" Multiplicity="*" />
+          <End Type="SiGLEntitiesModel.project" Role="project" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="project">
+              <PropertyRef Name="project_id" />
+            </Principal>
+            <Dependent Role="project_objectives">
+              <PropertyRef Name="project_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="projectproject_contacts">
+          <End Type="SiGLEntitiesModel.project" Role="project" Multiplicity="0..1" />
+          <End Type="SiGLEntitiesModel.project_contacts" Role="project_contacts" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="project">
+              <PropertyRef Name="project_id" />
+            </Principal>
+            <Dependent Role="project_contacts">
+              <PropertyRef Name="project_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="proj_durationproject">
+          <End Type="SiGLEntitiesModel.proj_duration" Role="proj_duration" Multiplicity="0..1" />
+          <End Type="SiGLEntitiesModel.project" Role="project" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="proj_duration">
+              <PropertyRef Name="proj_duration_id" />
+            </Principal>
+            <Dependent Role="project">
+              <PropertyRef Name="proj_duration_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="projectproject_cooperators">
+          <End Type="SiGLEntitiesModel.project" Role="project" Multiplicity="0..1" />
+          <End Type="SiGLEntitiesModel.project_cooperators" Role="project_cooperators" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="project">
+              <PropertyRef Name="project_id" />
+            </Principal>
+            <Dependent Role="project_cooperators">
+              <PropertyRef Name="project_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="data_hostproject">
+          <End Type="SiGLEntitiesModel.data_host" Role="data_host" Multiplicity="*" />
+          <End Type="SiGLEntitiesModel.project" Role="project" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="project">
+              <PropertyRef Name="project_id" />
+            </Principal>
+            <Dependent Role="data_host">
+              <PropertyRef Name="project_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="proj_statusproject">
+          <End Type="SiGLEntitiesModel.proj_status" Role="proj_status" Multiplicity="0..1" />
+          <End Type="SiGLEntitiesModel.project" Role="project" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="proj_status">
+              <PropertyRef Name="proj_status_id" />
+            </Principal>
+            <Dependent Role="project">
+              <PropertyRef Name="proj_status_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="projectproject_publication">
+          <End Type="SiGLEntitiesModel.project" Role="project" Multiplicity="0..1" />
+          <End Type="SiGLEntitiesModel.project_publication" Role="project_publication" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="project">
+              <PropertyRef Name="project_id" />
+            </Principal>
+            <Dependent Role="project_publication">
+              <PropertyRef Name="project_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="projectproject_keywords">
+          <End Type="SiGLEntitiesModel.project" Role="project" Multiplicity="0..1" />
+          <End Type="SiGLEntitiesModel.project_keywords" Role="project_keywords" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="project">
+              <PropertyRef Name="project_id" />
+            </Principal>
+            <Dependent Role="project_keywords">
+              <PropertyRef Name="project_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="data_managerproject">
+          <End Type="SiGLEntitiesModel.data_manager" Role="data_manager" Multiplicity="1" />
+          <End Type="SiGLEntitiesModel.project" Role="project" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="data_manager">
+              <PropertyRef Name="data_manager_id" />
+            </Principal>
+            <Dependent Role="project">
+              <PropertyRef Name="data_manager_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="roledata_manager">
+          <End Type="SiGLEntitiesModel.role" Role="role" Multiplicity="1" />
+          <End Type="SiGLEntitiesModel.data_manager" Role="data_manager" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="role">
+              <PropertyRef Name="role_id" />
+            </Principal>
+            <Dependent Role="data_manager">
+              <PropertyRef Name="role_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="contactproject_contacts">
+          <End Type="SiGLEntitiesModel.contact" Role="contact" Multiplicity="0..1" />
+          <End Type="SiGLEntitiesModel.project_contacts" Role="project_contacts" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="contact">
+              <PropertyRef Name="contact_id" />
+            </Principal>
+            <Dependent Role="project_contacts">
+              <PropertyRef Name="contact_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="organization_systemcontact">
+          <End Type="SiGLEntitiesModel.organization_system" Role="organization_system" Multiplicity="0..1" />
+          <End Type="SiGLEntitiesModel.contact" Role="contact" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="organization_system">
+              <PropertyRef Name="organization_system_id" />
+            </Principal>
+            <Dependent Role="contact">
+              <PropertyRef Name="organization_system_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="organizationorganization_system">
+          <End Type="SiGLEntitiesModel.organization" Role="organization" Multiplicity="1" />
+          <End Type="SiGLEntitiesModel.organization_system" Role="organization_system" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="organization">
+              <PropertyRef Name="organization_id" />
+            </Principal>
+            <Dependent Role="organization_system">
+              <PropertyRef Name="org_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="divisionorganization">
+          <End Type="SiGLEntitiesModel.division" Role="division" Multiplicity="*" />
+          <End Type="SiGLEntitiesModel.organization" Role="organization" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="organization">
+              <PropertyRef Name="organization_id" />
+            </Principal>
+            <Dependent Role="division">
+              <PropertyRef Name="org_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="sectiondivision">
+          <End Type="SiGLEntitiesModel.section" Role="section" Multiplicity="*" />
+          <End Type="SiGLEntitiesModel.division" Role="division" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="division">
+              <PropertyRef Name="division_id" />
+            </Principal>
+            <Dependent Role="section">
+              <PropertyRef Name="div_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="sectionorganization_system">
+          <End Type="SiGLEntitiesModel.section" Role="section" Multiplicity="0..1" />
+          <End Type="SiGLEntitiesModel.organization_system" Role="organization_system" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="section">
+              <PropertyRef Name="section_id" />
+            </Principal>
+            <Dependent Role="organization_system">
+              <PropertyRef Name="sec_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="divisionorganization_system">
+          <End Type="SiGLEntitiesModel.division" Role="division" Multiplicity="0..1" />
+          <End Type="SiGLEntitiesModel.organization_system" Role="organization_system" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="division">
+              <PropertyRef Name="division_id" />
+            </Principal>
+            <Dependent Role="organization_system">
+              <PropertyRef Name="div_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="organization_systemproject_cooperators">
+          <End Type="SiGLEntitiesModel.organization_system" Role="organization_system" Multiplicity="0..1" />
+          <End Type="SiGLEntitiesModel.project_cooperators" Role="project_cooperators" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="organization_system">
+              <PropertyRef Name="organization_system_id" />
+            </Principal>
+            <Dependent Role="project_cooperators">
+              <PropertyRef Name="organization_system_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="publicationproject_publication">
+          <End Type="SiGLEntitiesModel.publication" Role="publication" Multiplicity="0..1" />
+          <End Type="SiGLEntitiesModel.project_publication" Role="project_publication" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="publication">
+              <PropertyRef Name="publication_id" />
+            </Principal>
+            <Dependent Role="project_publication">
+              <PropertyRef Name="publication_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="keywordproject_keywords">
+          <End Type="SiGLEntitiesModel.keyword" Role="keyword" Multiplicity="0..1" />
+          <End Type="SiGLEntitiesModel.project_keywords" Role="project_keywords" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="keyword">
+              <PropertyRef Name="keyword_id" />
+            </Principal>
+            <Dependent Role="project_keywords">
+              <PropertyRef Name="keyword_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="SiGLEntitiesModelStoreContainer" CdmEntityContainer="SiGLEntities">
+          <EntitySetMapping Name="contacts">
+            <EntityTypeMapping TypeName="SiGLEntitiesModel.contact">
+              <MappingFragment StoreEntitySet="contact">
+                <ScalarProperty Name="science_base_id" ColumnName="science_base_id" />
+                <ScalarProperty Name="organization_system_id" ColumnName="organization_system_id" />
+                <ScalarProperty Name="phone" ColumnName="phone" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="contact_id" ColumnName="contact_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="data_host">
+            <EntityTypeMapping TypeName="SiGLEntitiesModel.data_host">
+              <MappingFragment StoreEntitySet="data_host">
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="project_id" ColumnName="project_id" />
+                <ScalarProperty Name="portal_url" ColumnName="portal_url" />
+                <ScalarProperty Name="host_name" ColumnName="host_name" />
+                <ScalarProperty Name="data_host_id" ColumnName="data_host_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="data_manager">
+            <EntityTypeMapping TypeName="SiGLEntitiesModel.data_manager">
+              <MappingFragment StoreEntitySet="data_manager">
+                <ScalarProperty Name="reset_flag" ColumnName="reset_flag" />
+                <ScalarProperty Name="salt" ColumnName="salt" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="role_id" ColumnName="role_id" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="phone" ColumnName="phone" />
+                <ScalarProperty Name="organization_system_id" ColumnName="organization_system_id" />
+                <ScalarProperty Name="lname" ColumnName="lname" />
+                <ScalarProperty Name="fname" ColumnName="fname" />
+                <ScalarProperty Name="username" ColumnName="username" />
+                <ScalarProperty Name="data_manager_id" ColumnName="data_manager_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="divisions">
+            <EntityTypeMapping TypeName="SiGLEntitiesModel.division">
+              <MappingFragment StoreEntitySet="division">
+                <ScalarProperty Name="org_id" ColumnName="org_id" />
+                <ScalarProperty Name="division_name" ColumnName="division_name" />
+                <ScalarProperty Name="division_id" ColumnName="division_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="frequency_type">
+            <EntityTypeMapping TypeName="SiGLEntitiesModel.frequency_type">
+              <MappingFragment StoreEntitySet="frequency_type">
+                <ScalarProperty Name="frequency" ColumnName="frequency" />
+                <ScalarProperty Name="frequency_type_id" ColumnName="frequency_type_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="keywords">
+            <EntityTypeMapping TypeName="SiGLEntitiesModel.keyword">
+              <MappingFragment StoreEntitySet="keyword">
+                <ScalarProperty Name="term" ColumnName="term" />
+                <ScalarProperty Name="keyword_id" ColumnName="keyword_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="lake_type">
+            <EntityTypeMapping TypeName="SiGLEntitiesModel.lake_type">
+              <MappingFragment StoreEntitySet="lake_type">
+                <ScalarProperty Name="lake" ColumnName="lake" />
+                <ScalarProperty Name="lake_type_id" ColumnName="lake_type_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="media_type">
+            <EntityTypeMapping TypeName="SiGLEntitiesModel.media_type">
+              <MappingFragment StoreEntitySet="media_type">
+                <ScalarProperty Name="media" ColumnName="media" />
+                <ScalarProperty Name="media_type_id" ColumnName="media_type_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="objective_type">
+            <EntityTypeMapping TypeName="SiGLEntitiesModel.objective_type">
+              <MappingFragment StoreEntitySet="objective_type">
+                <ScalarProperty Name="objective" ColumnName="objective" />
+                <ScalarProperty Name="objective_type_id" ColumnName="objective_type_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="organizations">
+            <EntityTypeMapping TypeName="SiGLEntitiesModel.organization">
+              <MappingFragment StoreEntitySet="organization">
+                <ScalarProperty Name="organization_name" ColumnName="organization_name" />
+                <ScalarProperty Name="organization_id" ColumnName="organization_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="organization_system">
+            <EntityTypeMapping TypeName="SiGLEntitiesModel.organization_system">
+              <MappingFragment StoreEntitySet="organization_system">
+                <ScalarProperty Name="science_base_id" ColumnName="science_base_id" />
+                <ScalarProperty Name="sec_id" ColumnName="sec_id" />
+                <ScalarProperty Name="div_id" ColumnName="div_id" />
+                <ScalarProperty Name="org_id" ColumnName="org_id" />
+                <ScalarProperty Name="organization_system_id" ColumnName="organization_system_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="parameter_type">
+            <EntityTypeMapping TypeName="SiGLEntitiesModel.parameter_type">
+              <MappingFragment StoreEntitySet="parameter_type">
+                <ScalarProperty Name="parameter_group" ColumnName="parameter_group" />
+                <ScalarProperty Name="parameter" ColumnName="parameter" />
+                <ScalarProperty Name="parameter_type_id" ColumnName="parameter_type_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="proj_duration">
+            <EntityTypeMapping TypeName="SiGLEntitiesModel.proj_duration">
+              <MappingFragment StoreEntitySet="proj_duration">
+                <ScalarProperty Name="duration_value" ColumnName="duration_value" />
+                <ScalarProperty Name="proj_duration_id" ColumnName="proj_duration_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="proj_status">
+            <EntityTypeMapping TypeName="SiGLEntitiesModel.proj_status">
+              <MappingFragment StoreEntitySet="proj_status">
+                <ScalarProperty Name="status_value" ColumnName="status_value" />
+                <ScalarProperty Name="proj_status_id" ColumnName="proj_status_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="projects">
+            <EntityTypeMapping TypeName="SiGLEntitiesModel.project">
+              <MappingFragment StoreEntitySet="project">
+                <ScalarProperty Name="last_edited_stamp" ColumnName="last_edited_stamp" />
+                <ScalarProperty Name="created_stamp" ColumnName="created_stamp" />
+                <ScalarProperty Name="ready_flag" ColumnName="ready_flag" />
+                <ScalarProperty Name="proj_duration_id" ColumnName="proj_duration_id" />
+                <ScalarProperty Name="proj_status_id" ColumnName="proj_status_id" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="science_base_id" ColumnName="science_base_id" />
+                <ScalarProperty Name="data_manager_id" ColumnName="data_manager_id" />
+                <ScalarProperty Name="additional_info" ColumnName="additional_info" />
+                <ScalarProperty Name="url" ColumnName="url" />
+                <ScalarProperty Name="end_date" ColumnName="end_date" />
+                <ScalarProperty Name="start_date" ColumnName="start_date" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="project_id" ColumnName="project_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="project_contacts">
+            <EntityTypeMapping TypeName="SiGLEntitiesModel.project_contacts">
+              <MappingFragment StoreEntitySet="project_contacts">
+                <ScalarProperty Name="contact_id" ColumnName="contact_id" />
+                <ScalarProperty Name="project_id" ColumnName="project_id" />
+                <ScalarProperty Name="project_contacts_id" ColumnName="project_contacts_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="project_cooperators">
+            <EntityTypeMapping TypeName="SiGLEntitiesModel.project_cooperators">
+              <MappingFragment StoreEntitySet="project_cooperators">
+                <ScalarProperty Name="organization_system_id" ColumnName="organization_system_id" />
+                <ScalarProperty Name="project_id" ColumnName="project_id" />
+                <ScalarProperty Name="project_cooperator_id" ColumnName="project_cooperator_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="project_keywords">
+            <EntityTypeMapping TypeName="SiGLEntitiesModel.project_keywords">
+              <MappingFragment StoreEntitySet="project_keywords">
+                <ScalarProperty Name="keyword_id" ColumnName="keyword_id" />
+                <ScalarProperty Name="project_id" ColumnName="project_id" />
+                <ScalarProperty Name="project_keywords_id" ColumnName="project_keywords_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="project_objectives">
+            <EntityTypeMapping TypeName="SiGLEntitiesModel.project_objectives">
+              <MappingFragment StoreEntitySet="project_objectives">
+                <ScalarProperty Name="objective_id" ColumnName="objective_id" />
+                <ScalarProperty Name="project_id" ColumnName="project_id" />
+                <ScalarProperty Name="project_objectives_id" ColumnName="project_objectives_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="project_publication">
+            <EntityTypeMapping TypeName="SiGLEntitiesModel.project_publication">
+              <MappingFragment StoreEntitySet="project_publication">
+                <ScalarProperty Name="publication_id" ColumnName="publication_id" />
+                <ScalarProperty Name="project_id" ColumnName="project_id" />
+                <ScalarProperty Name="project_publication_id" ColumnName="project_publication_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="publications">
+            <EntityTypeMapping TypeName="SiGLEntitiesModel.publication">
+              <MappingFragment StoreEntitySet="publication">
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="science_base_id" ColumnName="science_base_id" />
+                <ScalarProperty Name="citation" ColumnName="citation" />
+                <ScalarProperty Name="url" ColumnName="url" />
+                <ScalarProperty Name="title" ColumnName="title" />
+                <ScalarProperty Name="publication_id" ColumnName="publication_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="resource_type">
+            <EntityTypeMapping TypeName="SiGLEntitiesModel.resource_type">
+              <MappingFragment StoreEntitySet="resource_type">
+                <ScalarProperty Name="resource_name" ColumnName="resource_name" />
+                <ScalarProperty Name="resource_type_id" ColumnName="resource_type_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="roles">
+            <EntityTypeMapping TypeName="SiGLEntitiesModel.role">
+              <MappingFragment StoreEntitySet="role">
+                <ScalarProperty Name="role_description" ColumnName="role_description" />
+                <ScalarProperty Name="role_name" ColumnName="role_name" />
+                <ScalarProperty Name="role_id" ColumnName="role_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sections">
+            <EntityTypeMapping TypeName="SiGLEntitiesModel.section">
+              <MappingFragment StoreEntitySet="section">
+                <ScalarProperty Name="div_id" ColumnName="div_id" />
+                <ScalarProperty Name="section_name" ColumnName="section_name" />
+                <ScalarProperty Name="section_id" ColumnName="section_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sites">
+            <EntityTypeMapping TypeName="SiGLEntitiesModel.site">
+              <MappingFragment StoreEntitySet="site">
+                <ScalarProperty Name="url" ColumnName="url" />
+                <ScalarProperty Name="watershed_huc8" ColumnName="watershed_huc8" />
+                <ScalarProperty Name="state_province" ColumnName="state_province" />
+                <ScalarProperty Name="country" ColumnName="country" />
+                <ScalarProperty Name="lake_type_id" ColumnName="lake_type_id" />
+                <ScalarProperty Name="status_type_id" ColumnName="status_type_id" />
+                <ScalarProperty Name="waterbody" ColumnName="waterbody" />
+                <ScalarProperty Name="longitude" ColumnName="longitude" />
+                <ScalarProperty Name="latitude" ColumnName="latitude" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="additional_info" ColumnName="additional_info" />
+                <ScalarProperty Name="sample_platform" ColumnName="sample_platform" />
+                <ScalarProperty Name="project_id" ColumnName="project_id" />
+                <ScalarProperty Name="end_date" ColumnName="end_date" />
+                <ScalarProperty Name="start_date" ColumnName="start_date" />
+                <ScalarProperty Name="site_id" ColumnName="site_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="site_frequency">
+            <EntityTypeMapping TypeName="SiGLEntitiesModel.site_frequency">
+              <MappingFragment StoreEntitySet="site_frequency">
+                <ScalarProperty Name="frequency_type_id" ColumnName="frequency_type_id" />
+                <ScalarProperty Name="site_id" ColumnName="site_id" />
+                <ScalarProperty Name="site_frequency_id" ColumnName="site_frequency_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="site_media">
+            <EntityTypeMapping TypeName="SiGLEntitiesModel.site_media">
+              <MappingFragment StoreEntitySet="site_media">
+                <ScalarProperty Name="media_type_id" ColumnName="media_type_id" />
+                <ScalarProperty Name="site_id" ColumnName="site_id" />
+                <ScalarProperty Name="site_media_id" ColumnName="site_media_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="site_parameters">
+            <EntityTypeMapping TypeName="SiGLEntitiesModel.site_parameters">
+              <MappingFragment StoreEntitySet="site_parameters">
+                <ScalarProperty Name="parameter_type_id" ColumnName="parameter_type_id" />
+                <ScalarProperty Name="site_id" ColumnName="site_id" />
+                <ScalarProperty Name="site_parameters_id" ColumnName="site_parameters_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="site_resource">
+            <EntityTypeMapping TypeName="SiGLEntitiesModel.site_resource">
+              <MappingFragment StoreEntitySet="site_resource">
+                <ScalarProperty Name="resource_type_id" ColumnName="resource_type_id" />
+                <ScalarProperty Name="site_id" ColumnName="site_id" />
+                <ScalarProperty Name="site_resource_id" ColumnName="site_resource_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="status_type">
+            <EntityTypeMapping TypeName="SiGLEntitiesModel.status_type">
+              <MappingFragment StoreEntitySet="status_type">
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="status_id" ColumnName="status_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
