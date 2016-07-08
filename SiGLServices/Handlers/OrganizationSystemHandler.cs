@@ -297,32 +297,8 @@ namespace SiGLServices.Handlers
         #endregion
 
         #region PutMethods
-        ///// 
-        ///// Force the user to provide authentication and authorization 
-        ///// Don't think there will ever be any PUTs on this entity
-        //[SiGLRequiresRole(new string[] { AdminRole, ManagerRole })]
-        //[HttpOperation(HttpMethod.PUT)]
-        //public OperationResult Put(Int32 entityId, organization_system anEntity)
-        //{
-        //    try
-        //    {
-        //        if (anEntity.org_id <= 0)
-        //            throw new BadRequestException("Invalid input parameters");
-        //        using (EasySecureString securedPassword = GetSecuredPassword())
-        //        {
-        //            using (SiGLAgent sa = new SiGLAgent(username, securedPassword))
-        //            {
-        //                anEntity = sa.Update<organization_system>(entityId, anEntity);
-        //                sm(sa.Messages);
-        //            }//end using
-        //        }//end using
-
-        //        return new OperationResult.Modified { ResponseResource = anEntity, Description = this.MessageString };
-        //    }
-        //    catch (Exception ex)
-        //    { return HandleException(ex); }
-        //}//end HttpMethod.PUT
-
+        // Don't think there will ever be any PUTs on this entity
+       
         #endregion
 
         #region DeleteMethods
