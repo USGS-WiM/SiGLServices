@@ -1,0 +1,310 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="SiGLEntitiesModel.Store" Provider="Npgsql" ProviderManifestToken="9.4.5" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="contact">
+    <Key>
+      <PropertyRef Name="contact_id" />
+    </Key>
+    <Property Name="contact_id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="name" Type="varchar" MaxLength="200" />
+    <Property Name="email" Type="varchar" MaxLength="50" />
+    <Property Name="phone" Type="varchar" MaxLength="30" />
+    <Property Name="organization_system_id" Type="int4" />
+    <Property Name="science_base_id" Type="varchar" MaxLength="200" />
+  </EntityType>
+  <EntityType Name="data_host">
+    <Key>
+      <PropertyRef Name="data_host_id" />
+    </Key>
+    <Property Name="data_host_id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="host_name" Type="varchar" MaxLength="255" />
+    <Property Name="portal_url" Type="varchar" MaxLength="255" />
+    <Property Name="project_id" Type="int4" />
+    <Property Name="description" Type="varchar" MaxLength="255" />
+  </EntityType>
+  <EntityType Name="data_manager">
+    <Key>
+      <PropertyRef Name="data_manager_id" />
+    </Key>
+    <Property Name="data_manager_id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="username" Type="varchar" MaxLength="60" Nullable="false" />
+    <Property Name="fname" Type="varchar" MaxLength="100" />
+    <Property Name="lname" Type="varchar" MaxLength="100" />
+    <Property Name="organization_system_id" Type="int4" />
+    <Property Name="phone" Type="varchar" MaxLength="30" />
+    <Property Name="email" Type="varchar" MaxLength="100" />
+    <Property Name="role_id" Type="int4" Nullable="false" />
+    <Property Name="password" Type="varchar" MaxLength="8000" Nullable="false" />
+    <Property Name="salt" Type="varchar" MaxLength="8000" Nullable="false" />
+    <Property Name="reset_flag" Type="int4" />
+  </EntityType>
+  <EntityType Name="division">
+    <Key>
+      <PropertyRef Name="division_id" />
+    </Key>
+    <Property Name="division_id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="division_name" Type="varchar" MaxLength="500" />
+    <Property Name="org_id" Type="int4" />
+  </EntityType>
+  <EntityType Name="frequency_type">
+    <Key>
+      <PropertyRef Name="frequency_type_id" />
+    </Key>
+    <Property Name="frequency_type_id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="frequency" Type="varchar" MaxLength="60" />
+  </EntityType>
+  <EntityType Name="keyword">
+    <Key>
+      <PropertyRef Name="keyword_id" />
+    </Key>
+    <Property Name="keyword_id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="term" Type="varchar" MaxLength="200" />
+  </EntityType>
+  <EntityType Name="lake_type">
+    <Key>
+      <PropertyRef Name="lake_type_id" />
+    </Key>
+    <Property Name="lake_type_id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="lake" Type="varchar" MaxLength="100" />
+  </EntityType>
+  <EntityType Name="media_type">
+    <Key>
+      <PropertyRef Name="media_type_id" />
+    </Key>
+    <Property Name="media_type_id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="media" Type="varchar" MaxLength="200" />
+  </EntityType>
+  <EntityType Name="objective_type">
+    <Key>
+      <PropertyRef Name="objective_type_id" />
+    </Key>
+    <Property Name="objective_type_id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="objective" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="organization">
+    <Key>
+      <PropertyRef Name="organization_id" />
+    </Key>
+    <Property Name="organization_id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="organization_name" Type="varchar" MaxLength="250" />
+  </EntityType>
+  <EntityType Name="organization_system">
+    <Key>
+      <PropertyRef Name="organization_system_id" />
+    </Key>
+    <Property Name="organization_system_id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="org_id" Type="int4" Nullable="false" />
+    <Property Name="div_id" Type="int4" />
+    <Property Name="sec_id" Type="int4" />
+    <Property Name="science_base_id" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="parameter_type">
+    <Key>
+      <PropertyRef Name="parameter_type_id" />
+    </Key>
+    <Property Name="parameter_type_id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="parameter" Type="varchar" MaxLength="75" />
+    <Property Name="parameter_group" Type="varchar" MaxLength="255" />
+  </EntityType>
+  <EntityType Name="proj_duration">
+    <Key>
+      <PropertyRef Name="proj_duration_id" />
+    </Key>
+    <Property Name="proj_duration_id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="duration_value" Type="varchar" MaxLength="100" />
+  </EntityType>
+  <EntityType Name="proj_status">
+    <Key>
+      <PropertyRef Name="proj_status_id" />
+    </Key>
+    <Property Name="proj_status_id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="status_value" Type="varchar" MaxLength="100" />
+  </EntityType>
+  <EntityType Name="project">
+    <Key>
+      <PropertyRef Name="project_id" />
+    </Key>
+    <Property Name="project_id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="name" Type="varchar" MaxLength="255" />
+    <Property Name="start_date" Type="timestamp" />
+    <Property Name="end_date" Type="timestamp" />
+    <Property Name="url" Type="varchar" MaxLength="255" />
+    <Property Name="additional_info" Type="varchar" MaxLength="2000" />
+    <Property Name="data_manager_id" Type="int4" Nullable="false" />
+    <Property Name="science_base_id" Type="varchar" MaxLength="40" />
+    <Property Name="description" Type="varchar" MaxLength="4000" />
+    <Property Name="proj_status_id" Type="int4" />
+    <Property Name="proj_duration_id" Type="int4" />
+    <Property Name="ready_flag" Type="int4" />
+    <Property Name="created_stamp" Type="timestamp" />
+    <Property Name="last_edited_stamp" Type="timestamp" />
+  </EntityType>
+  <EntityType Name="project_contacts">
+    <Key>
+      <PropertyRef Name="project_contacts_id" />
+    </Key>
+    <Property Name="project_contacts_id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="project_id" Type="int4" />
+    <Property Name="contact_id" Type="int4" />
+  </EntityType>
+  <EntityType Name="project_cooperators">
+    <Key>
+      <PropertyRef Name="project_cooperator_id" />
+    </Key>
+    <Property Name="project_cooperator_id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="project_id" Type="int4" />
+    <Property Name="organization_system_id" Type="int4" />
+  </EntityType>
+  <EntityType Name="project_keywords">
+    <Key>
+      <PropertyRef Name="project_keywords_id" />
+    </Key>
+    <Property Name="project_keywords_id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="project_id" Type="int4" />
+    <Property Name="keyword_id" Type="int4" />
+  </EntityType>
+  <EntityType Name="project_objectives">
+    <Key>
+      <PropertyRef Name="project_objectives_id" />
+    </Key>
+    <Property Name="project_objectives_id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="project_id" Type="int4" />
+    <Property Name="objective_id" Type="int4" />
+  </EntityType>
+  <EntityType Name="project_publication">
+    <Key>
+      <PropertyRef Name="project_publication_id" />
+    </Key>
+    <Property Name="project_publication_id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="project_id" Type="int4" />
+    <Property Name="publication_id" Type="int4" />
+  </EntityType>
+  <EntityType Name="publication">
+    <Key>
+      <PropertyRef Name="publication_id" />
+    </Key>
+    <Property Name="publication_id" Type="int4" Nullable="false" />
+    <Property Name="title" Type="varchar" MaxLength="2000" />
+    <Property Name="url" Type="varchar" MaxLength="2000" />
+    <Property Name="citation" Type="varchar" MaxLength="1000" />
+    <Property Name="science_base_id" Type="varchar" MaxLength="100" />
+    <Property Name="description" Type="varchar" MaxLength="4000" />
+  </EntityType>
+  <EntityType Name="resource_type">
+    <Key>
+      <PropertyRef Name="resource_type_id" />
+    </Key>
+    <Property Name="resource_type_id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="resource_name" Type="varchar" MaxLength="60" />
+  </EntityType>
+  <EntityType Name="role">
+    <Key>
+      <PropertyRef Name="role_id" />
+    </Key>
+    <Property Name="role_id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="role_name" Type="varchar" MaxLength="255" />
+    <Property Name="role_description" Type="varchar" MaxLength="255" />
+  </EntityType>
+  <EntityType Name="section">
+    <Key>
+      <PropertyRef Name="section_id" />
+    </Key>
+    <Property Name="section_id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="section_name" Type="varchar" MaxLength="500" />
+    <Property Name="div_id" Type="int4" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6005: The data type 'geometry' is currently not supported for the target Entity Framework version; the column 'geom' in the table 'pgtest.lampadmin.site' was excluded.-->
+  <EntityType Name="site">
+    <Key>
+      <PropertyRef Name="site_id" />
+    </Key>
+    <Property Name="site_id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="start_date" Type="timestamp" />
+    <Property Name="end_date" Type="timestamp" />
+    <Property Name="project_id" Type="int4" />
+    <Property Name="sample_platform" Type="varchar" MaxLength="255" />
+    <Property Name="additional_info" Type="varchar" MaxLength="1000" />
+    <Property Name="name" Type="varchar" MaxLength="255" />
+    <Property Name="description" Type="varchar" MaxLength="255" />
+    <Property Name="latitude" Type="float8" Nullable="false" />
+    <Property Name="longitude" Type="float8" Nullable="false" />
+    <Property Name="waterbody" Type="varchar" MaxLength="255" />
+    <Property Name="status_type_id" Type="int4" />
+    <Property Name="lake_type_id" Type="int4" />
+    <Property Name="country" Type="varchar" MaxLength="25" />
+    <Property Name="state_province" Type="varchar" MaxLength="50" />
+    <Property Name="watershed_huc8" Type="varchar" MaxLength="8" />
+    <Property Name="url" Type="varchar" MaxLength="255" />
+  </EntityType>
+  <EntityType Name="site_frequency">
+    <Key>
+      <PropertyRef Name="site_frequency_id" />
+    </Key>
+    <Property Name="site_frequency_id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="site_id" Type="int4" Nullable="false" />
+    <Property Name="frequency_type_id" Type="int4" Nullable="false" />
+  </EntityType>
+  <EntityType Name="site_media">
+    <Key>
+      <PropertyRef Name="site_media_id" />
+    </Key>
+    <Property Name="site_media_id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="site_id" Type="int4" Nullable="false" />
+    <Property Name="media_type_id" Type="int4" Nullable="false" />
+  </EntityType>
+  <EntityType Name="site_parameters">
+    <Key>
+      <PropertyRef Name="site_parameters_id" />
+    </Key>
+    <Property Name="site_parameters_id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="site_id" Type="int4" Nullable="false" />
+    <Property Name="parameter_type_id" Type="int4" Nullable="false" />
+  </EntityType>
+  <EntityType Name="site_resource">
+    <Key>
+      <PropertyRef Name="site_resource_id" />
+    </Key>
+    <Property Name="site_resource_id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="site_id" Type="int4" Nullable="false" />
+    <Property Name="resource_type_id" Type="int4" Nullable="false" />
+  </EntityType>
+  <EntityType Name="status_type">
+    <Key>
+      <PropertyRef Name="status_id" />
+    </Key>
+    <Property Name="status_id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="status" Type="varchar" MaxLength="60" />
+  </EntityType>
+  <EntityContainer Name="SiGLEntitiesModelStoreContainer">
+    <EntitySet Name="contact" EntityType="Self.contact" Schema="lampadmin" store:Type="Tables" />
+    <EntitySet Name="data_host" EntityType="Self.data_host" Schema="lampadmin" store:Type="Tables" />
+    <EntitySet Name="data_manager" EntityType="Self.data_manager" Schema="lampadmin" store:Type="Tables" />
+    <EntitySet Name="division" EntityType="Self.division" Schema="lampadmin" store:Type="Tables" />
+    <EntitySet Name="frequency_type" EntityType="Self.frequency_type" Schema="lampadmin" store:Type="Tables" />
+    <EntitySet Name="keyword" EntityType="Self.keyword" Schema="lampadmin" store:Type="Tables" />
+    <EntitySet Name="lake_type" EntityType="Self.lake_type" Schema="lampadmin" store:Type="Tables" />
+    <EntitySet Name="media_type" EntityType="Self.media_type" Schema="lampadmin" store:Type="Tables" />
+    <EntitySet Name="objective_type" EntityType="Self.objective_type" Schema="lampadmin" store:Type="Tables" />
+    <EntitySet Name="organization" EntityType="Self.organization" Schema="lampadmin" store:Type="Tables" />
+    <EntitySet Name="organization_system" EntityType="Self.organization_system" Schema="lampadmin" store:Type="Tables" />
+    <EntitySet Name="parameter_type" EntityType="Self.parameter_type" Schema="lampadmin" store:Type="Tables" />
+    <EntitySet Name="proj_duration" EntityType="Self.proj_duration" Schema="lampadmin" store:Type="Tables" />
+    <EntitySet Name="proj_status" EntityType="Self.proj_status" Schema="lampadmin" store:Type="Tables" />
+    <EntitySet Name="project" EntityType="Self.project" Schema="lampadmin" store:Type="Tables" />
+    <EntitySet Name="project_contacts" EntityType="Self.project_contacts" Schema="lampadmin" store:Type="Tables" />
+    <EntitySet Name="project_cooperators" EntityType="Self.project_cooperators" Schema="lampadmin" store:Type="Tables" />
+    <EntitySet Name="project_keywords" EntityType="Self.project_keywords" Schema="lampadmin" store:Type="Tables" />
+    <EntitySet Name="project_objectives" EntityType="Self.project_objectives" Schema="lampadmin" store:Type="Tables" />
+    <EntitySet Name="project_publication" EntityType="Self.project_publication" Schema="lampadmin" store:Type="Tables" />
+    <EntitySet Name="publication" EntityType="Self.publication" Schema="lampadmin" store:Type="Tables" />
+    <EntitySet Name="resource_type" EntityType="Self.resource_type" Schema="lampadmin" store:Type="Tables" />
+    <EntitySet Name="role" EntityType="Self.role" Schema="lampadmin" store:Type="Tables" />
+    <EntitySet Name="section" EntityType="Self.section" Schema="lampadmin" store:Type="Tables" />
+    <EntitySet Name="site" EntityType="Self.site" Schema="lampadmin" store:Type="Tables" />
+    <EntitySet Name="site_frequency" EntityType="Self.site_frequency" Schema="lampadmin" store:Type="Tables" />
+    <EntitySet Name="site_media" EntityType="Self.site_media" Schema="lampadmin" store:Type="Tables" />
+    <EntitySet Name="site_parameters" EntityType="Self.site_parameters" Schema="lampadmin" store:Type="Tables" />
+    <EntitySet Name="site_resource" EntityType="Self.site_resource" Schema="lampadmin" store:Type="Tables" />
+    <EntitySet Name="status_type" EntityType="Self.status_type" Schema="lampadmin" store:Type="Tables" />
+  </EntityContainer>
+</Schema>
