@@ -120,6 +120,11 @@
     <Compile Include="Configuration.cs" />
     <Compile Include="Handlers\ContactHandler.cs" />
     <Compile Include="Handlers\DataHostHandler.cs" />
+    <Compile Include="Handlers\ProjectHandler.cs" />
+    <Compile Include="Handlers\StatusHandler.cs" />
+    <Compile Include="Handlers\SectionHandler.cs" />
+    <Compile Include="Handlers\RoleHandler.cs" />
+    <Compile Include="Handlers\ResourceHandler.cs" />
     <Compile Include="Handlers\PublicationHandler.cs" />
     <Compile Include="Handlers\ProjDurationHandler.cs" />
     <Compile Include="Handlers\ProjStatusHandler.cs" />
@@ -133,7 +138,9 @@
     <Compile Include="Handlers\FrequencyHandler.cs" />
     <Compile Include="Handlers\DivisionHandler.cs" />
     <Compile Include="Handlers\DataManagerHandler.cs" />
+    <Compile Include="Resources\ContactResource.cs" />
     <Compile Include="Resources\DataManagerResource.cs" />
+    <Compile Include="Resources\ProjectResource.cs" />
     <Compile Include="Resources\OrganizationResource.cs" />
     <Compile Include="Resources\ParameterResource.cs" />
     <Compile Include="Security\SiGLAuthenticationProvider.cs" />
