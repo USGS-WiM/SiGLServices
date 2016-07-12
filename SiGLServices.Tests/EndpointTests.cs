@@ -376,7 +376,7 @@ namespace SiGLServices.Test
         public void OrganizationSystemRequest()
         {
             //GET LIST of organization_system
-            List<organization_system> RequestList = this.GETRequest<List<organization_system>>(host + Configuration.organizationSystemResource);
+            List<organization_system> RequestList = this.GETRequest<List<organization_system>>(host + Configuration.orgSystemResource);
             Assert.IsNotNull(RequestList, RequestList.Count.ToString());
 
             //GET LIST of organizationResources (test in browser instead)
@@ -384,7 +384,7 @@ namespace SiGLServices.Test
 
             //POST (organization_system)
             organization_system postObj;
-            postObj = this.POSTRequest<organization_system>(host + Configuration.organizationSystemResource, new organization_system() { org_id = 1, div_id=44,sec_id=1 }, basicAuth);
+            postObj = this.POSTRequest<organization_system>(host + Configuration.orgSystemResource, new organization_system() { org_id = 1, div_id = 44, sec_id = 1 }, basicAuth);
             Assert.IsNotNull(postObj, "ID: " + postObj.organization_system_id.ToString());
 
             //POST (projectOrganization)
@@ -393,7 +393,7 @@ namespace SiGLServices.Test
             Assert.IsNotNull(postProjOrg, postProjOrg.Count.ToString());
 
             //GET POSTed item (organization_system)
-            organization_system RequestObj = this.GETRequest<organization_system>(host + Configuration.organizationSystemResource + "/" + postObj.organization_system_id, basicAuth);
+            organization_system RequestObj = this.GETRequest<organization_system>(host + Configuration.orgSystemResource + "/" + postObj.organization_system_id, basicAuth);
             Assert.IsNotNull(RequestObj);
 
             //GET item (organizationResource) Test in browser instead         
@@ -489,11 +489,11 @@ namespace SiGLServices.Test
             Assert.IsNotNull(postObj, "ID: " + postObj.proj_duration_id.ToString());
 
             //GET POSTed item
-            proj_duration RequestObj = this.GETRequest<proj_duration>(host + Configuration.projDurationResource + "/" + postObj.proj_duration_id, basicAuth);
+            proj_duration RequestObj = this.GETRequest<proj_duration>(host + Configuration.projDurationResource + "/" + postObj.proj_duration_id);
             Assert.IsNotNull(RequestObj);
 
             //GET project proj_duration
-            proj_duration projDuration = this.GETRequest<proj_duration>(host + Configuration.projectResource + "/1512/projDuration", basicAuth);
+            proj_duration projDuration = this.GETRequest<proj_duration>(host + Configuration.projectResource + "/1512/projDuration");
             Assert.IsNotNull(projDuration);
 
             //PUT POSTed item
@@ -507,7 +507,102 @@ namespace SiGLServices.Test
         }//end method
         [TestMethod]
         public void ProjectRequest()
-        { }
+        {
+            //GET LIST GetAllProjects
+            List<project> RequestList = this.GETRequest<List<project>>(host + Configuration.projectResource);
+            Assert.IsNotNull(RequestList, RequestList.Count.ToString());
+
+            //GetContactProjects
+            List<project> ContProjList = this.GETRequest<List<project>>(host + Configuration.contactResource + "/1/" + Configuration.projectResource);
+            Assert.IsNotNull(ContProjList, ContProjList.Count.ToString());
+
+            //GetDataManagersProjects
+            List<project> DMProjList = this.GETRequest<List<project>>(host + Configuration.dataManagerResource + "/163/" + Configuration.projectResource);
+            Assert.IsNotNull(DMProjList, DMProjList.Count.ToString());
+
+            //GetKeyWordProjects
+            List<project> KeyProjList = this.GETRequest<List<project>>(host + Configuration.keywordResource + "/10/" + Configuration.projectResource);
+            Assert.IsNotNull(KeyProjList, KeyProjList.Count.ToString());
+
+            //GetPublicationProjects
+            List<project> PubProjList = this.GETRequest<List<project>>(host + Configuration.publicationResource + "/1/" + Configuration.projectResource);
+            Assert.IsNotNull(PubProjList, PubProjList.Count.ToString());
+
+            //GetObjectiveProjects
+            List<project> ObjProjList = this.GETRequest<List<project>>(host + Configuration.objectiveResource + "/1/" + Configuration.projectResource);
+            Assert.IsNotNull(ObjProjList, ObjProjList.Count.ToString());
+
+            //GetFreqSiteProjects
+            List<project> SiteFreqProjList = this.GETRequest<List<project>>(host + Configuration.frequencyResource + "/1/" + Configuration.projectResource);
+            Assert.IsNotNull(SiteFreqProjList, SiteFreqProjList.Count.ToString());
+
+            //GetLakeSiteProjects
+            List<project> siteLakeProjList = this.GETRequest<List<project>>(host + Configuration.lakeResource + "/1/" + Configuration.projectResource);
+            Assert.IsNotNull(siteLakeProjList, siteLakeProjList.Count.ToString());
+
+            //GetMediaSiteProjects
+            List<project> siteMedProjList = this.GETRequest<List<project>>(host + Configuration.mediaResource + "/1/" + Configuration.projectResource);
+            Assert.IsNotNull(siteMedProjList, siteMedProjList.Count.ToString());
+
+            //GetParameterSiteProjects
+            List<project> siteParamProjList = this.GETRequest<List<project>>(host + Configuration.parameterResource + "/1/" + Configuration.projectResource);
+            Assert.IsNotNull(siteParamProjList, siteParamProjList.Count.ToString());
+
+            //GetResourceSiteProjects
+            List<project> siteResProjList = this.GETRequest<List<project>>(host + Configuration.resourceResource + "/1/" + Configuration.projectResource);
+            Assert.IsNotNull(siteResProjList, siteResProjList.Count.ToString());
+
+            //GetSiteStatusProjects
+            List<project> siteStatusProjList = this.GETRequest<List<project>>(host + Configuration.statusResource + "/1/" + Configuration.projectResource);
+            Assert.IsNotNull(siteStatusProjList, siteStatusProjList.Count.ToString());
+
+            //GetOrgSysProjects
+            List<project> orgSysProjList = this.GETRequest<List<project>>(host + Configuration.orgSystemResource + "/1/" + Configuration.projectResource);
+            Assert.IsNotNull(orgSysProjList, orgSysProjList.Count.ToString());
+
+            //GetProjectDurationProjects
+            List<project> projDurProjList = this.GETRequest<List<project>>(host + Configuration.projDurationResource + "/1/" + Configuration.projectResource);
+            Assert.IsNotNull(projDurProjList, projDurProjList.Count.ToString());
+
+            //GetProjectStatusProjects
+            List<project> projStatProjList = this.GETRequest<List<project>>(host + Configuration.projStatusResource + "/1/" + Configuration.projectResource);
+            Assert.IsNotNull(projStatProjList, projStatProjList.Count.ToString());
+
+            //GetFlaggedProjects
+            List<project> flagProjList = this.GETRequest<List<project>>(host + Configuration.projectResource + "?FlaggedProjects=1");
+            Assert.IsNotNull(flagProjList, flagProjList.Count.ToString());
+
+            //GetIndexProjects (project_sitecount_view
+            List<project_sitecount_view> indexProjectList = this.GETRequest<List<project_sitecount_view>>(host + Configuration.projectResource + "/IndexProjects", basicAuth);
+            Assert.IsNotNull(indexProjectList, indexProjectList.Count.ToString());
+            //POST
+            project postObj;
+            postObj = this.POSTRequest<project>(host + Configuration.projectResource, new project() { name = "post-test", proj_duration_id = 1, proj_status_id=1 }, basicAuth);
+            Assert.IsNotNull(postObj, "ID: " + postObj.project_id.ToString());
+
+            //GET POSTed item
+            project RequestObj = this.GETRequest<project>(host + Configuration.projectResource + "/" + postObj.project_id);
+            Assert.IsNotNull(RequestObj);
+
+            //GetSiteProject
+            project siteProjObj = this.GETRequest<project>(host + Configuration.siteResource + "/1301/project");
+            Assert.IsNotNull(siteProjObj);
+
+            //GetDataHostProject
+            project dhProjObj = this.GETRequest<project>(host + Configuration.dataHostResource + "/1/project");
+            Assert.IsNotNull(dhProjObj);
+
+            //PUT POSTed item
+            postObj.name = "put-test";
+            project putObj = this.PUTRequest<project>(host + Configuration.projectResource + "/" + postObj.project_id, postObj, basicAuth);
+            Assert.IsNotNull(putObj);
+
+            //Delete POSTed item
+            bool success = this.DELETERequest<project>(host + Configuration.projectResource + "/2084", basicAuth);
+            Assert.IsTrue(success);
+
+            //not testing delete all dm projects just yet
+        }
         [TestMethod]
         public void PublicationRequest()
         {
@@ -546,10 +641,127 @@ namespace SiGLServices.Test
             bool success = this.DELETERequest<publication>(host + Configuration.publicationResource + "/" + RequestObj.publication_id, basicAuth);
             Assert.IsTrue(success);
         }//end method
-        
-        
-        
-        
+        [TestMethod]
+        public void ResourceRequest()
+        {
+            //GET LIST
+            List<resource_type> RequestList = this.GETRequest<List<resource_type>>(host + Configuration.resourceResource);
+            Assert.IsNotNull(RequestList, RequestList.Count.ToString());
+
+            //GET site Media
+            List<resource_type> siteResourceList = this.GETRequest<List<resource_type>>(host + Configuration.siteResource + "/13659/" + Configuration.resourceResource);
+            Assert.IsNotNull(siteResourceList, siteResourceList.Count.ToString());
+
+            //POST
+            resource_type postObj;
+            postObj = this.POSTRequest<resource_type>(host + Configuration.resourceResource, new resource_type() { resource_name = "post-test" }, basicAuth);
+            Assert.IsNotNull(postObj, "ID: " + postObj.resource_type_id.ToString());
+
+            //GET POSTed item
+            resource_type RequestObj = this.GETRequest<resource_type>(host + Configuration.resourceResource + "/" + postObj.resource_type_id);
+            Assert.IsNotNull(RequestObj);
+
+            //POST siteResource
+            List<resource_type> siteResResp;
+            siteResResp = this.POSTRequest<resource_type, List<resource_type>>(host + Configuration.siteResource + "/13659/addResource?ResourceTypeId=" + RequestObj.resource_type_id, null, basicAuth);
+            Assert.IsNotNull(siteResResp, siteResResp.Count.ToString());
+
+            //PUT POSTed item
+            RequestObj.resource_name = "put-test";
+            resource_type putObj = this.PUTRequest<resource_type>(host + Configuration.resourceResource + "/" + RequestObj.resource_type_id, RequestObj, basicAuth);
+            Assert.IsNotNull(putObj);
+
+            //Delete POSTed item 
+            bool siteRessuccess = this.DELETERequest<resource_type>(host + Configuration.siteResource + "/13659/removeResource?ResourceTypeId=" + RequestObj.resource_type_id, basicAuth);
+            Assert.IsTrue(siteRessuccess);
+
+            //Delete POSTed item
+            bool success = this.DELETERequest<resource_type>(host + Configuration.resourceResource + "/" + RequestObj.resource_type_id, basicAuth);
+            Assert.IsTrue(success);
+        }//end method
+        [TestMethod]
+        public void RoleRequest()
+        {
+            //GET LIST
+            List<role> RequestList = this.GETRequest<List<role>>(host + Configuration.roleResource);
+            Assert.IsNotNull(RequestList, RequestList.Count.ToString());
+                        
+            //POST
+            role postObj;
+            postObj = this.POSTRequest<role>(host + Configuration.roleResource, new role() { role_name = "post-test" }, basicAuth);
+            Assert.IsNotNull(postObj, "ID: " + postObj.role_id.ToString());
+
+            //GET POSTed item
+            role RequestObj = this.GETRequest<role>(host + Configuration.roleResource + "/" + postObj.role_id);
+            Assert.IsNotNull(RequestObj);
+
+            //GET dm role
+            role dmRoleObj = this.GETRequest<role>(host + Configuration.dataManagerResource + "/6/role");
+            Assert.IsNotNull(dmRoleObj);
+           
+            //PUT POSTed item
+            RequestObj.role_name = "put-test";
+            role putObj = this.PUTRequest<role>(host + Configuration.roleResource + "/" + RequestObj.role_id, RequestObj, basicAuth);
+            Assert.IsNotNull(putObj);
+
+            //Delete POSTed item
+            bool success = this.DELETERequest<role>(host + Configuration.roleResource + "/" + RequestObj.role_id, basicAuth);
+            Assert.IsTrue(success);
+        }//end method
+        [TestMethod]
+        public void SectionRequest()
+        {
+            //GET LIST
+            List<section> RequestList = this.GETRequest<List<section>>(host + Configuration.sectionResource);
+            Assert.IsNotNull(RequestList, RequestList.Count.ToString());
+
+            //POST
+            section postObj;
+            postObj = this.POSTRequest<section>(host + Configuration.sectionResource, new section() { section_name = "post-test", div_id = 1 }, basicAuth);
+            Assert.IsNotNull(postObj, "ID: " + postObj.section_id.ToString());
+
+            //GET POSTed item
+            section RequestObj = this.GETRequest<section>(host + Configuration.sectionResource + "/" + postObj.section_id, basicAuth);
+            Assert.IsNotNull(RequestObj);
+
+            //PUT POSTed item
+            postObj.section_name = "put-test";
+            section putObj = this.PUTRequest<section>(host + Configuration.sectionResource + "/" + postObj.section_id, postObj, basicAuth);
+            Assert.IsNotNull(putObj);
+
+            //Delete POSTed item
+            bool success = this.DELETERequest<section>(host + Configuration.sectionResource + "/" + postObj.section_id, basicAuth);
+            Assert.IsTrue(success);
+        }//end method
+        [TestMethod]
+        public void StatusRequest()
+        {
+            //GET LIST
+            List<status_type> RequestList = this.GETRequest<List<status_type>>(host + Configuration.statusResource);
+            Assert.IsNotNull(RequestList, RequestList.Count.ToString());
+
+            //POST
+            status_type postObj;
+            postObj = this.POSTRequest<status_type>(host + Configuration.statusResource, new status_type() { status = "post-test" }, basicAuth);
+            Assert.IsNotNull(postObj, "ID: " + postObj.status_id.ToString());
+
+            //GET POSTed item
+            status_type RequestObj = this.GETRequest<status_type>(host + Configuration.statusResource + "/" + postObj.status_id);
+            Assert.IsNotNull(RequestObj);
+
+            //GET site status
+            status_type siteStatus = this.GETRequest<status_type>(host + Configuration.siteResource + "/1336/status");
+            Assert.IsNotNull(siteStatus);
+
+            //PUT POSTed item
+            RequestObj.status = "put-test";
+            status_type putObj = this.PUTRequest<status_type>(host + Configuration.statusResource + "/" + RequestObj.status_id, RequestObj, basicAuth);
+            Assert.IsNotNull(RequestObj);
+
+            //Delete POSTed item
+            bool success = this.DELETERequest<status_type>(host + Configuration.statusResource + "/" + RequestObj.status_id, basicAuth);
+            Assert.IsTrue(success);
+        }//end method
         
         
         

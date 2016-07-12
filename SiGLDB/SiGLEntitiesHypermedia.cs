@@ -63,67 +63,31 @@ namespace SiGLDB
     {
         public List<Link> Links { get; set; }
     }
-    public partial class PROJECT : IHypermedia
+    public partial class project : IHypermedia
+    {
+        public List<Link> Links { get; set; }
+    }  
+    public partial class publication : IHypermedia
     {
         public List<Link> Links { get; set; }
     }
-    public partial class PROJECT_CONTACTS : IHypermedia
+    public partial class resource_type : IHypermedia
     {
         public List<Link> Links { get; set; }
     }
-    public partial class PROJECT_COOPERATORS : IHypermedia
+    public partial class role : IHypermedia
     {
         public List<Link> Links { get; set; }
     }
-    public partial class PROJECT_KEYWORDS : IHypermedia
+    public partial class section : IHypermedia
     {
         public List<Link> Links { get; set; }
-    }
-    public partial class PROJECT_OBJECTIVES : IHypermedia
-    {
-        public List<Link> Links { get; set; }
-    }
-    public partial class PROJECT_PUBLICATIONS : IHypermedia
+    }  
+    public partial class site : IHypermedia
     {
         public List<Link> Links { get; set; }
     }   
-    public partial class PUBLICATION : IHypermedia
-    {
-        public List<Link> Links { get; set; }
-    }
-    public partial class RESOURCE_TYPE : IHypermedia
-    {
-        public List<Link> Links { get; set; }
-    }
-    public partial class ROLE : IHypermedia
-    {
-        public List<Link> Links { get; set; }
-    }
-    public partial class SECTION : IHypermedia
-    {
-        public List<Link> Links { get; set; }
-    }
-    public partial class SITE : IHypermedia
-    {
-        public List<Link> Links { get; set; }
-    }
-    public partial class SITE_FREQUENCY : IHypermedia
-    {
-        public List<Link> Links { get; set; }
-    }
-    public partial class SITE_MEDIA : IHypermedia
-    {
-        public List<Link> Links { get; set; }
-    }
-    public partial class SITE_PARAMETERS : IHypermedia
-    {
-        public List<Link> Links { get; set; }
-    }
-    public partial class SITE_RESOURCE : IHypermedia
-    {
-        public List<Link> Links { get; set; }
-    }
-    public partial class STATUS_TYPE : IHypermedia
+    public partial class status_type : IHypermedia
     {
         public List<Link> Links { get; set; }
     }

@@ -104,7 +104,20 @@ namespace SiGLServices.Utilities.ServiceAgent
             switch (type)
             {
                 case "dm_list_view":
-                    return @"SELECT * FROM lampadmin.dm_list_view;";
+                    return @"SELECT dm.data_manager_id, dm.organization_system_id, (dm.fname::text || ' '::text) || dm.lname::text AS fullname, dm.fname, dm.lname, 
+                                r.role_name, count(p.data_manager_id) AS project_count
+                            FROM lampadmin.data_manager dm
+                            LEFT JOIN lampadmin.project p ON p.data_manager_id::numeric = dm.data_manager_id::numeric
+                            LEFT JOIN lampadmin.role r ON r.role_id::numeric = dm.role_id::numeric
+                            GROUP BY dm.data_manager_id, dm.organization_system_id, dm.fname, dm.lname, p.data_manager_id, r.role_name;";
+                case "project_sitecount_view":
+                    return @"SELECT p.project_id, p.data_manager_id, p.name, count(s.project_id) AS site_count, dm.lname, dm.fname, o.organization_name
+                            FROM lampadmin.project p
+                            LEFT JOIN lampadmin.site s ON p.project_id = s.project_id
+                            LEFT JOIN lampadmin.data_manager dm ON p.data_manager_id = dm.data_manager_id
+                            LEFT JOIN lampadmin.organization_system orgS ON dm.organization_system_id = orgS.organization_system_id
+                            LEFT JOIN lampadmin.organization o ON orgS.org_id = o.organization_id
+                            GROUP BY p.project_id, p.name, p.data_manager_id, dm.lname, dm.fname, o.organization_name;";
                 default:
                     throw new Exception("No sql for table " + type);
             }//end switch;
