@@ -29,3 +29,5 @@ D:\TMRData\WIMprojects\SiGLServices\SiGLServices.Tests\bin\Debug\ServiceStack.Te
 D:\TMRData\WIMprojects\SiGLServices\SiGLServices.Tests\obj\Debug\SiGLServices.Tests.csprojResolveAssemblyReference.cache
 D:\TMRData\WIMprojects\SiGLServices\SiGLServices.Tests\obj\Debug\SiGLServices.Tests.dll
 D:\TMRData\WIMprojects\SiGLServices\SiGLServices.Tests\obj\Debug\SiGLServices.Tests.pdb
+D:\TMRData\WIMprojects\SiGLServices\SiGLServices.Tests\bin\Debug\MoreLinq.dll
+D:\TMRData\WIMprojects\SiGLServices\SiGLServices.Tests\bin\Debug\MoreLinq.xml

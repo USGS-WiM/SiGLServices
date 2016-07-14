@@ -29,6 +29,7 @@ using System.Data.Entity;
 using System.Runtime.InteropServices;
 using SiGLServices.Utilities.ServiceAgent;
 using System.Text;
+using MoreLinq;
 using SiGLDB;
 using WiM.Exceptions;
 using WiM.Resources;
@@ -471,6 +472,30 @@ namespace SiGLServices.Handlers
             }
         }
         
+       // .AtUri(siteResource + "/StatesWithSites").Named("GetStatesThatHaveSites")
+        [HttpOperation(HttpMethod.GET, ForUriName = "GetStatesThatHaveSites")]
+        public OperationResult GetStatesThatHaveSites()
+        {
+            List<string> stateNames = null;
+            
+            try
+            {
+                using (SiGLAgent sa = new SiGLAgent())
+                {
+                    stateNames = sa.Select<site>().DistinctBy(x => x.state_province).Select(p => p.state_province).ToList();
+
+                    sm(MessageType.info, "Count: " + stateNames.Count());
+                    sm(sa.Messages);
+
+                }//end using
+                return new OperationResult.OK { ResponseResource = stateNames, Description = this.MessageString };
+            }
+            catch (Exception ex)
+            {
+                return HandleException(ex);
+            }
+        }//end HttpMethod.GET
+
         //not sure that I really need this (going to make a getFullSite instead, using a siteResource)
         //[HttpOperation(HttpMethod.GET, ForUriName = "GetSitesView")]
         //public OperationResult GetSitesView()
