@@ -1,4 +1,3 @@
-D:\TMRData\WIMprojects\SiGLServices\SiGLDB\bin\Debug\AWSSDK.pdb
 D:\TMRData\WIMprojects\SiGLServices\SiGLDB\bin\Debug\SiGLDB.dll.config
 D:\TMRData\WIMprojects\SiGLServices\SiGLDB\bin\Debug\SiGLDB.dll
 D:\TMRData\WIMprojects\SiGLServices\SiGLDB\bin\Debug\SiGLDB.pdb
@@ -16,6 +15,7 @@ D:\TMRData\WIMprojects\SiGLServices\SiGLDB\bin\Debug\ServiceStack.Text.dll
 D:\TMRData\WIMprojects\SiGLServices\SiGLDB\bin\Debug\WiMHypermedia.dll
 D:\TMRData\WIMprojects\SiGLServices\SiGLDB\bin\Debug\WiMServices.dll
 D:\TMRData\WIMprojects\SiGLServices\SiGLDB\bin\Debug\WiMServices.Test.dll
+D:\TMRData\WIMprojects\SiGLServices\SiGLDB\bin\Debug\AWSSDK.pdb
 D:\TMRData\WIMprojects\SiGLServices\SiGLDB\bin\Debug\EntityFramework.xml
 D:\TMRData\WIMprojects\SiGLServices\SiGLDB\bin\Debug\EntityFramework.SqlServer.xml
 D:\TMRData\WIMprojects\SiGLServices\SiGLDB\bin\Debug\EntityFramework6.Npgsql.xml

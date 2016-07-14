@@ -417,6 +417,7 @@ namespace SiGLServices
             //project_sitecount_view
             ResourceSpace.Has.ResourcesOfType<List<project_sitecount_view>>()
                 .AtUri(projectResource + "/IndexProjects?DataManager={dataManagerId}").Named("GetIndexProjects")
+                .And.AtUri(projectResource + "/WithSiteCount").Named("ProjectsWithSiteCount")
                 .HandledBy<ProjectHandler>()
                 .TranscodedBy<UTF8EntityXmlSerializerCodec>(null).ForMediaType("application/xml;q=1").ForExtension("xml")
                 .And.TranscodedBy<JsonEntityDotNetCodec>(null).ForMediaType("application/json;q=0.9").ForExtension("json")
@@ -424,7 +425,7 @@ namespace SiGLServices
 
             //fullProject
             ResourceSpace.Has.ResourcesOfType<List<FullProject>>()
-                .AtUri(projectResource + "/GetFullProject/{scienceBaseId}").Named("GetFullProject")
+                .AtUri(projectResource + "/GetFullProject?ByScienceBase={scienceBaseId}&ByProject={projectId}").Named("GetFullProject")
                 .HandledBy<ProjectHandler>()
                 .TranscodedBy<UTF8EntityXmlSerializerCodec>(null).ForMediaType("application/xml;q=1").ForExtension("xml")
                 .And.TranscodedBy<JsonDotNetCodec>(null).ForMediaType("application/json;q=0.9").ForExtension("json")
@@ -513,7 +514,44 @@ namespace SiGLServices
         }
         private void AddSITE_Resources() //(19)
         {
-            //DO TUESDAY
+            ResourceSpace.Has.ResourcesOfType<List<site>>()
+                .AtUri(siteResource).Named("GetAllSites")
+                .And.AtUri(projectResource + "/{projectId}/" + siteResource).Named("GetProjectSites")
+                .And.AtUri(lakeResource + "/{lakeId}/" + siteResource).Named("GetLakeSites")
+                .And.AtUri(statusResource + "/{statusId}/" + siteResource).Named("GetStatusSites")
+                .And.AtUri(mediaResource + "/{mediaId}/" + siteResource).Named("GetMediaSites")
+                .And.AtUri(resourceResource + "/{resourceTypeId}/"+ siteResource).Named("GetResourceSites")
+                .And.AtUri(parameterResource + "/{parameterId}/" + siteResource).Named("GetParameterSites")
+                .And.AtUri(frequencyResource + "/{frequencyId}/" + siteResource).Named("GetFrequencySites")
+                .And.AtUri(@"/Sites/FilteredSites?Duration={durationIDs}&Lake={lakes}&Media={media}&ProjObjs={objIDs}&ProjOrg={orgID}
+                        &Parameters={parameters}&ResComp={resComps}&State={states}&Status={statusIDs}").Named("GetFilteredSites")                                                                                                                                         
+                .HandledBy<SiteHandler>()//
+                .TranscodedBy<UTF8EntityXmlSerializerCodec>(null).ForMediaType("application/xml;q=1").ForExtension("xml")
+                .And.TranscodedBy<JsonEntityDotNetCodec>(null).ForMediaType("application/json;q=0.9").ForExtension("json")
+                .And.TranscodedBy<CsvDotNetCodec>(null).ForMediaType("text/csv").ForExtension("csv");
+
+            ResourceSpace.Has.ResourcesOfType<site>()
+                .AtUri(siteResource + "/{entityId}")
+                .HandledBy<SiteHandler>()
+                .TranscodedBy<UTF8EntityXmlSerializerCodec>(null).ForMediaType("application/xml;q=1").ForExtension("xml")
+                .And.TranscodedBy<JsonEntityDotNetCodec>(null).ForMediaType("application/json;q=0.9").ForExtension("json")
+                .And.TranscodedBy<CsvDotNetCodec>(null).ForMediaType("text/csv").ForExtension("csv");
+
+            //fullSitesList
+            ResourceSpace.Has.ResourcesOfType<List<FullSite>>()
+                .AtUri(projectResource + "/{projectId}/ProjectFullSites").Named("GetProjectFullSites")
+                .HandledBy<SiteHandler>()
+                .TranscodedBy<UTF8EntityXmlSerializerCodec>(null).ForMediaType("application/xml;q=1").ForExtension("xml")
+                .And.TranscodedBy<JsonDotNetCodec>(null).ForMediaType("application/json;q=0.9").ForExtension("json")
+                .And.TranscodedBy<CsvDotNetCodec>(null).ForMediaType("text/csv").ForExtension("csv");
+
+            //fullSite
+            ResourceSpace.Has.ResourcesOfType<FullSite>()
+                .AtUri(siteResource + "/{siteId}/GetFullSite").Named("GetFullSite")
+                .HandledBy<SiteHandler>()
+                .TranscodedBy<UTF8EntityXmlSerializerCodec>(null).ForMediaType("application/xml;q=1").ForExtension("xml")
+                .And.TranscodedBy<JsonDotNetCodec>(null).ForMediaType("application/json;q=0.9").ForExtension("json")
+                .And.TranscodedBy<CsvDotNetCodec>(null).ForMediaType("text/csv").ForExtension("csv");           
         }
         private void AddSTATUS_Resources() //(20)
         {
