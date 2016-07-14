@@ -118,6 +118,12 @@ namespace SiGLServices.Utilities.ServiceAgent
                             LEFT JOIN lampadmin.organization_system orgS ON dm.organization_system_id = orgS.organization_system_id
                             LEFT JOIN lampadmin.organization o ON orgS.org_id = o.organization_id
                             GROUP BY p.project_id, p.name, p.data_manager_id, dm.lname, dm.fname, o.organization_name;";
+                case "site_list_view":
+                    return @"SELECT s.site_id, s.start_date, s.end_date, s.project_id, s.sample_platform, s.additional_info, s.name, s.description, s.latitude, s.longitude, s.waterbody, 
+                            s.status_type_id, st.status, s.lake_type_id, l.lake, s.country, s.state_province, s.watershed_huc8, s.url
+                            FROM lampadmin.site s
+                            LEFT JOIN lampadmin.status_type st ON st.status_id = s.status_type_id
+                            LEFT JOIN lampadmin.lake_type l ON l.lake_type_id = s.lake_type_id;";
                 default:
                     throw new Exception("No sql for table " + type);
             }//end switch;
