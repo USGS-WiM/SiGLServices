@@ -514,6 +514,13 @@ namespace SiGLServices
         }
         private void AddSITE_Resources() //(19)
         {
+            ResourceSpace.Has.ResourcesOfType<List<string>>()
+                .AtUri(siteResource + "/StatesWithSites").Named("GetStatesThatHaveSites")
+                .HandledBy<SiteHandler>()//
+                .TranscodedBy<UTF8EntityXmlSerializerCodec>(null).ForMediaType("application/xml;q=1").ForExtension("xml")
+                .And.TranscodedBy<JsonEntityDotNetCodec>(null).ForMediaType("application/json;q=0.9").ForExtension("json")
+                .And.TranscodedBy<CsvDotNetCodec>(null).ForMediaType("text/csv").ForExtension("csv");
+            
             ResourceSpace.Has.ResourcesOfType<List<site>>()
                 .AtUri(siteResource).Named("GetAllSites")
                 .And.AtUri(projectResource + "/{projectId}/" + siteResource).Named("GetProjectSites")

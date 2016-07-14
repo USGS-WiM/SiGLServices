@@ -29,3 +29,5 @@ D:\TMRData\WIMprojects\SiGLServices\SiGLServices\bin\ServiceStack.Text.xml
 D:\TMRData\WIMprojects\SiGLServices\SiGLServices\obj\Debug\SiGLServices.csprojResolveAssemblyReference.cache
 D:\TMRData\WIMprojects\SiGLServices\SiGLServices\obj\Debug\SiGLServices.dll
 D:\TMRData\WIMprojects\SiGLServices\SiGLServices\obj\Debug\SiGLServices.pdb
+D:\TMRData\WIMprojects\SiGLServices\SiGLServices\bin\MoreLinq.dll
+D:\TMRData\WIMprojects\SiGLServices\SiGLServices\bin\MoreLinq.xml
