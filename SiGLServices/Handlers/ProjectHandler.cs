@@ -528,6 +528,27 @@ namespace SiGLServices.Handlers
             }
         }//end HttpMethod.GET
 
+        //used to populate sigl map project dropdown
+        [HttpOperation(HttpMethod.GET, ForUriName="ProjectsWithSiteCount")]
+        public OperationResult GetProjectsWithSiteCount()
+        {
+            List<project_sitecount_view> entities = null;
+            try
+            {
+                using(SiGLAgent sa = new SiGLAgent())
+                {
+                    entities = sa.getTable<project_sitecount_view>(new Object[1] { null }).ToList();
+                    sm(MessageType.info, "Count: " + entities.Count());
+                    sm(sa.Messages);
+                }//end using
+                return new OperationResult.OK { ResponseResource = entities, Description = this.MessageString };
+            }
+            catch (Exception ex)
+            {
+                return HandleException(ex);
+            }            
+        }//end HttpMethod.GET
+
         [HttpOperation(HttpMethod.GET, ForUriName = "GetIndexProjects")]
         public OperationResult GetIndexProjects([Optional] Int32 dataManagerId)
         {
@@ -575,27 +596,44 @@ namespace SiGLServices.Handlers
 
         //"/projects/GetFullProject/{scienceBaseId}").Named("GetFullProject")
         [HttpOperation(HttpMethod.GET, ForUriName = "GetFullProject")]
-        public OperationResult GetFullProject(string scienceBaseId)
+        public OperationResult GetFullProject([Optional] String scienceBaseId, [Optional] String projectId)
         {
             FullProject anEntity = null;
             IQueryable<project> query = null;
             try
             {
-                if (string.IsNullOrEmpty(scienceBaseId)) throw new BadRequestException("Invalid input parameters");
+                if (string.IsNullOrEmpty(scienceBaseId) && string.IsNullOrEmpty(projectId)) throw new BadRequestException("Invalid input parameters");
 
                 using (SiGLAgent sa = new SiGLAgent(true))
                 {
-                    query = sa.Select<project>().Include(e => e.data_host).Include(e => e.project_objectives).Include("project_objectives.objective_type")
-                        .Include(e => e.project_keywords).Include("project_keywords.keyword")
-                        .Include(e => e.project_cooperators).Include("project_cooperators.organization_system")
-                        .Include("project_cooperators.organization_system.organization")
-                        .Include("project_cooperators.organization_system.division")
-                        .Include("project_cooperators.organization_system.section")
-                        .Include(e => e.project_contacts).Include("project_contacts.contact")
-                        .Include("project_contacts.contact.organization_system.organization")
-                        .Include(e => e.project_publication).Include("project_publication.publication")
-                        .Where(e => e.science_base_id == scienceBaseId);
-
+                    if (!string.IsNullOrEmpty(scienceBaseId))
+                    {
+                        query = sa.Select<project>().Include(e => e.data_host).Include(e => e.project_objectives).Include("project_objectives.objective_type")
+                            .Include(e => e.project_keywords).Include("project_keywords.keyword")
+                            .Include(e => e.project_cooperators).Include("project_cooperators.organization_system")
+                            .Include("project_cooperators.organization_system.organization")
+                            .Include("project_cooperators.organization_system.division")
+                            .Include("project_cooperators.organization_system.section")
+                            .Include(e => e.project_contacts).Include("project_contacts.contact")
+                            .Include("project_contacts.contact.organization_system.organization")
+                            .Include(e => e.project_publication).Include("project_publication.publication")
+                            .Where(e => e.science_base_id == scienceBaseId);
+                    }
+                    if (!string.IsNullOrEmpty(projectId))
+                    {
+                        Int32 projId = Convert.ToInt32(projectId);
+                        query = sa.Select<project>().Include(e => e.data_host).Include(e => e.project_objectives).Include("project_objectives.objective_type")
+                            .Include(e=>e.proj_status).Include(e=>e.proj_duration)
+                            .Include(e => e.project_keywords).Include("project_keywords.keyword")
+                            .Include(e => e.project_cooperators).Include("project_cooperators.organization_system")
+                            .Include("project_cooperators.organization_system.organization")
+                            .Include("project_cooperators.organization_system.division")
+                            .Include("project_cooperators.organization_system.section")
+                            .Include(e => e.project_contacts).Include("project_contacts.contact")
+                            .Include("project_contacts.contact.organization_system.organization")
+                            .Include(e => e.project_publication).Include("project_publication.publication")
+                            .Where(e => e.project_id == projId);
+                    }
                     anEntity = query.AsEnumerable().Select(p => new FullProject
                         {
                             ProjectId = p.project_id,
@@ -604,7 +642,12 @@ namespace SiGLServices.Handlers
                             StartDate = p.start_date != null ? p.start_date.Value.ToString() : "",
                             EndDate = p.end_date != null ? p.end_date.Value.ToString() : "",
                             DataManagerId = p.data_manager_id,
+                            status_id = p.proj_status_id,
+                            Status = p.proj_status_id > 0 ? p.proj_status.status_value : "",
+                            duration_id = p.proj_duration_id,
+                            Duration = p.proj_duration_id > 0 ? p.proj_duration.duration_value : "",
                             Description = p.description,
+                            AdditionalInfo = p.additional_info,
                             Objectives = p.project_objectives.Select(po => new objective_type
                             {
                                 objective_type_id = po.objective_type.objective_type_id, objective = po.objective_type.objective 
@@ -614,10 +657,10 @@ namespace SiGLServices.Handlers
                                 keyword_id = po.keyword.keyword_id, term = po.keyword.term 
                             }).ToList(),
                             ProjectWebsite = p.url,
-                            DataHost = p.data_host.Select(d => new data_host
+                            DataHosts = p.data_host.Select(d => new data_host
                             { 
                                 data_host_id = d.data_host_id, description = d.description, host_name = d.host_name, portal_url = d.portal_url, project_id = d.project_id
-                            }).FirstOrDefault(),
+                            }).ToList(),
                             Organizations = p.project_cooperators.Where(pc => pc.organization_system_id > 0).Select(c => new OrganizationResource
                             {
                                 organization_system_id = c.organization_system.organization_system_id,
