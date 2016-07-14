@@ -802,6 +802,11 @@ namespace SiGLServices.Test
             List<site> ParamSiteList = this.GETRequest<List<site>>(host + Configuration.parameterResource + "/27/" + Configuration.siteResource);
             Assert.IsNotNull(ParamSiteList, ParamSiteList.Count.ToString());
 
+            //Get States where there are sites
+            List<site> StateSiteList = this.GETRequest<List<site>>(host + Configuration.siteResource + "/StatesWithSites");
+            Assert.IsNotNull(StateSiteList, StateSiteList.Count.ToString());
+
+
            //Get GetFrequencySites
             List<site> FreqSiteList = this.GETRequest<List<site>>(host + Configuration.frequencyResource + "/60/" + Configuration.siteResource);
             Assert.IsNotNull(FreqSiteList, FreqSiteList.Count.ToString());
