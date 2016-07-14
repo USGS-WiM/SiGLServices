@@ -573,8 +573,13 @@ namespace SiGLServices.Test
             Assert.IsNotNull(flagProjList, flagProjList.Count.ToString());
 
             //GetIndexProjects (project_sitecount_view
+            List<project_sitecount_view> ProjectSiteCtList = this.GETRequest<List<project_sitecount_view>>(host + Configuration.projectResource + "/WithSiteCount");
+            Assert.IsNotNull(ProjectSiteCtList, ProjectSiteCtList.Count.ToString());
+
+            //GetIndexProjects (project_sitecount_view
             List<project_sitecount_view> indexProjectList = this.GETRequest<List<project_sitecount_view>>(host + Configuration.projectResource + "/IndexProjects", basicAuth);
             Assert.IsNotNull(indexProjectList, indexProjectList.Count.ToString());
+            
             //POST
             project postObj;
             postObj = this.POSTRequest<project>(host + Configuration.projectResource, new project() { name = "post-test", proj_duration_id = 1, proj_status_id=1 }, basicAuth);
@@ -760,6 +765,78 @@ namespace SiGLServices.Test
 
             //Delete POSTed item
             bool success = this.DELETERequest<status_type>(host + Configuration.statusResource + "/" + RequestObj.status_id, basicAuth);
+            Assert.IsTrue(success);
+        }//end method
+        [TestMethod]
+        public void SiteRequest()
+        {
+            //GET LIST
+            List<site> RequestList = this.GETRequest<List<site>>(host + Configuration.siteResource);
+            Assert.IsNotNull(RequestList, RequestList.Count.ToString());
+
+            //get ProjectFullSites -- test in browser only
+            List<FullSite> projFullSiteList = this.GETRequest<List<FullSite>>(host + Configuration.projectResource + "/1741/ProjectFullSites");
+            Assert.IsNotNull(projFullSiteList, projFullSiteList.Count.ToString());
+
+            //Get GetProjectSites
+            List<site> ProjSiteList = this.GETRequest<List<site>>(host + Configuration.projectResource + "/1741/" + Configuration.siteResource);
+            Assert.IsNotNull(ProjSiteList, ProjSiteList.Count.ToString());
+
+            //Get GetLakeSites
+            List<site> LakeSiteList = this.GETRequest<List<site>>(host + Configuration.lakeResource + "/1/" + Configuration.siteResource);
+            Assert.IsNotNull(LakeSiteList, LakeSiteList.Count.ToString());
+
+           //Get GetStatusSites
+            List<site> StatusSiteList = this.GETRequest<List<site>>(host + Configuration.statusResource + "/2/" + Configuration.siteResource);
+            Assert.IsNotNull(StatusSiteList, StatusSiteList.Count.ToString());
+
+           //Get GetMediaSites
+            List<site> MediaSiteList = this.GETRequest<List<site>>(host + Configuration.mediaResource + "/6/" + Configuration.siteResource);
+            Assert.IsNotNull(MediaSiteList, MediaSiteList.Count.ToString());
+
+           //Get GetResourceSites
+            List<site> resourceSiteList = this.GETRequest<List<site>>(host + Configuration.resourceResource + "/10/" + Configuration.siteResource);
+            Assert.IsNotNull(resourceSiteList, resourceSiteList.Count.ToString());
+
+            //GetParameterSites
+            List<site> ParamSiteList = this.GETRequest<List<site>>(host + Configuration.parameterResource + "/27/" + Configuration.siteResource);
+            Assert.IsNotNull(ParamSiteList, ParamSiteList.Count.ToString());
+
+           //Get GetFrequencySites
+            List<site> FreqSiteList = this.GETRequest<List<site>>(host + Configuration.frequencyResource + "/60/" + Configuration.siteResource);
+            Assert.IsNotNull(FreqSiteList, FreqSiteList.Count.ToString());
+
+            //filtered sites (site map tab)
+            List<site> FilteredSite1List = this.GETRequest<List<site>>(host + Configuration.siteResource + "/FilteredSites?Duration=2&Lake=3&Media=7&Parameters=15,16&ResComp=9&State=Wisconsin&Status=2");
+            Assert.IsNotNull(FilteredSite1List, FilteredSite1List.Count.ToString());
+
+            //filtered sites (project map tab)
+            List<site> FilteredSite2List = this.GETRequest<List<site>>(host + Configuration.siteResource + "/FilteredSites?Duration=2&Lake=3&ProjObjs=2,28&ProjOrg=75&State=Wisconsin&Status=2");
+            Assert.IsNotNull(FilteredSite2List, FilteredSite2List.Count.ToString());
+
+            //POST
+            site postObj;
+            postObj = this.POSTRequest<site>(host + Configuration.siteResource, new site()
+            { 
+                name = "post-test", latitude=44.43, longitude=-89.432, country="United States of America", state_province="Wisconsin", lake_type_id=2 
+            }, basicAuth);
+            Assert.IsNotNull(postObj, "ID: " + postObj.site_id.ToString());
+
+            //GET POSTed item
+            site RequestObj = this.GETRequest<site>(host + Configuration.siteResource + "/" + postObj.site_id);
+            Assert.IsNotNull(RequestObj);
+
+            //GET GetFullSite -- Test in browser only
+            FullSite FullSite = this.GETRequest<FullSite>(host + Configuration.siteResource + "/13156/GetFullSite");
+            Assert.IsNotNull(FullSite);
+
+            //PUT POSTed item
+            RequestObj.name = "put-test";
+            site putObj = this.PUTRequest<site>(host + Configuration.siteResource + "/" + RequestObj.site_id, RequestObj, basicAuth);
+            Assert.IsNotNull(putObj);
+
+            //Delete POSTed item
+            bool success = this.DELETERequest<site>(host + Configuration.siteResource + "/" + RequestObj.site_id, basicAuth);
             Assert.IsTrue(success);
         }//end method
         

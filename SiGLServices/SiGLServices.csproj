@@ -121,6 +121,7 @@
     <Compile Include="Handlers\ContactHandler.cs" />
     <Compile Include="Handlers\DataHostHandler.cs" />
     <Compile Include="Handlers\ProjectHandler.cs" />
+    <Compile Include="Handlers\SiteHandler.cs" />
     <Compile Include="Handlers\StatusHandler.cs" />
     <Compile Include="Handlers\SectionHandler.cs" />
     <Compile Include="Handlers\RoleHandler.cs" />
@@ -139,6 +140,7 @@
     <Compile Include="Handlers\DivisionHandler.cs" />
     <Compile Include="Handlers\DataManagerHandler.cs" />
     <Compile Include="Resources\ContactResource.cs" />
+    <Compile Include="Resources\SiteResource.cs" />
     <Compile Include="Resources\DataManagerResource.cs" />
     <Compile Include="Resources\ProjectResource.cs" />
     <Compile Include="Resources\OrganizationResource.cs" />
