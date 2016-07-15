@@ -511,7 +511,7 @@ namespace SiGLServices.Handlers
 
             try
             {
-                if (flag <= 0) throw new BadRequestException("Invalid input parameters");
+                //if (flag <= 0) throw new BadRequestException("Invalid input parameters");
 
                 using (SiGLAgent sa = new SiGLAgent())
                 {
