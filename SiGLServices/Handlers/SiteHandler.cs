@@ -113,8 +113,8 @@ namespace SiGLServices.Handlers
                     {
                         SiteId = s.site_id,
                         Name = s.name,
-                        Latitude = s.latitude,
-                        Longitude = s.longitude,
+                        latitude = s.latitude,
+                        longitude = s.longitude,
                         State = s.state_province,
                         Country = s.country,
                         lake_type_id = s.lake_type_id,
@@ -209,8 +209,8 @@ namespace SiGLServices.Handlers
                     {
                         SiteId = s.site_id,
                         Name = s.name,
-                        Latitude = s.latitude,
-                        Longitude = s.longitude,
+                        latitude = s.latitude,
+                        longitude = s.longitude,
                         State = s.state_province,
                         Country = s.country,
                         lake_type_id = s.lake_type_id,

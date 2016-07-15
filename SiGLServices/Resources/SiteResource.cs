@@ -39,8 +39,8 @@ namespace SiGLServices.Resources
         public string AdditionalInfo { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public Nullable<double> Latitude { get; set; }
-        public Nullable<double> Longitude { get; set; }
+        public Nullable<double> latitude { get; set; }
+        public Nullable<double> longitude { get; set; }
         public string StartDate { get; set; }
         public string EndDate { get; set; }
         public string Waterbody { get; set; }
