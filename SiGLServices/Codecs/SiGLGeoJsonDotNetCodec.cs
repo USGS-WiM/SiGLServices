@@ -66,8 +66,8 @@ namespace SiGLServices.Codecs.json
                     IEnumerable collection = entity as IEnumerable;
                     foreach (var item in collection)
                     {
-                        lat = Convert.ToDouble(item.GetType().GetProperty("LATITUDE").GetValue(item));
-                        longit = Convert.ToDouble(item.GetType().GetProperty("LONGITUDE").GetValue(item));
+                        lat = Convert.ToDouble(item.GetType().GetProperty("latitude").GetValue(item));
+                        longit = Convert.ToDouble(item.GetType().GetProperty("longitude").GetValue(item));
 
                         fc.addFeature(new Feature(item, longit, lat));
                         entity = fc;
@@ -76,8 +76,8 @@ namespace SiGLServices.Codecs.json
                 else if (extraTypes.Contains(entity.GetType()))
                 {
                     fc = new FeatureCollection(4326);
-                    lat = Convert.ToDouble(entity.GetType().GetProperty("LATITUDE").GetValue(entity)); ;
-                    longit = Convert.ToDouble(entity.GetType().GetProperty("LONGITUDE").GetValue(entity)); ;
+                    lat = Convert.ToDouble(entity.GetType().GetProperty("latitude").GetValue(entity)); ;
+                    longit = Convert.ToDouble(entity.GetType().GetProperty("longitude").GetValue(entity)); ;
 
                     fc.addFeature(new Feature(entity, longit, lat));
                     entity = fc;
