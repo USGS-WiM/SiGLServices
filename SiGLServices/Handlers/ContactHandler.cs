@@ -21,6 +21,7 @@
 // 06.24.16 - TR - Created
 #endregion
 using OpenRasta.Web;
+using OpenRasta.Security;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,7 +40,7 @@ namespace SiGLServices.Handlers
     public class ContactHandler : SiGLHandlerBase
     {
         #region GetMethods
-        [SiGLRequiresRole(new string[] { AdminRole, ManagerRole})]
+        [RequiresAuthentication]
         [HttpOperation(HttpMethod.GET)]
         public OperationResult Get()
         {
@@ -66,7 +67,7 @@ namespace SiGLServices.Handlers
             }            
         }//end HttpMethod.GET
 
-        [SiGLRequiresRole(new string[] { AdminRole, ManagerRole })]
+        [RequiresAuthentication]
         [HttpOperation(HttpMethod.GET)]
         public OperationResult Get(Int32 entityId)
         {
@@ -91,7 +92,8 @@ namespace SiGLServices.Handlers
                 return HandleException(ex);
             }
         }//end HttpMethod.GET
-                
+
+        [RequiresAuthentication]
         [HttpOperation(HttpMethod.GET, ForUriName = "GetProjectContacts")]
         public OperationResult GetProjectContacts(Int32 projectId)
         {
@@ -99,18 +101,18 @@ namespace SiGLServices.Handlers
 
             try
             {
-                //Return BadRequest if there is no ID
                 if (projectId <= 0) throw new BadRequestException("Invalid input parameters");
-                
-                using (SiGLAgent sa = new SiGLAgent())
+
+                using (EasySecureString securedPassword = GetSecuredPassword())
                 {
-                    entities = sa.Select<project_contacts>().Where(pc => pc.project_id == projectId).Select(c => c.contact).ToList();
+                    using (SiGLAgent sa = new SiGLAgent(username, securedPassword))
+                    {
+                        entities = sa.Select<project_contacts>().Where(pc => pc.project_id == projectId).Select(c => c.contact).ToList();
 
-                    sm(MessageType.info, "Count: " + entities.Count());
-                    sm(sa.Messages);
-                }//end using
-                
-
+                        sm(MessageType.info, "Count: " + entities.Count());
+                        sm(sa.Messages);
+                    }//end using
+                }
                 return new OperationResult.OK { ResponseResource = entities, Description = this.MessageString };
             }
             catch (Exception ex)
@@ -119,6 +121,7 @@ namespace SiGLServices.Handlers
             }            
         }//end HttpMethod.GET
 
+        [RequiresAuthentication]
         [HttpOperation(HttpMethod.GET, ForUriName = "GetOrgSysContacts")]
         public OperationResult GetOrgSysContacts(Int32 orgSysId)
         {
@@ -126,17 +129,18 @@ namespace SiGLServices.Handlers
 
             try
             {
-                //Return BadRequest if there is no ID
                 if (orgSysId <= 0) throw new BadRequestException("Invalid input parameters");
-                
-                using (SiGLAgent sa = new SiGLAgent())
+
+                using (EasySecureString securedPassword = GetSecuredPassword())
                 {
-                    entities = sa.Select<organization_system>().Include(o => o.contacts).SingleOrDefault(o => o.organization_system_id == orgSysId).contacts.ToList();
+                    using (SiGLAgent sa = new SiGLAgent(username, securedPassword))
+                    {
+                        entities = sa.Select<organization_system>().Include(o => o.contacts).SingleOrDefault(o => o.organization_system_id == orgSysId).contacts.ToList();
 
-                    sm(MessageType.info, "Count: " + entities.Count());
-                    sm(sa.Messages);                    
-                }//end using
-
+                        sm(MessageType.info, "Count: " + entities.Count());
+                        sm(sa.Messages);
+                    }//end using
+                }
                 return new OperationResult.OK { ResponseResource = entities, Description = this.MessageString };
             }
             catch (Exception ex)
@@ -246,7 +250,7 @@ namespace SiGLServices.Handlers
         /// 
         /// Force the user to provide authentication and authorization 
         ///
-        [RequiresRole(AdminRole)]
+        [SiGLRequiresRole(AdminRole)]
         [HttpOperation(HttpMethod.DELETE)]
         public OperationResult Delete(Int32 entityId)
         {

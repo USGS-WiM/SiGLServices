@@ -114,8 +114,6 @@ namespace SiGLServices.Handlers
             }
         }//end HttpMethod.GET
 
-
-
         #endregion
         #region PostMethods
 
