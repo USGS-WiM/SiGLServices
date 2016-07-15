@@ -515,7 +515,11 @@ namespace SiGLServices.Handlers
 
                 using (SiGLAgent sa = new SiGLAgent())
                 {
-                    entities = sa.Select<project>().Where(p => p.ready_flag == flag).ToList();
+                    if (flag == 0)
+                        entities = sa.Select<project>().Where(p => p.ready_flag == 0 || !p.ready_flag.HasValue).ToList();
+                    else 
+                        entities = sa.Select<project>().Where(p => p.ready_flag == flag).ToList();
+
                     sm(MessageType.info, "Count: " + entities.Count());
                     sm(sa.Messages);
 
