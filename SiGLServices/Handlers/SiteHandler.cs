@@ -414,12 +414,14 @@ namespace SiGLServices.Handlers
                 List<string> _stateList = !string.IsNullOrEmpty(states) ? states.Split(delimiterChar, StringSplitOptions.RemoveEmptyEntries).ToList() : null;
                 List<Int32> _statusIds = !string.IsNullOrEmpty(statusIDs) ? statusIDs.Split(delimiterChar, StringSplitOptions.RemoveEmptyEntries).Select(Int32.Parse).ToList() : null;
                 
-                using (SiGLAgent sa = new SiGLAgent(true))
+                using (SiGLAgent sa = new SiGLAgent())
                 {
                     IQueryable<site> query;
 
-                    query = sa.Select<site>();
-                    
+                    //query = sa.Select<site>();
+                    query = sa.Select<site>().Include(s => s.project).Include(s => s.site_media).Include("project.project_objectives").Include("project.project_cooperators")
+                            .Include(s => s.site_parameters).Include(s => s.site_resource);
+
                     if (_durationIds != null && _durationIds.Count > 0)
                         query = query.Where(s => s.project != null && _durationIds.Contains(s.project.proj_duration_id.Value));
 
