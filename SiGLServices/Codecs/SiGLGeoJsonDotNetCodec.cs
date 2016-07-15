@@ -37,6 +37,7 @@ using OpenRasta.Web;
 using OpenRasta.Codecs;
 
 using WiM.Resources.Spatial;
+using SiGLServices.Resources;
 using Newtonsoft.Json;
 using WiM.Codecs.json;
 
@@ -48,7 +49,7 @@ namespace SiGLServices.Codecs.json
     [MediaType("application/geojson;q=0.5", "geojson")]
     public class SiGLGeoJsonDotNetCodec : JsonDotNetCodec
     {
-        private Type[] extraTypes = new Type[1] { typeof(site) };
+        private Type[] extraTypes = new Type[2] { typeof(site), typeof(FullSite) };
 
         public override void WriteTo(object entity, IHttpEntity response, string[] parameters)
         {
