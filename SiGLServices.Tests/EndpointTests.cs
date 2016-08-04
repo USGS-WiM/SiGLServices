@@ -41,8 +41,13 @@ namespace SiGLServices.Test
 
             //POST
             contact postObj;
-            postObj = this.POSTRequest<contact>(host + Configuration.contactResource, new contact() {  name = "post-test", organization_system_id = 1, email = "postTest@post.test",phone="(123) 345-5678" }, basicAuth);
+            postObj = this.POSTRequest<contact>(host + Configuration.contactResource, new contact() { name = "post-test", organization_system_id = 1, email = "postTest@post.test", phone = "(123) 345-5678" }, basicAuth);
             Assert.IsNotNull(postObj, "ID: " + postObj.contact_id.ToString());
+
+            //POST
+            List<contact> postProjObj;
+            postProjObj = this.POSTRequest<contact, List<contact>>(host + Configuration.projectResource + "/685/addContact", new contact() { name = "post1-test", organization_system_id = 1, email = "postTest1@post.test", phone = "(222) 333-4444" }, basicAuth);
+            Assert.IsNotNull(postProjObj, postProjObj.Count.ToString());
 
             //GET POSTed item
             contact RequestObj = this.GETRequest<contact>(host + Configuration.contactResource + "/" + postObj.contact_id, basicAuth);

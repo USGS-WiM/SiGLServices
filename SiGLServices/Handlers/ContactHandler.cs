@@ -152,40 +152,41 @@ namespace SiGLServices.Handlers
         #endregion
         #region PostMethods
 
-        [SiGLRequiresRole(new string[] { AdminRole, ManagerRole })]
-        [HttpOperation(HttpMethod.POST)]
-        public OperationResult POST(contact anEntity)
-        {
-            try
-            {
-                if (string.IsNullOrEmpty(anEntity.name) || !anEntity.organization_system_id.HasValue || string.IsNullOrEmpty(anEntity.email) || string.IsNullOrEmpty(anEntity.phone) )
-                    throw new BadRequestException("Invalid input parameters");
-                using (EasySecureString securedPassword = GetSecuredPassword())
-                {
-                    using (SiGLAgent sa = new SiGLAgent(username, securedPassword))
-                    {
-                        anEntity = sa.Add<contact>(anEntity);
-                        sm(sa.Messages);
+        //[SiGLRequiresRole(new string[] { AdminRole, ManagerRole })]
+        //[HttpOperation(HttpMethod.POST)]
+        //public OperationResult POST(contact anEntity)
+        //{
+        //    try
+        //    {
+        //        if (string.IsNullOrEmpty(anEntity.name) || !anEntity.organization_system_id.HasValue || string.IsNullOrEmpty(anEntity.email) || string.IsNullOrEmpty(anEntity.phone) )
+        //            throw new BadRequestException("Invalid input parameters");
+        //        using (EasySecureString securedPassword = GetSecuredPassword())
+        //        {
+        //            using (SiGLAgent sa = new SiGLAgent(username, securedPassword))
+        //            {
+        //                anEntity = sa.Add<contact>(anEntity);
+        //                sm(sa.Messages);
 
-                    }//end using
-                }//end using
-                return new OperationResult.Created { ResponseResource = anEntity, Description = this.MessageString };
-            }
-            catch (Exception ex)
-            { return HandleException(ex); }
+        //            }//end using
+        //        }//end using
+        //        return new OperationResult.Created { ResponseResource = anEntity, Description = this.MessageString };
+        //    }
+        //    catch (Exception ex)
+        //    { return HandleException(ex); }
 
-        }//end HttpMethod.GET
+        //}//end HttpMethod.GET
 
         //posts relationship, then returns list of network_names for the anEntity.site_id
         [SiGLRequiresRole(new string[] { AdminRole, ManagerRole })]
         [HttpOperation(HttpMethod.POST, ForUriName = "AddProjectContact")]
-        public OperationResult AddNetworkName(Int32 projectId, Int32 contactId)
+        public OperationResult AddProjectContact(Int32 projectId, contact anEntity)
         {
-            project_contacts anEntity = null;
+            project_contacts projContact = null;
             List<contact> contactList = null;
             try
             {
-                if (projectId <= 0 || contactId <= 0) throw new BadRequestException("Invalid input parameters");
+                if (projectId <= 0 || string.IsNullOrEmpty(anEntity.name) || !anEntity.organization_system_id.HasValue || string.IsNullOrEmpty(anEntity.email) || string.IsNullOrEmpty(anEntity.phone))
+                    throw new BadRequestException("Invalid input parameters");
 
                 using (EasySecureString securedPassword = GetSecuredPassword())
                 {
@@ -194,15 +195,18 @@ namespace SiGLServices.Handlers
                         if (sa.Select<project>().First(p => p.project_id == projectId) == null)
                             throw new NotFoundRequestException();
 
-                        if (sa.Select<contact>().First(n => n.contact_id == contactId) == null)
-                            throw new NotFoundRequestException();
-
-                        if (sa.Select<project_contacts>().FirstOrDefault(nt => nt.contact_id == contactId && nt.project_id == projectId) == null)
+                        if (anEntity.contact_id < 1)
                         {
-                            anEntity = new project_contacts();
-                            anEntity.project_id = projectId;
-                            anEntity.contact_id = contactId;
-                            anEntity = sa.Add<project_contacts>(anEntity);
+                            anEntity = sa.Add<contact>(anEntity);
+                        }
+
+
+                        if (sa.Select<project_contacts>().FirstOrDefault(nt => nt.contact_id == anEntity.contact_id && nt.project_id == projectId) == null)
+                        {
+                            projContact = new project_contacts();
+                            projContact.project_id = projectId;
+                            projContact.contact_id = anEntity.contact_id;
+                            projContact = sa.Add<project_contacts>(projContact);
                             sm(sa.Messages);
                         }
                         //return list of network types
