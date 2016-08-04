@@ -599,10 +599,16 @@ namespace SiGLServices.Handlers
                 {
                     using (SiGLAgent sa = new SiGLAgent(username, securedPassword))
                     {
-                        anEntity = sa.Select<site>().FirstOrDefault(i => i.site_id == entityId);
+                        anEntity = sa.Select<site>().SingleOrDefault(s => s.site_id == entityId);
                         if (anEntity == null) throw new WiM.Exceptions.NotFoundRequestException();
 
                         sa.Delete<site>(anEntity);
+
+                        sa.Select<site_frequency>().Where(freq => freq.site_id == entityId).ToList().ForEach(x=> sa.Delete<site_frequency>(x));
+                        sa.Select<site_media>().Where(med => med.site_id == entityId).ToList().ForEach(x => sa.Delete<site_media>(x));
+                        sa.Select<site_parameters>().Where(pa => pa.site_id == entityId).ToList().ForEach(x => sa.Delete<site_parameters>(x));
+                        sa.Select<site_resource>().Where(res => res.site_id == entityId).ToList().ForEach(x => sa.Delete<site_resource>(x));
+
                         sm(sa.Messages);
                     }//end using
                 }//end using

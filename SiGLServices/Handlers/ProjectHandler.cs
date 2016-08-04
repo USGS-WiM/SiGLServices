@@ -805,21 +805,22 @@ namespace SiGLServices.Handlers
                 if (entityId <= 0) throw new BadRequestException("Invalid input parameters");
                 using (EasySecureString securedPassword = GetSecuredPassword())
                 {
-                    using (SiGLAgent sa = new SiGLAgent(username, securedPassword,true))
+                    using (SiGLAgent sa = new SiGLAgent(username, securedPassword))
                     {
                         project anEntity = sa.Select<project>().SingleOrDefault(p => p.project_id == entityId);
                         if (anEntity == null) throw new WiM.Exceptions.NotFoundRequestException();
+
                         data_manager dm = anEntity.data_manager;
                         if (!IsAuthorizedToEdit(dm.username)) return new OperationResult.Forbidden { Description = "Not Authorized" };
 
-                        anEntity.project_contacts.Clear();
-                        anEntity.project_cooperators.Clear();
-                        anEntity.project_keywords.Clear();
-                        anEntity.project_objectives.Clear();
-                        anEntity.project_publication.Clear();
-                        anEntity.sites.Clear();
+                        sa.Delete<project>(anEntity);
+                        sa.Select<project_contacts>().Where(c => c.project_id == entityId).ToList().ForEach(x => sa.Delete<project_contacts>(x));
+                        sa.Select<project_cooperators>().Where(coop => coop.project_id == entityId).ToList().ForEach(x => sa.Delete<project_cooperators>(x));
+                        sa.Select<project_keywords>().Where(k => k.project_id == entityId).ToList().ForEach(x => sa.Delete<project_keywords>(x));
+                        sa.Select<project_objectives>().Where(o => o.project_id == entityId).ToList().ForEach(x => sa.Delete<project_objectives>(x));
+                        sa.Select<project_publication>().Where(p => p.project_id == entityId).ToList().ForEach(x => sa.Delete<project_publication>(x));
+                        sa.Select<site>().Where(s => s.project_id == entityId).ToList().ForEach(x => sa.Delete<site>(x));
 
-                        sa.Delete<project>(anEntity);                        
                         sm(sa.Messages);
                     }//end using
                 }//end using
