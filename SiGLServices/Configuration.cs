@@ -116,7 +116,7 @@ namespace SiGLServices
         {
             ResourceSpace.Has.ResourcesOfType<List<contact>>()
             .AtUri(contactResource)
-            .And.AtUri(projectResource + "/{projectId}/addContact?ContactId={contactId}").Named("AddProjectContact")
+            .And.AtUri(projectResource + "/{projectId}/addContact").Named("AddProjectContact")
             .And.AtUri(projectResource + "/{projectId}/" + contactResource).Named("GetProjectContacts")
             .And.AtUri(orgSystemResource + "/{orgSysId}/" + contactResource).Named("GetOrgSysContacts")
             .HandledBy<ContactHandler>()
