@@ -104,7 +104,7 @@ namespace SiGLServices.Utilities.ServiceAgent
             switch (type)
             {
                 case "dm_list_view":
-                    return @"SELECT dm.data_manager_id, dm.organization_system_id, (dm.fname::text || ' '::text) || dm.lname::text AS fullname, dm.fname, dm.lname, 
+                    return @"SELECT dm.data_manager_id, dm.username, dm.phone, dm.email, dm.role_id, dm.organization_system_id, (dm.fname::text || ' '::text) || dm.lname::text AS fullname, dm.fname, dm.lname, 
                                 r.role_name, count(p.data_manager_id) AS project_count
                             FROM lampadmin.data_manager dm
                             LEFT JOIN lampadmin.project p ON p.data_manager_id::numeric = dm.data_manager_id::numeric
