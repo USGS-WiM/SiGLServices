@@ -748,7 +748,7 @@ namespace SiGLServices.Handlers
         /// 
         /// Force the user to provide authentication and authorization 
         ///
-        [SiGLRequiresRole(new string[] { AdminRole })]
+        [SiGLRequiresRole(new string[] { AdminRole, ManagerRole })]
         [HttpOperation(HttpMethod.PUT)]
         public OperationResult Put(Int32 entityId, project anEntity)
         {
