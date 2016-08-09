@@ -305,7 +305,7 @@ namespace SiGLServices.Handlers
         /// 
         /// Force the user to provide authentication and authorization 
         /// Won't be any delete because this same organization_system can be used on many projects (project_cooperators table)
-        [SiGLRequiresRole(AdminRole)]
+        [SiGLRequiresRole(new string[] { AdminRole, ManagerRole })]
         [HttpOperation(HttpMethod.DELETE, ForUriName = "RemoveProjectOrganization")]
         public OperationResult RemoveProjectOrganization(Int32 projectId, Int32 orgSystemId)
         {

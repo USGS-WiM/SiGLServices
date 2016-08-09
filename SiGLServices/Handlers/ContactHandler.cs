@@ -195,11 +195,11 @@ namespace SiGLServices.Handlers
                         if (sa.Select<project>().First(p => p.project_id == projectId) == null)
                             throw new NotFoundRequestException();
 
-                        if (anEntity.contact_id < 1)
+                        contact con = sa.Select<contact>().FirstOrDefault(p => p.name == anEntity.name && p.organization_system_id == anEntity.organization_system_id && p.email == anEntity.email && p.phone == anEntity.phone);
+                        if (con == null)
                         {
-                            anEntity = sa.Add<contact>(anEntity);
+                            con = sa.Add<contact>(anEntity);
                         }
-
 
                         if (sa.Select<project_contacts>().FirstOrDefault(nt => nt.contact_id == anEntity.contact_id && nt.project_id == projectId) == null)
                         {

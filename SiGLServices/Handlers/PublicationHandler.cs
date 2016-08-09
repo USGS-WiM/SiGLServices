@@ -140,13 +140,13 @@ namespace SiGLServices.Handlers
         //posts relationship, then returns list of frequency_type for the site_id
         [SiGLRequiresRole(new string[] { AdminRole, ManagerRole })]
         [HttpOperation(HttpMethod.POST, ForUriName = "AddProjectPublication")]
-        public OperationResult AddProjectPublication(Int32 projectId, Int32 publicationId)
+        public OperationResult AddProjectPublication(Int32 projectId, publication entity)
         {
             project_publication anEntity = null;
             List<publication> publicationList = null;
             try
             {
-                if (projectId <= 0 || publicationId <= 0) throw new BadRequestException("Invalid input parameters");
+                if (projectId <= 0 || (string.IsNullOrEmpty(entity.title) && string.IsNullOrEmpty(entity.description) && string.IsNullOrEmpty(entity.url))) throw new BadRequestException("Invalid input parameters");
                 
                 using (EasySecureString securedPassword = GetSecuredPassword())
                 {
@@ -155,14 +155,17 @@ namespace SiGLServices.Handlers
                         if (sa.Select<project>().First(s => s.project_id == projectId) == null)
                             throw new NotFoundRequestException();
 
-                        if (sa.Select<publication>().First(n => n.publication_id == publicationId) == null)
-                            throw new NotFoundRequestException();
+                        publication pub = sa.Select<publication>().FirstOrDefault(p => p.title == entity.title && p.description == entity.description && p.url == entity.url);
+                        if (pub == null)
+                        {
+                            pub = sa.Add<publication>(entity);
+                        }
 
-                        if (sa.Select<project_publication>().FirstOrDefault(nt => nt.publication_id == publicationId && nt.project_id == projectId) == null)
+                        if (sa.Select<project_publication>().FirstOrDefault(nt => nt.publication_id == pub.publication_id && nt.project_id == projectId) == null)
                         {
                             anEntity = new project_publication();
                             anEntity.project_id = projectId;
-                            anEntity.publication_id = publicationId;
+                            anEntity.publication_id = pub.publication_id;
                             anEntity = sa.Add<project_publication>(anEntity);
                             sm(sa.Messages);
                         }
