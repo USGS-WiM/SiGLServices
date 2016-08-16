@@ -152,7 +152,8 @@ namespace SiGLServices.Handlers
                 {
                     using (SiGLAgent sa = new SiGLAgent(username, securedPassword, true))
                     {
-                        if (sa.Select<project>().First(s => s.project_id == projectId) == null)
+                        project aProj = sa.Select<project>().First(s => s.project_id == projectId);
+                        if (aProj == null)
                             throw new NotFoundRequestException();
 
                         publication pub = sa.Select<publication>().FirstOrDefault(p => p.title == entity.title && p.description == entity.description && p.url == entity.url);
@@ -169,6 +170,10 @@ namespace SiGLServices.Handlers
                             anEntity = sa.Add<project_publication>(anEntity);
                             sm(sa.Messages);
                         }
+
+                        aProj.last_edited_stamp = DateTime.Now.Date;
+                        sa.Update<project>(aProj);
+
                         //return list of freq types
                         publicationList = sa.Select<publication>().Where(nn => nn.project_publication.Any(nns => nns.project_id == projectId)).ToList();
                         
@@ -199,6 +204,13 @@ namespace SiGLServices.Handlers
                     using (SiGLAgent sa = new SiGLAgent(username, securedPassword))
                     {
                         anEntity = sa.Update<publication>(entityId, anEntity);
+
+                        List<project> projList = sa.Select<project>().Include(p => p.project_publication).Where(p => p.project_publication.Any(c => c.publication_id == entityId)).ToList();
+                        foreach (project p in projList)
+                        {
+                            p.last_edited_stamp = DateTime.Now.Date;
+                            sa.Update<project>(p);
+                        }
                         sm(sa.Messages);
                     }//end using
                 }//end using
@@ -252,13 +264,17 @@ namespace SiGLServices.Handlers
                 {
                     using (SiGLAgent sa = new SiGLAgent(username, securedPassword))
                     {
-                        if (sa.Select<project>().First(s => s.project_id == projectId) == null)
+                        project aProj = sa.Select<project>().First(p => p.project_id == projectId);
+                        if (aProj == null)
                             throw new NotFoundRequestException();
 
                         project_publication ObjectToBeDeleted = sa.Select<project_publication>().SingleOrDefault(nns => nns.project_id == projectId && nns.publication_id == publicationId);
 
                         if (ObjectToBeDeleted == null) throw new NotFoundRequestException();
                         sa.Delete<project_publication>(ObjectToBeDeleted);
+
+                        aProj.last_edited_stamp = DateTime.Now.Date;
+                        sa.Update<project>(aProj);
                         sm(sa.Messages);
                     }//end using
                 }//end using

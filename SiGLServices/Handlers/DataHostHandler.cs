@@ -140,7 +140,7 @@ namespace SiGLServices.Handlers
 
                         anEntity = sa.Add<data_host>(anEntity);
                         requestedProject.last_edited_stamp = DateTime.Now.Date;
-                        sa.Update<project>(requestedProject); //WILL THIS WORK??
+                        sa.Update<project>(requestedProject);
                         sm(sa.Messages);
                         entities = sa.Select<data_host>().Where(dh => dh.project_id == anEntity.project_id).ToList();
                     }//end using
@@ -171,7 +171,11 @@ namespace SiGLServices.Handlers
                 {
                     using (SiGLAgent sa = new SiGLAgent(username, securedPassword))
                     {
+                        project requestedProject = sa.Select<project>().Include(p => p.data_manager).First(p => p.project_id == anEntity.project_id);
+
                         anEntity = sa.Update<data_host>(entityId, anEntity);
+                        requestedProject.last_edited_stamp = DateTime.Now.Date;
+                        sa.Update<project>(requestedProject);
                         sm(sa.Messages);
                     }//end using
                 }//end using

@@ -155,7 +155,8 @@ namespace SiGLServices.Handlers
                 {
                     using (SiGLAgent sa = new SiGLAgent(username, securedPassword, true))
                     {
-                        if (sa.Select<site>().First(s => s.site_id == siteId) == null)
+                        site aSite = sa.Select<site>().First(s => s.site_id == siteId);
+                        if (aSite == null)
                             throw new NotFoundRequestException();
 
                         if (sa.Select<media_type>().First(n => n.media_type_id == mediaTypeId) == null)
@@ -167,10 +168,14 @@ namespace SiGLServices.Handlers
                             anEntity.site_id = siteId;
                             anEntity.media_type_id = mediaTypeId;
                             anEntity = sa.Add<site_media>(anEntity);
+
+                            project aProj = sa.Select<project>().First(p => p.project_id == aSite.project_id);
+                            aProj.last_edited_stamp = DateTime.Now.Date;
+                            sa.Update<project>(aProj);
                             sm(sa.Messages);
                         }
                         //return list of freq types
-                        mediaTypeList = sa.Select<media_type>().Where(nn => nn.site_media.Any(nns => nns.site_id == siteId)).ToList();
+                        mediaTypeList = sa.Select<media_type>().Where(nn => nn.site_media.Any(nns => nns.site_id == siteId)).OrderBy(nn=>nn.media).ToList();
 
                     }//end using
                 }//end using
@@ -252,13 +257,17 @@ namespace SiGLServices.Handlers
                 {
                     using (SiGLAgent sa = new SiGLAgent(username, securedPassword))
                     {
-                        if (sa.Select<site>().First(s => s.site_id == siteId) == null)
+                        site aSite = sa.Select<site>().First(s => s.site_id == siteId);
+                        if (aSite == null)
                             throw new NotFoundRequestException();
 
                         site_media ObjectToBeDeleted = sa.Select<site_media>().SingleOrDefault(nns => nns.site_id == siteId && nns.media_type_id == mediaTypeId);
 
                         if (ObjectToBeDeleted == null) throw new NotFoundRequestException();
                         sa.Delete<site_media>(ObjectToBeDeleted);
+                        project aProj = sa.Select<project>().First(p => p.project_id == aSite.project_id);
+                        aProj.last_edited_stamp = DateTime.Now.Date;
+                        sa.Update<project>(aProj);
                         sm(sa.Messages);
                     }//end using
                 }//end using
