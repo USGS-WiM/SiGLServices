@@ -273,6 +273,11 @@ namespace SiGLServices.Handlers
                             anEntity = sa.Add<project_cooperators>(anEntity);
                             sm(sa.Messages);
                         }
+
+                        //update project's last edited stamp
+                        aProj.last_edited_stamp = DateTime.Now.Date;
+                        sa.Update<project>(aProj);
+
                         //return list of orgResources for this project
                         CooperatorList = sa.Select<organization_system>().Include(os => os.project_cooperators).Include(os => os.organization).Include(os => os.division).Include(os => os.section)
                                 .Where(o => o.project_cooperators.Any(p => p.project_id == projectId)).Select(orgRes => new OrganizationResource
@@ -328,6 +333,11 @@ namespace SiGLServices.Handlers
                         if (projCoop == null) throw new WiM.Exceptions.NotFoundRequestException();
 
                         sa.Delete<project_cooperators>(projCoop);
+
+                        //update project's last edited stamp
+                        aProj.last_edited_stamp = DateTime.Now.Date;
+                        sa.Update<project>(aProj);
+
                         sm(sa.Messages);
                     }//end using
                 }//end using

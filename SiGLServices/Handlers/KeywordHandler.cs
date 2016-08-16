@@ -166,7 +166,7 @@ namespace SiGLServices.Handlers
         //posts relationship, then returns list of frequency_type for the site_id
         [SiGLRequiresRole(new string[] { AdminRole, ManagerRole })]
         [HttpOperation(HttpMethod.POST, ForUriName = "AddProjectKeyword")]
-        public OperationResult AddSiteFrequency(Int32 projectId, string term)
+        public OperationResult AddProjectKeyword(Int32 projectId, string term)
         {
             project_keywords anEntity = null;
             keyword newKey = null;
@@ -179,7 +179,8 @@ namespace SiGLServices.Handlers
                 {
                     using (SiGLAgent sa = new SiGLAgent(username, securedPassword, true))
                     {
-                        if (sa.Select<project>().First(s => s.project_id == projectId) == null)
+                        project aProj = sa.Select<project>().First(s => s.project_id == projectId);
+                        if (aProj == null)
                             throw new NotFoundRequestException();
 
                         newKey = sa.Select<keyword>().FirstOrDefault(n => n.term == term);
@@ -197,6 +198,10 @@ namespace SiGLServices.Handlers
                             anEntity.project_id = projectId;
                             anEntity.keyword_id = newKey.keyword_id;
                             anEntity = sa.Add<project_keywords>(anEntity);
+
+                            aProj.last_edited_stamp = DateTime.Now.Date;
+                            sa.Update<project>(aProj);
+
                             sm(sa.Messages);
                         }
                         //return list of freq types
@@ -283,13 +288,16 @@ namespace SiGLServices.Handlers
                 {
                     using (SiGLAgent sa = new SiGLAgent(username, securedPassword))
                     {
-                        if (sa.Select<project>().First(s => s.project_id == projectId) == null)
+                        project aProj = sa.Select<project>().First(s => s.project_id == projectId);
+                        if (aProj == null)
                             throw new NotFoundRequestException();
 
                         project_keywords ObjectToBeDeleted = sa.Select<project_keywords>().SingleOrDefault(nns => nns.project_id == projectId && nns.keyword_id == keywordId);
 
                         if (ObjectToBeDeleted == null) throw new NotFoundRequestException();
                         sa.Delete<project_keywords>(ObjectToBeDeleted);
+                        aProj.last_edited_stamp = DateTime.Now.Date;
+                        sa.Update<project>(aProj);
                         sm(sa.Messages);
                     }//end using
                 }//end using

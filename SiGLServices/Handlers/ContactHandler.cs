@@ -192,7 +192,8 @@ namespace SiGLServices.Handlers
                 {
                     using (SiGLAgent sa = new SiGLAgent(username, securedPassword, true))
                     {
-                        if (sa.Select<project>().First(p => p.project_id == projectId) == null)
+                        project aProj = sa.Select<project>().First(p => p.project_id == projectId);
+                        if (aProj == null)
                             throw new NotFoundRequestException();
 
                         contact con = sa.Select<contact>().FirstOrDefault(p => p.name == anEntity.name && p.organization_system_id == anEntity.organization_system_id && p.email == anEntity.email && p.phone == anEntity.phone);
@@ -209,6 +210,10 @@ namespace SiGLServices.Handlers
                             projContact = sa.Add<project_contacts>(projContact);
                             sm(sa.Messages);
                         }
+                        //update project's last edited stamp
+                        aProj.last_edited_stamp = DateTime.Now.Date;
+                        sa.Update<project>(aProj);
+
                         //return list of network types
                         contactList = sa.Select<contact>().Where(nn => nn.project_contacts.Any(nns => nns.project_id == projectId)).ToList();
 
@@ -238,6 +243,13 @@ namespace SiGLServices.Handlers
                     using (SiGLAgent sa = new SiGLAgent(username, securedPassword))
                     {
                         anEntity = sa.Update<contact>(entityId, anEntity);
+
+                        List<project> projList = sa.Select<project>().Include(p => p.project_contacts).Where(p => p.project_contacts.Any(c => c.contact_id == entityId)).ToList();
+                        foreach (project p in projList)
+                        {
+                            p.last_edited_stamp = DateTime.Now.Date;
+                            sa.Update<project>(p);
+                        }
                         sm(sa.Messages);
                     }//end using
                 }//end using
@@ -292,13 +304,17 @@ namespace SiGLServices.Handlers
                 {
                     using (SiGLAgent sa = new SiGLAgent(username, securedPassword))
                     {
-                        if (sa.Select<project>().First(s => s.project_id == projectId) == null)
+                        project aProj = sa.Select<project>().First(p => p.project_id == projectId);
+                        if (aProj == null)
                             throw new NotFoundRequestException();
 
                         project_contacts ObjectToBeDeleted = sa.Select<project_contacts>().SingleOrDefault(pc => pc.project_id == projectId && pc.contact_id == contactId);
 
                         if (ObjectToBeDeleted == null) throw new NotFoundRequestException();
                         sa.Delete<project_contacts>(ObjectToBeDeleted);
+
+                        aProj.last_edited_stamp = DateTime.Now.Date;
+                        sa.Update<project>(aProj);
                         sm(sa.Messages);
                     }//end using
                 }//end using

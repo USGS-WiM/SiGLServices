@@ -155,7 +155,8 @@ namespace SiGLServices.Handlers
                 {
                     using (SiGLAgent sa = new SiGLAgent(username, securedPassword, true))
                     {
-                        if (sa.Select<project>().FirstOrDefault(s => s.project_id == projectId) == null)
+                        project aProj = sa.Select<project>().FirstOrDefault(s => s.project_id == projectId);
+                        if (aProj == null)
                             throw new NotFoundRequestException();
 
                         if (sa.Select<objective_type>().First(n => n.objective_type_id == objectiveTypeId) == null)
@@ -167,6 +168,10 @@ namespace SiGLServices.Handlers
                             anEntity.project_id = projectId;
                             anEntity.objective_id = objectiveTypeId;
                             anEntity = sa.Add<project_objectives>(anEntity);
+
+                            aProj.last_edited_stamp = DateTime.Now.Date;
+                            sa.Update<project>(aProj);
+
                             sm(sa.Messages);
                         }
                         //return list of freq types
@@ -252,13 +257,17 @@ namespace SiGLServices.Handlers
                 {
                     using (SiGLAgent sa = new SiGLAgent(username, securedPassword))
                     {
-                        if (sa.Select<project>().FirstOrDefault(s => s.project_id == projectId) == null)
+                        project aProj = sa.Select<project>().FirstOrDefault(s => s.project_id == projectId);
+                        if (aProj == null)
                             throw new NotFoundRequestException();
 
                         project_objectives ObjectToBeDeleted = sa.Select<project_objectives>().SingleOrDefault(nns => nns.project_id == projectId && nns.objective_id == objectiveTypeId);
 
                         if (ObjectToBeDeleted == null) throw new NotFoundRequestException();
                         sa.Delete<project_objectives>(ObjectToBeDeleted);
+
+                        aProj.last_edited_stamp = DateTime.Now.Date;
+                        sa.Update<project>(aProj);
                         sm(sa.Messages);
                     }//end using
                 }//end using
