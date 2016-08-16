@@ -229,17 +229,17 @@ namespace SiGLServices.Handlers
                             {
                                 resource_type_id = rt.resource_type.resource_type_id,
                                 resource_name = rt.resource_type.resource_name 
-                            }).ToList(),
+                            }).OrderBy(rt=>rt.resource_name).ToList(),
                         Media = s.site_media.Select(mt => new media_type
                         {
                             media_type_id = mt.media_type.media_type_id,
                             media = mt.media_type.media
-                        }).ToList(),
+                        }).OrderBy(mt=>mt.media).ToList(),
                         Frequencies = s.site_frequency.Select(ft => new frequency_type
                         {
                             frequency_type_id = ft.frequency_type.frequency_type_id,
                             frequency = ft.frequency_type.frequency
-                        }).ToList(),
+                        }).OrderBy(ft=>ft.frequency).ToList(),
                         Parameters = s.site_parameters.Select(pt => new parameter_type
                         {
                             parameter_type_id = pt.parameter_type.parameter_type_id,
@@ -534,7 +534,7 @@ namespace SiGLServices.Handlers
             try
             {
                 if (string.IsNullOrEmpty(anEntity.name) || anEntity.latitude < 0 || anEntity.longitude > 0 || string.IsNullOrEmpty(anEntity.country)
-                    || string.IsNullOrEmpty(anEntity.state_province) || !anEntity.lake_type_id.HasValue)
+                    || anEntity.project_id < 0 || string.IsNullOrEmpty(anEntity.state_province) || !anEntity.lake_type_id.HasValue)
                     throw new BadRequestException("Invalid input parameters");
 
                 using (EasySecureString securedPassword = GetSecuredPassword())
@@ -542,6 +542,9 @@ namespace SiGLServices.Handlers
                     using (SiGLAgent sa = new SiGLAgent(username, securedPassword))
                     {
                         anEntity = sa.Add<site>(anEntity);
+                        project aProj = sa.Select<project>().First(p => p.project_id == anEntity.project_id);
+                        aProj.last_edited_stamp = DateTime.Now.Date;
+                        sa.Update<project>(aProj);
                         sm(sa.Messages);
                     }//end using
                 }//end using
@@ -564,13 +567,21 @@ namespace SiGLServices.Handlers
             try
             {
                 if (string.IsNullOrEmpty(anEntity.name) || anEntity.latitude < 0 || anEntity.longitude > 0 || string.IsNullOrEmpty(anEntity.country)
-                    || string.IsNullOrEmpty(anEntity.state_province) || !anEntity.lake_type_id.HasValue)
+                    || anEntity.project_id < 0 || string.IsNullOrEmpty(anEntity.state_province) || !anEntity.lake_type_id.HasValue)
                     throw new BadRequestException("Invalid input parameters");
                 using (EasySecureString securedPassword = GetSecuredPassword())
                 {
                     using (SiGLAgent sa = new SiGLAgent(username, securedPassword))
                     {
+                        //no time please
+                        if (anEntity.start_date.HasValue) anEntity.start_date = anEntity.start_date.Value.Date;
+                        if (anEntity.end_date.HasValue) anEntity.end_date = anEntity.end_date.Value.Date;
+
                         anEntity = sa.Update<site>(entityId, anEntity);
+
+                        project aProj = sa.Select<project>().First(p => p.project_id == anEntity.project_id);
+                        aProj.last_edited_stamp = DateTime.Now.Date;
+                        sa.Update<project>(aProj);
                         sm(sa.Messages);
                     }//end using
                 }//end using
@@ -592,6 +603,7 @@ namespace SiGLServices.Handlers
         public OperationResult Delete(Int32 entityId)
         {
             site anEntity = null;
+            Int32 projId = 0;
             try
             {
                 if (entityId <= 0) throw new BadRequestException("Invalid input parameters");
@@ -601,6 +613,7 @@ namespace SiGLServices.Handlers
                     {
                         anEntity = sa.Select<site>().SingleOrDefault(s => s.site_id == entityId);
                         if (anEntity == null) throw new WiM.Exceptions.NotFoundRequestException();
+                        projId = anEntity.project_id.Value;
 
                         sa.Delete<site>(anEntity);
 
@@ -609,6 +622,9 @@ namespace SiGLServices.Handlers
                         sa.Select<site_parameters>().Where(pa => pa.site_id == entityId).ToList().ForEach(x => sa.Delete<site_parameters>(x));
                         sa.Select<site_resource>().Where(res => res.site_id == entityId).ToList().ForEach(x => sa.Delete<site_resource>(x));
 
+                        project aProj = sa.Select<project>().First(p => p.project_id == projId);
+                        aProj.last_edited_stamp = DateTime.Now.Date;
+                        sa.Update<project>(aProj);
                         sm(sa.Messages);
                     }//end using
                 }//end using

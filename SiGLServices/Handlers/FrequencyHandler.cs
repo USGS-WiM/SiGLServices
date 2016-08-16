@@ -152,7 +152,8 @@ namespace SiGLServices.Handlers
                 {
                     using (SiGLAgent sa = new SiGLAgent(username, securedPassword, true))
                     {
-                        if (sa.Select<site>().First(s => s.site_id == siteId) == null)
+                        site aSite = sa.Select<site>().First(s => s.site_id == siteId);
+                        if (aSite == null)
                             throw new NotFoundRequestException();
 
                         if (sa.Select<frequency_type>().First(n => n.frequency_type_id == frequencyTypeId) == null)
@@ -164,10 +165,14 @@ namespace SiGLServices.Handlers
                             anEntity.site_id = siteId;
                             anEntity.frequency_type_id = frequencyTypeId;
                             anEntity = sa.Add<site_frequency>(anEntity);
+
+                            project aProj = sa.Select<project>().First(p => p.project_id == aSite.project_id);
+                            aProj.last_edited_stamp = DateTime.Now.Date;
+                            sa.Update<project>(aProj);
                             sm(sa.Messages);
                         }
                         //return list of freq types
-                        freqTypeList = sa.Select<frequency_type>().Where(nn => nn.site_frequency.Any(nns => nns.site_id == siteId)).ToList();
+                        freqTypeList = sa.Select<frequency_type>().Where(nn => nn.site_frequency.Any(nns => nns.site_id == siteId)).OrderBy(nn=>nn.frequency).ToList();
                         
                     }//end using
                 }//end using
@@ -249,13 +254,17 @@ namespace SiGLServices.Handlers
                 {
                     using (SiGLAgent sa = new SiGLAgent(username, securedPassword))
                     {
-                        if (sa.Select<site>().First(s => s.site_id == siteId) == null)
+                        site aSite = sa.Select<site>().First(s => s.site_id == siteId);
+                        if (aSite == null)
                             throw new NotFoundRequestException();
 
                         site_frequency ObjectToBeDeleted = sa.Select<site_frequency>().SingleOrDefault(nns => nns.site_id == siteId && nns.frequency_type_id == frequencyTypeId);
 
                         if (ObjectToBeDeleted == null) throw new NotFoundRequestException();
                         sa.Delete<site_frequency>(ObjectToBeDeleted);
+                        project aProj = sa.Select<project>().First(p => p.project_id == aSite.project_id);
+                        aProj.last_edited_stamp = DateTime.Now.Date;
+                        sa.Update<project>(aProj);
                         sm(sa.Messages);
                     }//end using
                 }//end using
