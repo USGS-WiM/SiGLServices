@@ -207,7 +207,8 @@ namespace SiGLServices.Handlers
                 {
                     using (SiGLAgent sa = new SiGLAgent(username, securedPassword, true))
                     {
-                        if (sa.Select<site>().First(s => s.site_id == siteId) == null)
+                        site aSite = sa.Select<site>().First(s => s.site_id == siteId);
+                        if (aSite == null)
                             throw new NotFoundRequestException();
 
                         if (sa.Select<parameter_type>().First(n => n.parameter_type_id == parameterTypeId) == null)
@@ -219,6 +220,10 @@ namespace SiGLServices.Handlers
                             anEntity.site_id = siteId;
                             anEntity.parameter_type_id = parameterTypeId;
                             anEntity = sa.Add<site_parameters>(anEntity);
+
+                            project aProj = sa.Select<project>().First(p => p.project_id == aSite.project_id);
+                            aProj.last_edited_stamp = DateTime.Now.Date;
+                            sa.Update<project>(aProj);
                             sm(sa.Messages);
                         }
                         //return list of freq types
@@ -304,13 +309,18 @@ namespace SiGLServices.Handlers
                 {
                     using (SiGLAgent sa = new SiGLAgent(username, securedPassword))
                     {
-                        if (sa.Select<site>().First(s => s.site_id == siteId) == null)
+                        site aSite = sa.Select<site>().First(s => s.site_id == siteId);
+                        if (aSite == null)
                             throw new NotFoundRequestException();
 
                         site_parameters ObjectToBeDeleted = sa.Select<site_parameters>().SingleOrDefault(nns => nns.site_id == siteId && nns.parameter_type_id == parameterTypeId);
 
                         if (ObjectToBeDeleted == null) throw new NotFoundRequestException();
                         sa.Delete<site_parameters>(ObjectToBeDeleted);
+
+                        project aProj = sa.Select<project>().First(p => p.project_id == aSite.project_id);
+                        aProj.last_edited_stamp = DateTime.Now.Date;
+                        sa.Update<project>(aProj);
                         sm(sa.Messages);
                     }//end using
                 }//end using

@@ -155,7 +155,8 @@ namespace SiGLServices.Handlers
                 {
                     using (SiGLAgent sa = new SiGLAgent(username, securedPassword, true))
                     {
-                        if (sa.Select<site>().First(s => s.site_id == siteId) == null)
+                        site aSite = sa.Select<site>().First(s => s.site_id == siteId);
+                        if (aSite == null)
                             throw new NotFoundRequestException();
 
                         if (sa.Select<resource_type>().First(n => n.resource_type_id == resourceTypeId) == null)
@@ -167,10 +168,14 @@ namespace SiGLServices.Handlers
                             anEntity.site_id = siteId;
                             anEntity.resource_type_id = resourceTypeId;
                             anEntity = sa.Add<site_resource>(anEntity);
+
+                            project aProj = sa.Select<project>().First(p => p.project_id == aSite.project_id);
+                            aProj.last_edited_stamp = DateTime.Now.Date;
+                            sa.Update<project>(aProj);
                             sm(sa.Messages);
                         }
                         //return list of res types
-                        resTypeList = sa.Select<resource_type>().Where(nn => nn.site_resource.Any(nns => nns.site_id == siteId)).ToList();
+                        resTypeList = sa.Select<resource_type>().Where(nn => nn.site_resource.Any(nns => nns.site_id == siteId)).OrderBy(nn=>nn.resource_name).ToList();
 
                     }//end using
                 }//end using
@@ -252,13 +257,18 @@ namespace SiGLServices.Handlers
                 {
                     using (SiGLAgent sa = new SiGLAgent(username, securedPassword))
                     {
-                        if (sa.Select<site>().First(s => s.site_id == siteId) == null)
+                        site aSite = sa.Select<site>().First(s => s.site_id == siteId);
+                        if (aSite == null)
                             throw new NotFoundRequestException();
 
                         site_resource ObjectToBeDeleted = sa.Select<site_resource>().SingleOrDefault(nns => nns.site_id == siteId && nns.resource_type_id == resourceTypeId);
 
                         if (ObjectToBeDeleted == null) throw new NotFoundRequestException();
                         sa.Delete<site_resource>(ObjectToBeDeleted);
+
+                        project aProj = sa.Select<project>().First(p => p.project_id == aSite.project_id);
+                        aProj.last_edited_stamp = DateTime.Now.Date;
+                        sa.Update<project>(aProj);
                         sm(sa.Messages);
                     }//end using
                 }//end using
