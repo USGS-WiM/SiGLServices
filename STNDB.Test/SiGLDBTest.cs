@@ -8,7 +8,7 @@ namespace SiGLDB.Test
 {
     [TestClass]
     public class SiGLDBTest
-    {
+    {//<add name="SiGLEntities" connectionString="metadata=res://*/SiGLEntities.csdl|res://*/SiGLEntities.ssdl|res://*/SiGLEntities.msl;provider=Npgsql;provider connection string=&quot;Host=lampnew.ck2zppz9pgsw.us-east-1.rds.amazonaws.com;Password=***REMOVED***;Username=lampadmin;Database=lamp&quot;" providerName="System.Data.EntityClient" />
         private string connectionString = "***REMOVED***";
         private string password = "***REMOVED***";
 

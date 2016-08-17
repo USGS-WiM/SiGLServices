@@ -810,8 +810,9 @@ namespace SiGLServices.Handlers
                         project anEntity = sa.Select<project>().SingleOrDefault(p => p.project_id == entityId);
                         if (anEntity == null) throw new WiM.Exceptions.NotFoundRequestException();
 
-                        data_manager dm = anEntity.data_manager;
-                        if (!IsAuthorizedToEdit(dm.username)) return new OperationResult.Forbidden { Description = "Not Authorized" };
+                      ///  data_manager dm = anEntity.data_manager;
+                        //data_manager dataM = sa.Select<data_manager>().First(d => d.data_manager_id == dm);
+                      //  if (!IsAuthorizedToEdit(dm.username)) return new OperationResult.Forbidden { Description = "Not Authorized" };
 
                         sa.Delete<project>(anEntity);
                         sa.Select<project_contacts>().Where(c => c.project_id == entityId).ToList().ForEach(x => sa.Delete<project_contacts>(x));
