@@ -16,8 +16,7 @@ namespace SiGLServices.Test
         #region Private Fields
         private string host = "http://localhost/";
         private string basicAuth = "Basic " + Convert.ToBase64String(Encoding.GetEncoding("ISO-8859-1")
-                                .GetBytes("lampadmin:adminPa55word"));
-
+                                .GetBytes("lampadmin:***REMOVED***"));
 
         #endregion
         #region Constructor
@@ -32,11 +31,11 @@ namespace SiGLServices.Test
             Assert.IsNotNull(RequestList, RequestList.Count.ToString());            
             
             //GET project contacts
-            List<contact> projRequestList = this.GETRequest<List<contact>>(host + Configuration.projectResource + "/685/" + Configuration.contactResource);
+            List<contact> projRequestList = this.GETRequest<List<contact>>(host + Configuration.projectResource + "/685/" + Configuration.contactResource, basicAuth);
             Assert.IsNotNull(projRequestList);
 
             //GET orgSystem contacts
-            List<contact> OrgSysRequestList = this.GETRequest<List<contact>>(host + Configuration.orgSystemResource + "/15/" + Configuration.contactResource);
+            List<contact> OrgSysRequestList = this.GETRequest<List<contact>>(host + Configuration.orgSystemResource + "/15/" + Configuration.contactResource, basicAuth);
             Assert.IsNotNull(OrgSysRequestList);
 
             //POST
@@ -50,16 +49,16 @@ namespace SiGLServices.Test
             Assert.IsNotNull(postProjObj, postProjObj.Count.ToString());
 
             //GET POSTed item
-            contact RequestObj = this.GETRequest<contact>(host + Configuration.contactResource + "/" + postObj.contact_id, basicAuth);
+            contact RequestObj = this.GETRequest<contact>(host + Configuration.contactResource + "/" + postProjObj[0].contact_id, basicAuth);
             Assert.IsNotNull(RequestObj);
 
             //PUT POSTed item
-            postObj.name = "put-test"; postObj.email = "putTest@put.test";
-            contact putObj = this.PUTRequest<contact>(host + Configuration.contactResource + "/" + postObj.contact_id, postObj, basicAuth);
-            Assert.IsNotNull(RequestObj);
+            postProjObj[2].name = "put-test"; postProjObj[2].email = "putTest@put.test";
+            contact putObj = this.PUTRequest<contact>(host + Configuration.contactResource + "/" + postProjObj[2].contact_id, postProjObj[2], basicAuth);
+            Assert.IsNotNull(putObj);
 
             //Delete POSTed item
-            bool success = this.DELETERequest<contact>(host + Configuration.contactResource + "/" + postObj.contact_id, basicAuth);
+            bool success = this.DELETERequest<contact>(host + Configuration.contactResource + "/" + postProjObj[2].contact_id, basicAuth);
             Assert.IsTrue(success);
         }//end method
         [TestMethod]
@@ -88,7 +87,7 @@ namespace SiGLServices.Test
             Assert.IsNotNull(postObj, "ID: " + postObj.data_manager_id.ToString());
 
             //GET POSTed item
-            data_manager RequestObj = this.GETRequest<data_manager>(host + Configuration.dataManagerResource + "/1");
+            data_manager RequestObj = this.GETRequest<data_manager>(host + Configuration.dataManagerResource + "/" + postObj.data_manager_id, basicAuth);
             Assert.IsNotNull(RequestObj);
 
             //GET login
@@ -179,12 +178,12 @@ namespace SiGLServices.Test
             Assert.IsNotNull(postObj, "ID: " + postObj.frequency_type_id.ToString());
 
             //GET POSTed item
-            frequency_type RequestObj = this.GETRequest<frequency_type>(host + Configuration.frequencyResource + "/80", basicAuth);
+            frequency_type RequestObj = this.GETRequest<frequency_type>(host + Configuration.frequencyResource + "/" + postObj.frequency_type_id);
             Assert.IsNotNull(RequestObj);
 
             //POST siteFrequency
             List<frequency_type> siteFreqResp;
-            siteFreqResp = this.POSTRequest<frequency_type, List<frequency_type>>(host + Configuration.siteResource + "/1638/addFrequency?FrequencyTypeId=80", null, basicAuth);
+            siteFreqResp = this.POSTRequest<frequency_type, List<frequency_type>>(host + Configuration.siteResource + "/1638/addFrequency?FrequencyTypeId=100", null, basicAuth);
             Assert.IsNotNull(siteFreqResp, siteFreqResp.Count.ToString());
 
             //PUT POSTed item
@@ -193,11 +192,11 @@ namespace SiGLServices.Test
             Assert.IsNotNull(RequestObj);
 
             //Delete POSTed item "/Sites/{siteId}/removeNetworkName?NetworkNameId={networkNameId}"
-            bool siteFreqsuccess = this.DELETERequest<frequency_type>(host + Configuration.siteResource + "/1638/removeFrequencyType?FrequencyTypeId=80", basicAuth);
+            bool siteFreqsuccess = this.DELETERequest<frequency_type>(host + Configuration.siteResource + "/1638/removeFrequencyType?FrequencyTypeId=100", basicAuth);
             Assert.IsTrue(siteFreqsuccess);
 
             //Delete POSTed item
-            bool success = this.DELETERequest<frequency_type>(host + Configuration.frequencyResource + "/80", basicAuth);
+            bool success = this.DELETERequest<frequency_type>(host + Configuration.frequencyResource + "/100", basicAuth);
             Assert.IsTrue(success);
         }//end method
         [TestMethod]
@@ -216,6 +215,11 @@ namespace SiGLServices.Test
             postObj = this.POSTRequest<keyword>(host + Configuration.keywordResource, new keyword() { term = "post-test" }, basicAuth);
             Assert.IsNotNull(postObj, "ID: " + postObj.keyword_id.ToString());
 
+            //POST
+            List<keyword> projKeyResp;
+            projKeyResp = this.POSTRequest<keyword, List<keyword>>(host + Configuration.projectResource + "/88/addKeyword?Word=post-test1", null, basicAuth);
+            Assert.IsNotNull(projKeyResp, projKeyResp.Count.ToString());
+
             //GET POSTed item
             keyword RequestObj = this.GETRequest<keyword>(host + Configuration.keywordResource + "/" + postObj.keyword_id);
             Assert.IsNotNull(RequestObj);
@@ -225,14 +229,9 @@ namespace SiGLServices.Test
             Assert.IsNotNull(TermObj);
 
             //POST projKeyword
-            List<keyword> projKeywordResp;
-            projKeywordResp = this.POSTRequest<keyword, List<keyword>>(host + Configuration.projectResource + "/88/addKeyword?Word=post-test", null, basicAuth);
-            Assert.IsNotNull(projKeywordResp, projKeywordResp.Count.ToString());
-
-            //POST projKeyword
-            List<keyword> projKeyword2Resp;
-            projKeyword2Resp = this.POSTRequest<keyword, List<keyword>>(host + Configuration.projectResource + "/88/addKeyword?Word=test123456", null, basicAuth);
-            Assert.IsNotNull(projKeyword2Resp, projKeyword2Resp.Count.ToString());
+            //List<keyword> projKeywordResp;
+            //projKeywordResp = this.POSTRequest<keyword, List<keyword>>(host + Configuration.projectResource + "/88/addKeyword?Word=post-test", null, basicAuth);
+            //Assert.IsNotNull(projKeywordResp, projKeywordResp.Count.ToString());
 
             //PUT POSTed item
             RequestObj.term = "put-test";
@@ -240,12 +239,16 @@ namespace SiGLServices.Test
             Assert.IsNotNull(RequestObj);
 
             //Delete POSTed item
-            bool projKeywordsuccess = this.DELETERequest<keyword>(host + Configuration.projectResource + "/88/removeKeyword?KeywordId=" + RequestObj.keyword_id, basicAuth);
+            bool projKeywordsuccess = this.DELETERequest<keyword>(host + Configuration.projectResource + "/88/removeKeyword?KeywordId=" + projKeyResp[10].keyword_id, basicAuth);
             Assert.IsTrue(projKeywordsuccess);
 
             //Delete POSTed item
             bool success = this.DELETERequest<keyword>(host + Configuration.keywordResource + "/" + RequestObj.keyword_id, basicAuth);
             Assert.IsTrue(success);
+
+            //Delete POSTed item
+            bool PKsuccess = this.DELETERequest<keyword>(host + Configuration.keywordResource + "/" + projKeyResp[10].keyword_id, basicAuth);
+            Assert.IsTrue(PKsuccess);
         }//end method
         [TestMethod]
         public void LakeRequest()
@@ -345,11 +348,11 @@ namespace SiGLServices.Test
             Assert.IsNotNull(RequestObj);
 
             //Delete POSTed item 
-            bool projObjSuccess = this.DELETERequest<objective_type>(host + Configuration.projectResource + "/1607/removeObjective?ObjectiveTypeId=299", basicAuth);
+            bool projObjSuccess = this.DELETERequest<objective_type>(host + Configuration.projectResource + "/1513/removeObjective?ObjectiveTypeId=326", basicAuth);
             Assert.IsTrue(projObjSuccess);
 
             //Delete POSTed item
-            bool success = this.DELETERequest<objective_type>(host + Configuration.objectiveResource + "/299", basicAuth);
+            bool success = this.DELETERequest<objective_type>(host + Configuration.objectiveResource + "/326", basicAuth);
             Assert.IsTrue(success);
         }//end method
         [TestMethod]
@@ -407,7 +410,7 @@ namespace SiGLServices.Test
             // No Delete POSTed item
 
             //Delete projectCooperator
-            bool success = this.DELETERequest<organization_system>(host + Configuration.projectResource + "/removeOrganization?OrgSystemId=" + postProjOrg[0].organization_system_id, basicAuth);
+            bool success = this.DELETERequest<organization_system>(host + Configuration.projectResource + "/1/removeOrganization?OrgSystemId=" + postProjOrg[1].organization_system_id, basicAuth);
             Assert.IsTrue(success);
         }//end method
         [TestMethod]
@@ -465,11 +468,11 @@ namespace SiGLServices.Test
             Assert.IsNotNull(postObj, "ID: " + postObj.proj_status_id.ToString());
 
             //GET POSTed item
-            proj_status RequestObj = this.GETRequest<proj_status>(host + Configuration.projStatusResource + "/" + postObj.proj_status_id, basicAuth);
+            proj_status RequestObj = this.GETRequest<proj_status>(host + Configuration.projStatusResource + "/" + postObj.proj_status_id);
             Assert.IsNotNull(RequestObj);
 
             //GET project proj_status
-            proj_status projStat = this.GETRequest<proj_status>(host + Configuration.projectResource + "/681/projStatus", basicAuth);
+            proj_status projStat = this.GETRequest<proj_status>(host + Configuration.projectResource + "/681/projStatus");
             Assert.IsNotNull(projStat);
 
             //PUT POSTed item
@@ -550,7 +553,7 @@ namespace SiGLServices.Test
             Assert.IsNotNull(siteMedProjList, siteMedProjList.Count.ToString());
 
             //GetParameterSiteProjects
-            List<project> siteParamProjList = this.GETRequest<List<project>>(host + Configuration.parameterResource + "/1/" + Configuration.projectResource);
+            List<project> siteParamProjList = this.GETRequest<List<project>>(host + Configuration.parameterResource + "/2/" + Configuration.projectResource);
             Assert.IsNotNull(siteParamProjList, siteParamProjList.Count.ToString());
 
             //GetResourceSiteProjects
@@ -621,7 +624,7 @@ namespace SiGLServices.Test
             Assert.IsNotNull(RequestList, RequestList.Count.ToString());
 
             //GET project publications
-            List<publication> projPublicationList = this.GETRequest<List<publication>>(host + Configuration.projectResource + "/1450/" + Configuration.publicationResource);
+            List<publication> projPublicationList = this.GETRequest<List<publication>>(host + Configuration.projectResource + "/132/" + Configuration.publicationResource);
             Assert.IsNotNull(projPublicationList, projPublicationList.Count.ToString());
 
             //POST
@@ -635,7 +638,7 @@ namespace SiGLServices.Test
 
             //POST projPublication
             List<publication> projPubResp;
-            projPubResp = this.POSTRequest<publication, List<publication>>(host + Configuration.projectResource + "/1450/addPublication?PublicationId=" + postObj.publication_id, null, basicAuth);
+            projPubResp = this.POSTRequest<publication, List<publication>>(host + Configuration.projectResource + "/132/addPublication", new publication() {description = "post-test"}, basicAuth);
             Assert.IsNotNull(projPubResp, projPubResp.Count.ToString());
 
             //PUT POSTed item
@@ -644,7 +647,7 @@ namespace SiGLServices.Test
             Assert.IsNotNull(RequestObj);
 
             //Delete POSTed item 
-            bool projPubsuccess = this.DELETERequest<publication>(host + Configuration.projectResource + "/1450/removePublication?PublicationId=" + RequestObj.publication_id, basicAuth);
+            bool projPubsuccess = this.DELETERequest<publication>(host + Configuration.projectResource + "/132/removePublication?PublicationId=" + RequestObj.publication_id, basicAuth);
             Assert.IsTrue(projPubsuccess);
 
             //Delete POSTed item
@@ -659,7 +662,7 @@ namespace SiGLServices.Test
             Assert.IsNotNull(RequestList, RequestList.Count.ToString());
 
             //GET site Media
-            List<resource_type> siteResourceList = this.GETRequest<List<resource_type>>(host + Configuration.siteResource + "/13659/" + Configuration.resourceResource);
+            List<resource_type> siteResourceList = this.GETRequest<List<resource_type>>(host + Configuration.siteResource + "/9028/" + Configuration.resourceResource);
             Assert.IsNotNull(siteResourceList, siteResourceList.Count.ToString());
 
             //POST
@@ -673,7 +676,7 @@ namespace SiGLServices.Test
 
             //POST siteResource
             List<resource_type> siteResResp;
-            siteResResp = this.POSTRequest<resource_type, List<resource_type>>(host + Configuration.siteResource + "/13659/addResource?ResourceTypeId=" + RequestObj.resource_type_id, null, basicAuth);
+            siteResResp = this.POSTRequest<resource_type, List<resource_type>>(host + Configuration.siteResource + "/9028/addResource?ResourceTypeId=" + RequestObj.resource_type_id, null, basicAuth);
             Assert.IsNotNull(siteResResp, siteResResp.Count.ToString());
 
             //PUT POSTed item
@@ -682,7 +685,7 @@ namespace SiGLServices.Test
             Assert.IsNotNull(putObj);
 
             //Delete POSTed item 
-            bool siteRessuccess = this.DELETERequest<resource_type>(host + Configuration.siteResource + "/13659/removeResource?ResourceTypeId=" + RequestObj.resource_type_id, basicAuth);
+            bool siteRessuccess = this.DELETERequest<resource_type>(host + Configuration.siteResource + "/9028/removeResource?ResourceTypeId=" + RequestObj.resource_type_id, basicAuth);
             Assert.IsTrue(siteRessuccess);
 
             //Delete POSTed item
@@ -706,7 +709,7 @@ namespace SiGLServices.Test
             Assert.IsNotNull(RequestObj);
 
             //GET dm role
-            role dmRoleObj = this.GETRequest<role>(host + Configuration.dataManagerResource + "/6/role");
+            role dmRoleObj = this.GETRequest<role>(host + Configuration.dataManagerResource + "/303/role");
             Assert.IsNotNull(dmRoleObj);
            
             //PUT POSTed item
@@ -780,11 +783,11 @@ namespace SiGLServices.Test
             Assert.IsNotNull(RequestList, RequestList.Count.ToString());
 
             //get ProjectFullSites -- test in browser only
-            List<FullSite> projFullSiteList = this.GETRequest<List<FullSite>>(host + Configuration.projectResource + "/1741/ProjectFullSites");
-            Assert.IsNotNull(projFullSiteList, projFullSiteList.Count.ToString());
+          //  List<FullSite> projFullSiteList = this.GETRequest<List<FullSite>>(host + Configuration.projectResource + "/1901/ProjectFullSites");
+          //  Assert.IsNotNull(projFullSiteList, projFullSiteList.Count.ToString());
 
             //Get GetProjectSites
-            List<site> ProjSiteList = this.GETRequest<List<site>>(host + Configuration.projectResource + "/1741/" + Configuration.siteResource);
+            List<site> ProjSiteList = this.GETRequest<List<site>>(host + Configuration.projectResource + "/1901/" + Configuration.siteResource);
             Assert.IsNotNull(ProjSiteList, ProjSiteList.Count.ToString());
 
             //Get GetLakeSites
@@ -807,9 +810,9 @@ namespace SiGLServices.Test
             List<site> ParamSiteList = this.GETRequest<List<site>>(host + Configuration.parameterResource + "/27/" + Configuration.siteResource);
             Assert.IsNotNull(ParamSiteList, ParamSiteList.Count.ToString());
 
-            //Get States where there are sites
-            List<site> StateSiteList = this.GETRequest<List<site>>(host + Configuration.siteResource + "/StatesWithSites");
-            Assert.IsNotNull(StateSiteList, StateSiteList.Count.ToString());
+            //Get States where there are sites (test in browser)
+        //    List<site> StateSiteList = this.GETRequest<List<site>>(host + Configuration.siteResource + "/StatesWithSites");
+         //   Assert.IsNotNull(StateSiteList, StateSiteList.Count.ToString());
 
 
            //Get GetFrequencySites
@@ -817,18 +820,14 @@ namespace SiGLServices.Test
             Assert.IsNotNull(FreqSiteList, FreqSiteList.Count.ToString());
 
             //filtered sites (site map tab)
-            List<site> FilteredSite1List = this.GETRequest<List<site>>(host + Configuration.siteResource + "/FilteredSites?Duration=2&Lake=3&Media=7&Parameters=15,16&ResComp=9&State=Wisconsin&Status=2");
+            List<site> FilteredSite1List = this.GETRequest<List<site>>(host + Configuration.siteResource + "/FilteredSites?Duration=2&Lake=3&Media=7&ProjObjs=&ProjOrg=&Parameters=15,16&ResComp=9&State=Wisconsin&Status=2");
             Assert.IsNotNull(FilteredSite1List, FilteredSite1List.Count.ToString());
-
-            //filtered sites (project map tab)
-            List<site> FilteredSite2List = this.GETRequest<List<site>>(host + Configuration.siteResource + "/FilteredSites?Duration=2&Lake=3&ProjObjs=2,28&ProjOrg=75&State=Wisconsin&Status=2");
-            Assert.IsNotNull(FilteredSite2List, FilteredSite2List.Count.ToString());
 
             //POST
             site postObj;
             postObj = this.POSTRequest<site>(host + Configuration.siteResource, new site()
             { 
-                name = "post-test", latitude=44.43, longitude=-89.432, country="United States of America", state_province="Wisconsin", lake_type_id=2 
+                name = "post-test", project_id = 561, latitude=44.43, longitude=-89.432, country="United States of America", state_province="Wisconsin", lake_type_id=2 
             }, basicAuth);
             Assert.IsNotNull(postObj, "ID: " + postObj.site_id.ToString());
 
@@ -837,8 +836,8 @@ namespace SiGLServices.Test
             Assert.IsNotNull(RequestObj);
 
             //GET GetFullSite -- Test in browser only
-            FullSite FullSite = this.GETRequest<FullSite>(host + Configuration.siteResource + "/13156/GetFullSite");
-            Assert.IsNotNull(FullSite);
+       //   FullSite FullSite = this.GETRequest<FullSite>(host + Configuration.siteResource + "/13156/GetFullSite");
+       //   Assert.IsNotNull(FullSite);
 
             //PUT POSTed item
             RequestObj.name = "put-test";
@@ -848,14 +847,7 @@ namespace SiGLServices.Test
             //Delete POSTed item
             bool success = this.DELETERequest<site>(host + Configuration.siteResource + "/" + RequestObj.site_id, basicAuth);
             Assert.IsTrue(success);
-        }//end method
-        
-        
-        
-        
-        
-        
-        
+        }//end method  
         #endregion
     }
 }
