@@ -417,6 +417,7 @@ namespace SiGLDB
         public bool Equals(site other)
         {
             return string.Equals(this.name, other.name, StringComparison.OrdinalIgnoreCase) &&
+                  (!other.project_id.HasValue || this.project_id == other.project_id) &&
                   (other.latitude <= 0 || this.latitude == other.latitude) &&
                   (other.longitude <= 0 || this.longitude == other.longitude) &&
                   (string.Equals(this.country, other.country, StringComparison.OrdinalIgnoreCase)) &&
