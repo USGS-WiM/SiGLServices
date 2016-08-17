@@ -8,9 +8,9 @@ namespace SiGLDB.Test
 {
     [TestClass]
     public class SiGLDBTest
-    {
-        private string connectionString = "metadata=res://*/SiGLEntities.csdl|res://*/SiGLEntities.ssdl|res://*/SiGLEntities.msl;provider=Npgsql;provider connection string=';Database=pgtest;Host=pgtest.ck2zppz9pgsw.us-east-1.rds.amazonaws.com;Username=pgadmin;PASSWORD={0};Application Name=SiGL';";
-        private string password = "szWPX9wye2CdDf9SdnDH";
+    {//<add name="SiGLEntities" connectionString="metadata=res://*/SiGLEntities.csdl|res://*/SiGLEntities.ssdl|res://*/SiGLEntities.msl;provider=Npgsql;provider connection string=&quot;Host=lampnew.ck2zppz9pgsw.us-east-1.rds.amazonaws.com;Password=cafOR4_yR;Username=lampadmin;Database=lamp&quot;" providerName="System.Data.EntityClient" />
+        private string connectionString = "metadata=res://*/SiGLEntities.csdl|res://*/SiGLEntities.ssdl|res://*/SiGLEntities.msl;provider=Npgsql;provider connection string=';Database=lamp;Host=lampnew.ck2zppz9pgsw.us-east-1.rds.amazonaws.com;Username=lampadmin;PASSWORD={0};Application Name=SiGL';";
+        private string password = "cafOR4_yR";
 
         [TestMethod]
         public void SiGLDBConnectionTest()

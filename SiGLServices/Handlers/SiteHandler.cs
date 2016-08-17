@@ -534,7 +534,7 @@ namespace SiGLServices.Handlers
             try
             {
                 if (string.IsNullOrEmpty(anEntity.name) || anEntity.latitude < 0 || anEntity.longitude > 0 || string.IsNullOrEmpty(anEntity.country)
-                    || anEntity.project_id < 0 || string.IsNullOrEmpty(anEntity.state_province) || !anEntity.lake_type_id.HasValue)
+                    || !anEntity.project_id.HasValue || string.IsNullOrEmpty(anEntity.state_province) || !anEntity.lake_type_id.HasValue)
                     throw new BadRequestException("Invalid input parameters");
 
                 using (EasySecureString securedPassword = GetSecuredPassword())
