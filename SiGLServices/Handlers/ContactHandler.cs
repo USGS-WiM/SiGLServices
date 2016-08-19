@@ -40,7 +40,7 @@ namespace SiGLServices.Handlers
     public class ContactHandler : SiGLHandlerBase
     {
         #region GetMethods
-        [RequiresAuthentication]
+       
         [HttpOperation(HttpMethod.GET)]
         public OperationResult Get()
         {
@@ -48,16 +48,13 @@ namespace SiGLServices.Handlers
 
             try
             {
-                using (EasySecureString securedPassword = GetSecuredPassword())
+                using (SiGLAgent sa = new SiGLAgent())
                 {
-                    using (SiGLAgent sa = new SiGLAgent(username, securedPassword))
-                    {
-                        entities = sa.Select<contact>().OrderBy(e => e.contact_id).ToList();
+                    entities = sa.Select<contact>().OrderBy(e => e.contact_id).ToList();
 
-                        sm(MessageType.info, "Count: " + entities.Count());
-                        sm(sa.Messages);
+                    sm(MessageType.info, "Count: " + entities.Count());
+                    sm(sa.Messages);
 
-                    }//end using
                 }//end using
                 return new OperationResult.OK { ResponseResource = entities, Description = this.MessageString };
             }
@@ -66,8 +63,7 @@ namespace SiGLServices.Handlers
                 return HandleException(ex);
             }            
         }//end HttpMethod.GET
-
-        [RequiresAuthentication]
+      
         [HttpOperation(HttpMethod.GET)]
         public OperationResult Get(Int32 entityId)
         {
@@ -76,15 +72,14 @@ namespace SiGLServices.Handlers
             try
             {
                 if (entityId <= 0) throw new BadRequestException("Invalid input parameters");
-                using (EasySecureString securedPassword = GetSecuredPassword())
+               
+                using (SiGLAgent sa = new SiGLAgent())
                 {
-                    using (SiGLAgent sa = new SiGLAgent(username, securedPassword))
-                    {
-                        anEntity = sa.Select<contact>().FirstOrDefault(e => e.contact_id == entityId);
-                        if (anEntity == null) throw new WiM.Exceptions.NotFoundRequestException();
-                        sm(sa.Messages);
-                    }//end using
+                    anEntity = sa.Select<contact>().FirstOrDefault(e => e.contact_id == entityId);
+                    if (anEntity == null) throw new WiM.Exceptions.NotFoundRequestException();
+                    sm(sa.Messages);
                 }//end using
+               
                 return new OperationResult.OK { ResponseResource = anEntity, Description = this.MessageString };
             }
             catch (Exception ex)
@@ -92,8 +87,7 @@ namespace SiGLServices.Handlers
                 return HandleException(ex);
             }
         }//end HttpMethod.GET
-
-        [RequiresAuthentication]
+       
         [HttpOperation(HttpMethod.GET, ForUriName = "GetProjectContacts")]
         public OperationResult GetProjectContacts(Int32 projectId)
         {
@@ -101,18 +95,15 @@ namespace SiGLServices.Handlers
 
             try
             {
-                if (projectId <= 0) throw new BadRequestException("Invalid input parameters");
-
-                using (EasySecureString securedPassword = GetSecuredPassword())
+                if (projectId <= 0) throw new BadRequestException("Invalid input parameters");           
+                    
+                using (SiGLAgent sa = new SiGLAgent())
                 {
-                    using (SiGLAgent sa = new SiGLAgent(username, securedPassword))
-                    {
-                        entities = sa.Select<project_contacts>().Where(pc => pc.project_id == projectId).Select(c => c.contact).ToList();
+                    entities = sa.Select<project_contacts>().Where(pc => pc.project_id == projectId).Select(c => c.contact).ToList();
 
-                        sm(MessageType.info, "Count: " + entities.Count());
-                        sm(sa.Messages);
-                    }//end using
-                }
+                    sm(MessageType.info, "Count: " + entities.Count());
+                    sm(sa.Messages);
+                }//end using
                 return new OperationResult.OK { ResponseResource = entities, Description = this.MessageString };
             }
             catch (Exception ex)
@@ -120,8 +111,7 @@ namespace SiGLServices.Handlers
                 return HandleException(ex);
             }            
         }//end HttpMethod.GET
-
-        [RequiresAuthentication]
+       
         [HttpOperation(HttpMethod.GET, ForUriName = "GetOrgSysContacts")]
         public OperationResult GetOrgSysContacts(Int32 orgSysId)
         {
@@ -130,17 +120,15 @@ namespace SiGLServices.Handlers
             try
             {
                 if (orgSysId <= 0) throw new BadRequestException("Invalid input parameters");
-
-                using (EasySecureString securedPassword = GetSecuredPassword())
+                             
+                using (SiGLAgent sa = new SiGLAgent())
                 {
-                    using (SiGLAgent sa = new SiGLAgent(username, securedPassword))
-                    {
-                        entities = sa.Select<organization_system>().Include(o => o.contacts).SingleOrDefault(o => o.organization_system_id == orgSysId).contacts.ToList();
+                    entities = sa.Select<organization_system>().Include(o => o.contacts).SingleOrDefault(o => o.organization_system_id == orgSysId).contacts.ToList();
 
-                        sm(MessageType.info, "Count: " + entities.Count());
-                        sm(sa.Messages);
-                    }//end using
-                }
+                    sm(MessageType.info, "Count: " + entities.Count());
+                    sm(sa.Messages);
+                }//end using
+             
                 return new OperationResult.OK { ResponseResource = entities, Description = this.MessageString };
             }
             catch (Exception ex)

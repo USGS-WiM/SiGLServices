@@ -128,6 +128,7 @@ namespace SiGLServices.Handlers
                         Status = s.status_type_id > 0 ? s.status_type.status : "",
                         SamplePlatform = s.sample_platform,
                         AdditionalInfo = s.additional_info,
+                        url = s.url,
                         Resources = s.site_resource.Select(rt => new resource_type
                             {
                                 resource_type_id = rt.resource_type.resource_type_id,
