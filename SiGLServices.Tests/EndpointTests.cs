@@ -16,7 +16,9 @@ namespace SiGLServices.Test
         #region Private Fields
         private string host = "http://localhost/";
         private string basicAuth = "Basic " + Convert.ToBase64String(Encoding.GetEncoding("ISO-8859-1")
-                                .GetBytes("lampadmin:cafOR4_yR"));
+                                .GetBytes("lampadmin:szWPX9wye2CdDf9SdnDH"));
+        //private string basicAuth = "Basic " + Convert.ToBase64String(Encoding.GetEncoding("ISO-8859-1")
+        //                        .GetBytes("lampadmin:cafOR4_yR"));
 
         #endregion
         #region Constructor
