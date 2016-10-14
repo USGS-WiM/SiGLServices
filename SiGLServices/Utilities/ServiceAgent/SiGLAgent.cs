@@ -111,7 +111,7 @@ namespace SiGLServices.Utilities.ServiceAgent
                             LEFT JOIN lampadmin.role r ON r.role_id::numeric = dm.role_id::numeric
                             GROUP BY dm.data_manager_id, dm.organization_system_id, dm.fname, dm.lname, p.data_manager_id, r.role_name;";
                 case "project_sitecount_view":
-                    return @"SELECT p.project_id, p.data_manager_id, p.name, count(s.project_id) AS site_count, dm.lname, dm.fname, o.organization_name
+                    return @"SELECT p.project_id, p.data_manager_id, p.last_edited_stamp, p.created_stamp, p.name, count(s.project_id) AS site_count, dm.lname, dm.fname, o.organization_name
                             FROM lampadmin.project p
                             LEFT JOIN lampadmin.site s ON p.project_id = s.project_id
                             LEFT JOIN lampadmin.data_manager dm ON p.data_manager_id = dm.data_manager_id

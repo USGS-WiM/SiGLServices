@@ -48,7 +48,7 @@ namespace SiGLServices.Handlers
             {
                 using (SiGLAgent sa = new SiGLAgent())
                 {
-                    entities = sa.Select<objective_type>().OrderBy(e => e.objective_type_id).ToList();
+                    entities = sa.Select<objective_type>().OrderBy(e => e.objective).ToList();
 
                     sm(MessageType.info, "Count: " + entities.Count());
                     sm(sa.Messages);

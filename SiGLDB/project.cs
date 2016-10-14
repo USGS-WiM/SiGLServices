@@ -24,6 +24,7 @@ namespace SiGLDB
             this.data_host = new HashSet<data_host>();
             this.project_publication = new HashSet<project_publication>();
             this.project_keywords = new HashSet<project_keywords>();
+            this.project_monitor_coord = new HashSet<project_monitor_coord>();
         }
     
         public int project_id { get; set; }
@@ -58,5 +59,7 @@ namespace SiGLDB
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<project_keywords> project_keywords { get; set; }
         public virtual data_manager data_manager { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<project_monitor_coord> project_monitor_coord { get; set; }
     }
 }

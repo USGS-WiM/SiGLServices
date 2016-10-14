@@ -73,6 +73,13 @@
     <Property Name="media_type_id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="media" Type="varchar" MaxLength="200" />
   </EntityType>
+  <EntityType Name="monitoring_coordination">
+    <Key>
+      <PropertyRef Name="monitoring_coordination_id" />
+    </Key>
+    <Property Name="monitoring_coordination_id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="effort" Type="varchar" MaxLength="600" />
+  </EntityType>
   <EntityType Name="objective_type">
     <Key>
       <PropertyRef Name="objective_type_id" />
@@ -161,6 +168,14 @@
     <Property Name="project_keywords_id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="project_id" Type="int4" />
     <Property Name="keyword_id" Type="int4" />
+  </EntityType>
+  <EntityType Name="project_monitor_coord">
+    <Key>
+      <PropertyRef Name="project_monitor_coord_id" />
+    </Key>
+    <Property Name="project_monitor_coord_id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="project_id" Type="int4" />
+    <Property Name="monitoring_coordination_id" Type="int4" />
   </EntityType>
   <EntityType Name="project_objectives">
     <Key>
@@ -283,6 +298,7 @@ warning 6005: The data type 'geometry' is currently not supported for the target
     <EntitySet Name="keyword" EntityType="Self.keyword" Schema="lampadmin" store:Type="Tables" />
     <EntitySet Name="lake_type" EntityType="Self.lake_type" Schema="lampadmin" store:Type="Tables" />
     <EntitySet Name="media_type" EntityType="Self.media_type" Schema="lampadmin" store:Type="Tables" />
+    <EntitySet Name="monitoring_coordination" EntityType="Self.monitoring_coordination" Schema="lampadmin" store:Type="Tables" />
     <EntitySet Name="objective_type" EntityType="Self.objective_type" Schema="lampadmin" store:Type="Tables" />
     <EntitySet Name="organization" EntityType="Self.organization" Schema="lampadmin" store:Type="Tables" />
     <EntitySet Name="organization_system" EntityType="Self.organization_system" Schema="lampadmin" store:Type="Tables" />
@@ -293,6 +309,7 @@ warning 6005: The data type 'geometry' is currently not supported for the target
     <EntitySet Name="project_contacts" EntityType="Self.project_contacts" Schema="lampadmin" store:Type="Tables" />
     <EntitySet Name="project_cooperators" EntityType="Self.project_cooperators" Schema="lampadmin" store:Type="Tables" />
     <EntitySet Name="project_keywords" EntityType="Self.project_keywords" Schema="lampadmin" store:Type="Tables" />
+    <EntitySet Name="project_monitor_coord" EntityType="Self.project_monitor_coord" Schema="lampadmin" store:Type="Tables" />
     <EntitySet Name="project_objectives" EntityType="Self.project_objectives" Schema="lampadmin" store:Type="Tables" />
     <EntitySet Name="project_publication" EntityType="Self.project_publication" Schema="lampadmin" store:Type="Tables" />
     <EntitySet Name="publication" EntityType="Self.publication" Schema="lampadmin" store:Type="Tables" />
