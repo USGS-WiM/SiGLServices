@@ -18,6 +18,8 @@ namespace SiGLServices.Resources
         public string lname { get; set; }
         public string fname {get;set;}
         public string organization_name { get; set; }
+        public Nullable<DateTime> last_edited_stamp { get; set; }
+        public Nullable<DateTime> created_stamp { get; set; }
     }
 
     public class FullProject
@@ -35,6 +37,7 @@ namespace SiGLServices.Resources
         public string Description { get; set; }
         public string AdditionalInfo { get; set; }
         public List<objective_type> Objectives { get; set; }
+        public List<monitoring_coordination> MonitoringCoords { get; set; }
         public List<keyword> Keywords { get; set; }
         public string ProjectWebsite { get; set; }
         public List<data_host> DataHosts { get; set; }

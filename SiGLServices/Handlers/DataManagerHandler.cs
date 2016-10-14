@@ -259,12 +259,10 @@ namespace SiGLServices.Handlers
 
 
                         if (!string.IsNullOrEmpty(anEntity.password) && !Cryptography
-                            .VerifyPassword(Encoding.UTF8.GetString(Convert.FromBase64String(anEntity.password)),
-                                                                    ObjectToBeUpdated.salt, ObjectToBeUpdated.password))
+                            .VerifyPassword(Encoding.UTF8.GetString(Convert.FromBase64String(anEntity.password)), ObjectToBeUpdated.salt, ObjectToBeUpdated.password))
                         {
                             ObjectToBeUpdated.salt = Cryptography.CreateSalt();
-                            ObjectToBeUpdated.password = Cryptography.GenerateSHA256Hash(Encoding.UTF8
-                                .GetString(Convert.FromBase64String(anEntity.password)), ObjectToBeUpdated.salt);
+                            ObjectToBeUpdated.password = Cryptography.GenerateSHA256Hash(Encoding.UTF8.GetString(Convert.FromBase64String(anEntity.password)), ObjectToBeUpdated.salt);
                             ObjectToBeUpdated.reset_flag = null;
                             sm(MessageType.info, "Password updated.");
                         }

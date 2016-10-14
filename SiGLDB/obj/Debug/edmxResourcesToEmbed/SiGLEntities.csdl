@@ -159,6 +159,16 @@
       <End Role="keyword" EntitySet="keywords" />
       <End Role="project_keywords" EntitySet="project_keywords" />
     </AssociationSet>
+    <EntitySet Name="monitoring_coordination" EntityType="SiGLEntitiesModel.monitoring_coordination" />
+    <EntitySet Name="project_monitor_coord" EntityType="SiGLEntitiesModel.project_monitor_coord" />
+    <AssociationSet Name="monitoring_coordinationproject_monitor_coord" Association="SiGLEntitiesModel.monitoring_coordinationproject_monitor_coord">
+      <End Role="monitoring_coordination" EntitySet="monitoring_coordination" />
+      <End Role="project_monitor_coord" EntitySet="project_monitor_coord" />
+    </AssociationSet>
+    <AssociationSet Name="project_monitor_coordproject" Association="SiGLEntitiesModel.project_monitor_coordproject">
+      <End Role="project_monitor_coord" EntitySet="project_monitor_coord" />
+      <End Role="project" EntitySet="projects" />
+    </AssociationSet>
   </EntityContainer>
   <EntityType Name="contact">
     <Key>
@@ -330,6 +340,7 @@
     <NavigationProperty Name="project_publication" Relationship="SiGLEntitiesModel.projectproject_publication" FromRole="project" ToRole="project_publication" />
     <NavigationProperty Name="project_keywords" Relationship="SiGLEntitiesModel.projectproject_keywords" FromRole="project" ToRole="project_keywords" />
     <NavigationProperty Name="data_manager" Relationship="SiGLEntitiesModel.data_managerproject" FromRole="project" ToRole="data_manager" />
+    <NavigationProperty Name="project_monitor_coord" Relationship="SiGLEntitiesModel.project_monitor_coordproject" FromRole="project" ToRole="project_monitor_coord" />
   </EntityType>
   <EntityType Name="project_contacts">
     <Key>
@@ -877,6 +888,48 @@
       </Principal>
       <Dependent Role="project_keywords">
         <PropertyRef Name="keyword_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="monitoring_coordination">
+    <Key>
+      <PropertyRef Name="monitoring_coordination_id" />
+    </Key>
+    <Property Name="monitoring_coordination_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="effort" Type="String" MaxLength="600" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="project_monitor_coord" Relationship="SiGLEntitiesModel.monitoring_coordinationproject_monitor_coord" FromRole="monitoring_coordination" ToRole="project_monitor_coord" />
+  </EntityType>
+  <EntityType Name="project_monitor_coord">
+    <Key>
+      <PropertyRef Name="project_monitor_coord_id" />
+    </Key>
+    <Property Name="project_monitor_coord_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="project_id" Type="Int32" />
+    <Property Name="monitoring_coordination_id" Type="Int32" />
+    <NavigationProperty Name="monitoring_coordination" Relationship="SiGLEntitiesModel.monitoring_coordinationproject_monitor_coord" FromRole="project_monitor_coord" ToRole="monitoring_coordination" />
+    <NavigationProperty Name="project" Relationship="SiGLEntitiesModel.project_monitor_coordproject" FromRole="project_monitor_coord" ToRole="project" />
+  </EntityType>
+  <Association Name="monitoring_coordinationproject_monitor_coord">
+    <End Type="SiGLEntitiesModel.monitoring_coordination" Role="monitoring_coordination" Multiplicity="0..1" />
+    <End Type="SiGLEntitiesModel.project_monitor_coord" Role="project_monitor_coord" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="monitoring_coordination">
+        <PropertyRef Name="monitoring_coordination_id" />
+      </Principal>
+      <Dependent Role="project_monitor_coord">
+        <PropertyRef Name="monitoring_coordination_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="project_monitor_coordproject">
+    <End Type="SiGLEntitiesModel.project_monitor_coord" Role="project_monitor_coord" Multiplicity="*" />
+    <End Type="SiGLEntitiesModel.project" Role="project" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="project">
+        <PropertyRef Name="project_id" />
+      </Principal>
+      <Dependent Role="project_monitor_coord">
+        <PropertyRef Name="project_id" />
       </Dependent>
     </ReferentialConstraint>
   </Association>

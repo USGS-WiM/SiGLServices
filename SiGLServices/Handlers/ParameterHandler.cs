@@ -236,6 +236,57 @@ namespace SiGLServices.Handlers
             catch (Exception ex)
             { return HandleException(ex); }
         }
+
+        //posts relationship, then returns list of frequency_type for the site_id
+        [SiGLRequiresRole(new string[] { AdminRole, ManagerRole })]
+        [HttpOperation(HttpMethod.POST, ForUriName = "AddSiteParameterList")]
+        public OperationResult AddSiteParameterList(Int32 siteId, List<parameter_type> entities)
+        {
+            try
+            {
+                if (siteId <= 0 || entities.Count <= 0) throw new BadRequestException("Invalid input parameters");
+
+                using (EasySecureString securedPassword = GetSecuredPassword())
+                {
+                    using (SiGLAgent sa = new SiGLAgent(username, securedPassword, true))
+                    {
+                        sa.context.Configuration.AutoDetectChangesEnabled = false;
+
+                        Int32 projId = sa.Select<site>().AsNoTracking().FirstOrDefault(s => s.site_id == siteId).project_id.Value;
+
+                        if (projId <= 0)
+                            throw new NotFoundRequestException();
+                        //IQueryable<parameter_type> query = null;
+                        //query = sa.Select<parameter_type>().AsNoTracking();
+
+                        foreach (parameter_type p in entities)
+                        {
+                            //if (query.First(n => n.parameter_type_id == p.parameter_type_id) == null)
+                            //    throw new NotFoundRequestException();
+
+                            if (sa.Select<site_parameters>().AsNoTracking().FirstOrDefault(nt => nt.parameter_type_id == p.parameter_type_id && nt.site_id == siteId) == null)
+                            {
+                                site_parameters anEntity = new site_parameters(); 
+                                
+                                anEntity.site_id = siteId;
+                                anEntity.parameter_type_id = p.parameter_type_id;
+                                sa.Add<site_parameters>(anEntity);                                
+                            }
+                        }//end foreach
+                        project aProj = sa.Select<project>().First(p => p.project_id == projId);
+                        aProj.last_edited_stamp = DateTime.Now.Date;
+                        sa.Update<project>(aProj);
+                        sm(sa.Messages);
+                        //return list of freq types
+                       // parameterTypeList = sa.Select<parameter_type>().Where(nn => nn.site_parameters.Any(nns => nns.site_id == siteId)).ToList();
+
+                    }//end using
+                }//end using
+                return new OperationResult.OK { Description = this.MessageString };
+            }
+            catch (Exception ex)
+            { return HandleException(ex); }
+        }
         #endregion
 
         #region PutMethods

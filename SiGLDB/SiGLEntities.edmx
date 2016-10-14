@@ -78,6 +78,13 @@
           <Property Name="media_type_id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="media" Type="varchar" MaxLength="200" />
         </EntityType>
+        <EntityType Name="monitoring_coordination">
+          <Key>
+            <PropertyRef Name="monitoring_coordination_id" />
+          </Key>
+          <Property Name="monitoring_coordination_id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="effort" Type="varchar" MaxLength="600" />
+        </EntityType>
         <EntityType Name="objective_type">
           <Key>
             <PropertyRef Name="objective_type_id" />
@@ -166,6 +173,14 @@
           <Property Name="project_keywords_id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="project_id" Type="int4" />
           <Property Name="keyword_id" Type="int4" />
+        </EntityType>
+        <EntityType Name="project_monitor_coord">
+          <Key>
+            <PropertyRef Name="project_monitor_coord_id" />
+          </Key>
+          <Property Name="project_monitor_coord_id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="project_id" Type="int4" />
+          <Property Name="monitoring_coordination_id" Type="int4" />
         </EntityType>
         <EntityType Name="project_objectives">
           <Key>
@@ -288,6 +303,7 @@ warning 6005: The data type 'geometry' is currently not supported for the target
           <EntitySet Name="keyword" EntityType="Self.keyword" Schema="lampadmin" store:Type="Tables" />
           <EntitySet Name="lake_type" EntityType="Self.lake_type" Schema="lampadmin" store:Type="Tables" />
           <EntitySet Name="media_type" EntityType="Self.media_type" Schema="lampadmin" store:Type="Tables" />
+          <EntitySet Name="monitoring_coordination" EntityType="Self.monitoring_coordination" Schema="lampadmin" store:Type="Tables" />
           <EntitySet Name="objective_type" EntityType="Self.objective_type" Schema="lampadmin" store:Type="Tables" />
           <EntitySet Name="organization" EntityType="Self.organization" Schema="lampadmin" store:Type="Tables" />
           <EntitySet Name="organization_system" EntityType="Self.organization_system" Schema="lampadmin" store:Type="Tables" />
@@ -298,6 +314,7 @@ warning 6005: The data type 'geometry' is currently not supported for the target
           <EntitySet Name="project_contacts" EntityType="Self.project_contacts" Schema="lampadmin" store:Type="Tables" />
           <EntitySet Name="project_cooperators" EntityType="Self.project_cooperators" Schema="lampadmin" store:Type="Tables" />
           <EntitySet Name="project_keywords" EntityType="Self.project_keywords" Schema="lampadmin" store:Type="Tables" />
+          <EntitySet Name="project_monitor_coord" EntityType="Self.project_monitor_coord" Schema="lampadmin" store:Type="Tables" />
           <EntitySet Name="project_objectives" EntityType="Self.project_objectives" Schema="lampadmin" store:Type="Tables" />
           <EntitySet Name="project_publication" EntityType="Self.project_publication" Schema="lampadmin" store:Type="Tables" />
           <EntitySet Name="publication" EntityType="Self.publication" Schema="lampadmin" store:Type="Tables" />
@@ -474,6 +491,16 @@ warning 6005: The data type 'geometry' is currently not supported for the target
             <End Role="keyword" EntitySet="keywords" />
             <End Role="project_keywords" EntitySet="project_keywords" />
           </AssociationSet>
+          <EntitySet Name="monitoring_coordination" EntityType="SiGLEntitiesModel.monitoring_coordination" />
+          <EntitySet Name="project_monitor_coord" EntityType="SiGLEntitiesModel.project_monitor_coord" />
+          <AssociationSet Name="monitoring_coordinationproject_monitor_coord" Association="SiGLEntitiesModel.monitoring_coordinationproject_monitor_coord">
+            <End Role="monitoring_coordination" EntitySet="monitoring_coordination" />
+            <End Role="project_monitor_coord" EntitySet="project_monitor_coord" />
+          </AssociationSet>
+          <AssociationSet Name="project_monitor_coordproject" Association="SiGLEntitiesModel.project_monitor_coordproject">
+            <End Role="project_monitor_coord" EntitySet="project_monitor_coord" />
+            <End Role="project" EntitySet="projects" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="contact">
           <Key>
@@ -645,6 +672,7 @@ warning 6005: The data type 'geometry' is currently not supported for the target
           <NavigationProperty Name="project_publication" Relationship="SiGLEntitiesModel.projectproject_publication" FromRole="project" ToRole="project_publication" />
           <NavigationProperty Name="project_keywords" Relationship="SiGLEntitiesModel.projectproject_keywords" FromRole="project" ToRole="project_keywords" />
           <NavigationProperty Name="data_manager" Relationship="SiGLEntitiesModel.data_managerproject" FromRole="project" ToRole="data_manager" />
+          <NavigationProperty Name="project_monitor_coord" Relationship="SiGLEntitiesModel.project_monitor_coordproject" FromRole="project" ToRole="project_monitor_coord" />
         </EntityType>
         <EntityType Name="project_contacts">
           <Key>
@@ -1195,6 +1223,48 @@ warning 6005: The data type 'geometry' is currently not supported for the target
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="monitoring_coordination">
+          <Key>
+            <PropertyRef Name="monitoring_coordination_id" />
+          </Key>
+          <Property Name="monitoring_coordination_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="effort" Type="String" MaxLength="600" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="project_monitor_coord" Relationship="SiGLEntitiesModel.monitoring_coordinationproject_monitor_coord" FromRole="monitoring_coordination" ToRole="project_monitor_coord" />
+        </EntityType>
+        <EntityType Name="project_monitor_coord">
+          <Key>
+            <PropertyRef Name="project_monitor_coord_id" />
+          </Key>
+          <Property Name="project_monitor_coord_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="project_id" Type="Int32" />
+          <Property Name="monitoring_coordination_id" Type="Int32" />
+          <NavigationProperty Name="monitoring_coordination" Relationship="SiGLEntitiesModel.monitoring_coordinationproject_monitor_coord" FromRole="project_monitor_coord" ToRole="monitoring_coordination" />
+          <NavigationProperty Name="project" Relationship="SiGLEntitiesModel.project_monitor_coordproject" FromRole="project_monitor_coord" ToRole="project" />
+        </EntityType>
+        <Association Name="monitoring_coordinationproject_monitor_coord">
+          <End Type="SiGLEntitiesModel.monitoring_coordination" Role="monitoring_coordination" Multiplicity="0..1" />
+          <End Type="SiGLEntitiesModel.project_monitor_coord" Role="project_monitor_coord" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="monitoring_coordination">
+              <PropertyRef Name="monitoring_coordination_id" />
+            </Principal>
+            <Dependent Role="project_monitor_coord">
+              <PropertyRef Name="monitoring_coordination_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="project_monitor_coordproject">
+          <End Type="SiGLEntitiesModel.project_monitor_coord" Role="project_monitor_coord" Multiplicity="*" />
+          <End Type="SiGLEntitiesModel.project" Role="project" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="project">
+              <PropertyRef Name="project_id" />
+            </Principal>
+            <Dependent Role="project_monitor_coord">
+              <PropertyRef Name="project_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1500,6 +1570,23 @@ warning 6005: The data type 'geometry' is currently not supported for the target
               <MappingFragment StoreEntitySet="status_type">
                 <ScalarProperty Name="status" ColumnName="status" />
                 <ScalarProperty Name="status_id" ColumnName="status_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="monitoring_coordination">
+            <EntityTypeMapping TypeName="SiGLEntitiesModel.monitoring_coordination">
+              <MappingFragment StoreEntitySet="monitoring_coordination">
+                <ScalarProperty Name="effort" ColumnName="effort" />
+                <ScalarProperty Name="monitoring_coordination_id" ColumnName="monitoring_coordination_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="project_monitor_coord">
+            <EntityTypeMapping TypeName="SiGLEntitiesModel.project_monitor_coord">
+              <MappingFragment StoreEntitySet="project_monitor_coord">
+                <ScalarProperty Name="monitoring_coordination_id" ColumnName="monitoring_coordination_id" />
+                <ScalarProperty Name="project_id" ColumnName="project_id" />
+                <ScalarProperty Name="project_monitor_coord_id" ColumnName="project_monitor_coord_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

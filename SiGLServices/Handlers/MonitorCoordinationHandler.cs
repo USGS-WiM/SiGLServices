@@ -18,7 +18,7 @@
 //     
 
 #region Comments
-// 07.07.16 - TR - Created
+// 09.21.16 - TR - Created
 #endregion
 
 using OpenRasta.Web;
@@ -36,19 +36,19 @@ using WiM.Security;
 
 namespace SiGLServices.Handlers
 {
-    public class MediaHandler : SiGLHandlerBase
+    public class MonitorCoordinationHandler : SiGLHandlerBase
     {
         #region GetMethods
         [HttpOperation(HttpMethod.GET)]
         public OperationResult Get()
         {
-            List<media_type> entities = null;
+            List<monitoring_coordination> entities = null;
 
             try
             {
                 using (SiGLAgent sa = new SiGLAgent())
                 {
-                    entities = sa.Select<media_type>().OrderBy(e => e.media).ToList();
+                    entities = sa.Select<monitoring_coordination>().OrderBy(e => e.effort).ToList();
 
                     sm(MessageType.info, "Count: " + entities.Count());
                     sm(sa.Messages);
@@ -65,20 +65,20 @@ namespace SiGLServices.Handlers
         [HttpOperation(HttpMethod.GET)]
         public OperationResult Get(Int32 entityId)
         {
-            media_type anEntity = null;
+            monitoring_coordination anEntity = null;
 
             try
             {
                 if (entityId <= 0) throw new BadRequestException("Invalid input parameters");
-       
+
                 using (SiGLAgent sa = new SiGLAgent())
                 {
-                    anEntity = sa.Select<media_type>().FirstOrDefault(e => e.media_type_id == entityId);
+                    anEntity = sa.Select<monitoring_coordination>().FirstOrDefault(e => e.monitoring_coordination_id == entityId);
                     if (anEntity == null) throw new WiM.Exceptions.NotFoundRequestException();
                     sm(sa.Messages);
 
                 }//end using
-             
+
                 return new OperationResult.OK { ResponseResource = anEntity, Description = this.MessageString };
             }
             catch (Exception ex)
@@ -87,18 +87,18 @@ namespace SiGLServices.Handlers
             }
         }//end HttpMethod.GET
 
-        [HttpOperation(HttpMethod.GET, ForUriName = "GetSiteMedia")]
-        public OperationResult GetSiteLake(Int32 siteId)
+        [HttpOperation(HttpMethod.GET, ForUriName = "GetProjectMonitorCoords")]
+        public OperationResult GetProjectMonitorCoords(Int32 projectId)
         {
-            List<media_type> entities = null;
+            List<monitoring_coordination> entities = null;
 
             try
             {
-                if (siteId <= 0) throw new BadRequestException("Invalid input parameters");
+                if (projectId <= 0) throw new BadRequestException("Invalid input parameters");
 
                 using (SiGLAgent sa = new SiGLAgent(true))
                 {
-                    entities = sa.Select<site_media>().Where(sf => sf.site_id == siteId).Select(ft => ft.media_type).ToList();
+                    entities = sa.Select<project_monitor_coord>().Where(sf => sf.project_id == projectId).Select(ft => ft.monitoring_coordination).ToList();
                     sm(MessageType.info, "Count: " + entities.Count());
                     sm(sa.Messages);
                 }//end using
@@ -110,27 +110,27 @@ namespace SiGLServices.Handlers
                 return HandleException(ex);
             }
         }//end HttpMethod.GET
-       
+
         #endregion
-        
+
         #region PostMethods
         /// 
         /// Force the user to provide authentication and authorization 
         ///
-        [SiGLRequiresRole(new string[] { AdminRole})]
+        [SiGLRequiresRole(new string[] { AdminRole })]
         [HttpOperation(HttpMethod.POST)]
-        public OperationResult POST(media_type anEntity)
+        public OperationResult POST(monitoring_coordination anEntity)
         {
             try
             {
-                if (string.IsNullOrEmpty(anEntity.media))
+                if (string.IsNullOrEmpty(anEntity.effort))
                     throw new BadRequestException("Invalid input parameters");
 
                 using (EasySecureString securedPassword = GetSecuredPassword())
                 {
                     using (SiGLAgent sa = new SiGLAgent(username, securedPassword))
                     {
-                        anEntity = sa.Add<media_type>(anEntity);
+                        anEntity = sa.Add<monitoring_coordination>(anEntity);
                         sm(sa.Messages);
                     }//end using
                 }//end using
@@ -142,97 +142,44 @@ namespace SiGLServices.Handlers
 
         //posts relationship, then returns list of media_type for the site_id
         [SiGLRequiresRole(new string[] { AdminRole, ManagerRole })]
-        [HttpOperation(HttpMethod.POST, ForUriName = "AddSiteMedia")]
-        public OperationResult AddSiteMedia(Int32 siteId, Int32 mediaTypeId)
+        [HttpOperation(HttpMethod.POST, ForUriName = "AddProjectMonitorCoord")]
+        public OperationResult AddProjectMonitorCoord(Int32 projectId, Int32 monitorCoordId)
         {
-            site_media anEntity = null;
-            List<media_type> mediaTypeList = null;
+            project_monitor_coord anEntity = null;
+            List<monitoring_coordination> monitorCoordList = null;
             try
             {
-                if (siteId <= 0 || mediaTypeId <= 0) throw new BadRequestException("Invalid input parameters");
+                if (projectId <= 0 || monitorCoordId <= 0) throw new BadRequestException("Invalid input parameters");
 
                 using (EasySecureString securedPassword = GetSecuredPassword())
                 {
                     using (SiGLAgent sa = new SiGLAgent(username, securedPassword, true))
                     {
-                        site aSite = sa.Select<site>().First(s => s.site_id == siteId);
-                        if (aSite == null)
+                        project aProj = sa.Select<project>().FirstOrDefault(s => s.project_id == projectId);
+                        if (aProj == null)
                             throw new NotFoundRequestException();
 
-                        if (sa.Select<media_type>().First(n => n.media_type_id == mediaTypeId) == null)
+                        if (sa.Select<monitoring_coordination>().First(n => n.monitoring_coordination_id == monitorCoordId) == null)
                             throw new NotFoundRequestException();
 
-                        if (sa.Select<site_media>().FirstOrDefault(nt => nt.media_type_id == mediaTypeId && nt.site_id == siteId) == null)
+                        if (sa.Select<project_monitor_coord>().FirstOrDefault(nt => nt.monitoring_coordination_id == monitorCoordId && nt.project_id == projectId) == null)
                         {
-                            anEntity = new site_media();
-                            anEntity.site_id = siteId;
-                            anEntity.media_type_id = mediaTypeId;
-                            anEntity = sa.Add<site_media>(anEntity);
+                            anEntity = new project_monitor_coord();
+                            anEntity.project_id = projectId;
+                            anEntity.monitoring_coordination_id = monitorCoordId;
+                            anEntity = sa.Add<project_monitor_coord>(anEntity);
 
-                            project aProj = sa.Select<project>().First(p => p.project_id == aSite.project_id);
                             aProj.last_edited_stamp = DateTime.Now.Date;
                             sa.Update<project>(aProj);
+
                             sm(sa.Messages);
                         }
                         //return list of freq types
-                        mediaTypeList = sa.Select<media_type>().Where(nn => nn.site_media.Any(nns => nns.site_id == siteId)).OrderBy(nn=>nn.media).ToList();
+                        monitorCoordList = sa.Select<monitoring_coordination>().Where(nn => nn.project_monitor_coord.Any(nns => nns.project_id == projectId)).ToList();
 
                     }//end using
                 }//end using
-                return new OperationResult.Created { ResponseResource = mediaTypeList, Description = this.MessageString };
-            }
-            catch (Exception ex)
-            { return HandleException(ex); }
-        }
-
-        [SiGLRequiresRole(new string[] { AdminRole, ManagerRole })]
-        [HttpOperation(HttpMethod.POST, ForUriName = "AddSiteMediaList")]
-        public OperationResult AddSiteMedia(Int32 siteId, List<media_type> entities)
-        {
-           // site_media anEntity = null;
-            //List<media_type> mediaTypeList = null;
-            try
-            {
-                if (siteId <= 0 || entities.Count <= 0) throw new BadRequestException("Invalid input parameters");
-
-                using (EasySecureString securedPassword = GetSecuredPassword())
-                {
-                    using (SiGLAgent sa = new SiGLAgent(username, securedPassword, true))
-                    {
-                        sa.context.Configuration.AutoDetectChangesEnabled = false;
-                       // site aSite = sa.Select<site>().AsNoTracking().First(s => s.site_id == siteId);
-                        Int32 projId = sa.Select<site>().AsNoTracking().FirstOrDefault(s => s.site_id == siteId).project_id.Value;
-
-                        if (projId <= 0)
-                            throw new NotFoundRequestException();
-                        IQueryable<media_type> query = null;
-                        query = sa.Select<media_type>().AsNoTracking();
-
-                        foreach(media_type m in entities)
-                        {
-                            if (query.First(n => n.media_type_id == m.media_type_id) == null)
-                                throw new NotFoundRequestException();
-
-                            if (sa.Select<site_media>().AsNoTracking().FirstOrDefault(nt => nt.media_type_id == m.media_type_id && nt.site_id == siteId) == null)
-                            {
-                                site_media anEntity = new site_media();
-                                anEntity.site_id = siteId;
-                                anEntity.media_type_id = m.media_type_id;
-                                anEntity = sa.Add<site_media>(anEntity);
-                            }
-                        }//end foreach
-
-                        project aProj = sa.Select<project>().First(p => p.project_id == projId);
-                        aProj.last_edited_stamp = DateTime.Now.Date;
-                        sa.Update<project>(aProj);
-                        sm(sa.Messages);
-                        
-                        //return list of freq types
-                     //   mediaTypeList = sa.Select<media_type>().Where(nn => nn.site_media.Any(nns => nns.site_id == siteId)).OrderBy(nn => nn.media).ToList();
-
-                    }//end using
-                }//end using
-                return new OperationResult.OK { Description = this.MessageString };
+                return new OperationResult.Created { ResponseResource = monitorCoordList, Description = this.MessageString };
             }
             catch (Exception ex)
             { return HandleException(ex); }
@@ -245,7 +192,7 @@ namespace SiGLServices.Handlers
         ///
         [SiGLRequiresRole(new string[] { AdminRole })]
         [HttpOperation(HttpMethod.PUT)]
-        public OperationResult Put(Int32 entityId, media_type anEntity)
+        public OperationResult Put(Int32 entityId, monitoring_coordination anEntity)
         {
             try
             {
@@ -256,7 +203,7 @@ namespace SiGLServices.Handlers
                 {
                     using (SiGLAgent sa = new SiGLAgent(username, securedPassword))
                     {
-                        anEntity = sa.Update<media_type>(entityId, anEntity);
+                        anEntity = sa.Update<monitoring_coordination>(entityId, anEntity);
                         sm(sa.Messages);
                     }//end using
                 }//end using
@@ -277,7 +224,7 @@ namespace SiGLServices.Handlers
         [HttpOperation(HttpMethod.DELETE)]
         public OperationResult Delete(Int32 entityId)
         {
-            media_type anEntity = null;
+            monitoring_coordination anEntity = null;
             try
             {
                 if (entityId <= 0) throw new BadRequestException("Invalid input parameters");
@@ -285,10 +232,10 @@ namespace SiGLServices.Handlers
                 {
                     using (SiGLAgent sa = new SiGLAgent(username, securedPassword))
                     {
-                        anEntity = sa.Select<media_type>().FirstOrDefault(i => i.media_type_id == entityId);
+                        anEntity = sa.Select<monitoring_coordination>().FirstOrDefault(i => i.monitoring_coordination_id == entityId);
                         if (anEntity == null) throw new WiM.Exceptions.NotFoundRequestException();
 
-                        sa.Delete<media_type>(anEntity);
+                        sa.Delete<monitoring_coordination>(anEntity);
                         sm(sa.Messages);
                     }//end using
                 }//end using
@@ -299,26 +246,26 @@ namespace SiGLServices.Handlers
         }//end HTTP.DELETE
 
         [SiGLRequiresRole(new string[] { AdminRole, ManagerRole })]
-        [HttpOperation(HttpMethod.DELETE, ForUriName = "RemoveSiteMedia")]
-        public OperationResult RemoveSiteMedia(Int32 siteId, Int32 mediaTypeId)
+        [HttpOperation(HttpMethod.DELETE, ForUriName = "RemoveProjectMonitorCoord")]
+        public OperationResult RemoveProjectMonitorCoord(Int32 projectId, Int32 monitorCoordId)
         {
             try
             {
-                if (siteId <= 0 || mediaTypeId <= 0) throw new BadRequestException("Invalid input parameters");
+                if (projectId <= 0 || monitorCoordId <= 0) throw new BadRequestException("Invalid input parameters");
 
                 using (EasySecureString securedPassword = GetSecuredPassword())
                 {
                     using (SiGLAgent sa = new SiGLAgent(username, securedPassword))
                     {
-                        site aSite = sa.Select<site>().First(s => s.site_id == siteId);
-                        if (aSite == null)
+                        project aProj = sa.Select<project>().FirstOrDefault(s => s.project_id == projectId);
+                        if (aProj == null)
                             throw new NotFoundRequestException();
 
-                        site_media ObjectToBeDeleted = sa.Select<site_media>().SingleOrDefault(nns => nns.site_id == siteId && nns.media_type_id == mediaTypeId);
+                        project_monitor_coord ObjectToBeDeleted = sa.Select<project_monitor_coord>().SingleOrDefault(nns => nns.project_id == projectId && nns.monitoring_coordination_id == monitorCoordId);
 
                         if (ObjectToBeDeleted == null) throw new NotFoundRequestException();
-                        sa.Delete<site_media>(ObjectToBeDeleted);
-                        project aProj = sa.Select<project>().First(p => p.project_id == aSite.project_id);
+                        sa.Delete<project_monitor_coord>(ObjectToBeDeleted);
+
                         aProj.last_edited_stamp = DateTime.Now.Date;
                         sa.Update<project>(aProj);
                         sm(sa.Messages);
