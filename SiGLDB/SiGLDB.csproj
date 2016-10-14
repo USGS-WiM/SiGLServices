@@ -123,6 +123,9 @@
     <Compile Include="media_type.cs">
       <DependentUpon>SiGLEntities.tt</DependentUpon>
     </Compile>
+    <Compile Include="monitoring_coordination.cs">
+      <DependentUpon>SiGLEntities.tt</DependentUpon>
+    </Compile>
     <Compile Include="objective_type.cs">
       <DependentUpon>SiGLEntities.tt</DependentUpon>
     </Compile>
@@ -145,6 +148,9 @@
       <DependentUpon>SiGLEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="project_keywords.cs">
+      <DependentUpon>SiGLEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="project_monitor_coord.cs">
       <DependentUpon>SiGLEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="project_objectives.cs">

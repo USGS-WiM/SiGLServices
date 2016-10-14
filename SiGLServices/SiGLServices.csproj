@@ -123,6 +123,7 @@
     <Compile Include="Configuration.cs" />
     <Compile Include="Handlers\ContactHandler.cs" />
     <Compile Include="Handlers\DataHostHandler.cs" />
+    <Compile Include="Handlers\MonitorCoordinationHandler.cs" />
     <Compile Include="Handlers\ProjectHandler.cs" />
     <Compile Include="Handlers\SiteHandler.cs" />
     <Compile Include="Handlers\StatusHandler.cs" />

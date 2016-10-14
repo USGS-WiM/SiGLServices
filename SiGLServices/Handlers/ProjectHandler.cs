@@ -344,7 +344,31 @@ namespace SiGLServices.Handlers
                 return HandleException(ex);
             }
         }//end HttpMethod.GET
-        
+
+        [HttpOperation(HttpMethod.GET, ForUriName = "GetMonitorCoordinationProjects")]
+        public OperationResult GetMonitorCoordinationProjects(Int32 monitorCoordId)
+        {
+            List<project> entities = null;
+
+            try
+            {
+                if (monitorCoordId <= 0) throw new BadRequestException("Invalid input parameters");
+
+                using (SiGLAgent sa = new SiGLAgent())
+                {
+                    entities = sa.Select<project>().Include(p => p.project_monitor_coord).Where(p => p.project_monitor_coord.Any(c => c.monitoring_coordination_id == monitorCoordId)).ToList();
+                    sm(MessageType.info, "Count: " + entities.Count());
+                    sm(sa.Messages);
+
+                }//end using
+                return new OperationResult.OK { ResponseResource = entities, Description = this.MessageString };
+            }
+            catch (Exception ex)
+            {
+                return HandleException(ex);
+            }
+        }//end HttpMethod.GET
+
         [HttpOperation(HttpMethod.GET, ForUriName = "GetParameterSiteProjects")]
         public OperationResult GetParameterSiteProjects(Int32 parameterId)
         {
@@ -627,6 +651,7 @@ namespace SiGLServices.Handlers
                     {
                         Int32 projId = Convert.ToInt32(projectId);
                         query = sa.Select<project>().Include(e => e.data_host).Include(e => e.project_objectives).Include("project_objectives.objective_type")
+                            .Include(e => e.project_monitor_coord).Include("project_monitor_coord.monitoring_coordination")
                             .Include(e=>e.proj_status).Include(e=>e.proj_duration)
                             .Include(e => e.project_keywords).Include("project_keywords.keyword")
                             .Include(e => e.project_cooperators).Include("project_cooperators.organization_system")
@@ -654,16 +679,27 @@ namespace SiGLServices.Handlers
                             AdditionalInfo = p.additional_info,
                             Objectives = p.project_objectives.Select(po => new objective_type
                             {
-                                objective_type_id = po.objective_type.objective_type_id, objective = po.objective_type.objective 
+                                objective_type_id = po.objective_type.objective_type_id, 
+                                objective = po.objective_type.objective 
+                            }).ToList(),
+                            MonitoringCoords = p.project_monitor_coord.Select(pm => new monitoring_coordination
+                            {
+                                monitoring_coordination_id = pm.monitoring_coordination.monitoring_coordination_id,
+                                effort = pm.monitoring_coordination.effort
                             }).ToList(),
                             Keywords = p.project_keywords.Select(po => new keyword 
                             { 
-                                keyword_id = po.keyword.keyword_id, term = po.keyword.term 
+                                keyword_id = po.keyword.keyword_id, 
+                                term = po.keyword.term 
                             }).ToList(),
                             ProjectWebsite = p.url,
                             DataHosts = p.data_host.Select(d => new data_host
                             { 
-                                data_host_id = d.data_host_id, description = d.description, host_name = d.host_name, portal_url = d.portal_url, project_id = d.project_id
+                                data_host_id = d.data_host_id, 
+                                description = d.description, 
+                                host_name = d.host_name, 
+                                portal_url = d.portal_url, 
+                                project_id = d.project_id
                             }).ToList(),
                             Organizations = p.project_cooperators.Where(pc => pc.organization_system_id > 0).Select(c => new OrganizationResource
                             {
@@ -731,7 +767,7 @@ namespace SiGLServices.Handlers
                             data_manager user = sa.Select<data_manager>().FirstOrDefault(u => String.Equals(u.username.ToUpper(), Context.User.Identity.Name.ToUpper()));
                             anEntity.data_manager_id = user.data_manager_id;
                         }
-                        anEntity.created_stamp = DateTime.Now.Date;
+                        anEntity.created_stamp = DateTime.Now.Date; anEntity.last_edited_stamp = DateTime.Now.Date;
                         anEntity = sa.Add<project>(anEntity);
                         sm(sa.Messages);
                     }//end using
