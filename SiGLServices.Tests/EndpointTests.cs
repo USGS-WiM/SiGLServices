@@ -15,8 +15,8 @@ namespace SiGLServices.Test
     {
         #region Private Fields
         private string host = "http://localhost/";
-        private string basicAuth = "Basic " + Convert.ToBase64String(Encoding.GetEncoding("ISO-8859-1")
-                                .GetBytes("lampadmin:***REMOVED***"));
+        private string basicAuth = "Basic " + Convert.ToBase64String(Encoding.GetEncoding("ISO-8859-1").GetBytes("lampadmin:adminPa55word"));
+                              //  .GetBytes("pgadmin:***REMOVED***"));
         //private string basicAuth = "Basic " + Convert.ToBase64String(Encoding.GetEncoding("ISO-8859-1")
         //                        .GetBytes("lampadmin:***REMOVED***"));
 
@@ -320,6 +320,44 @@ namespace SiGLServices.Test
             Assert.IsTrue(success);
         }//end method
         [TestMethod]
+        public void MonitorCoordRequest()
+        {
+            //GET LIST
+            List<monitoring_coordination> RequestList = this.GETRequest<List<monitoring_coordination>>(host + Configuration.monitorCoordResource);
+            Assert.IsNotNull(RequestList, RequestList.Count.ToString());
+
+            //GET project objectives
+            List<monitoring_coordination> projMonList = this.GETRequest<List<monitoring_coordination>>(host + Configuration.projectResource + "/1441/" + Configuration.monitorCoordResource);
+            Assert.IsNotNull(projMonList, projMonList.Count.ToString());
+
+            //POST
+            monitoring_coordination postObj;
+            postObj = this.POSTRequest<monitoring_coordination>(host + Configuration.monitorCoordResource, new monitoring_coordination() { effort = "post-test1" }, basicAuth);
+            Assert.IsNotNull(postObj, "ID: " + postObj.monitoring_coordination_id.ToString());
+
+            //GET POSTed item
+            monitoring_coordination RequestObj = this.GETRequest<monitoring_coordination>(host + Configuration.monitorCoordResource + "/" + postObj.monitoring_coordination_id);
+            Assert.IsNotNull(RequestObj);
+
+            //POST projectObjective
+            List<monitoring_coordination> projMonResp;
+            projMonResp = this.POSTRequest<monitoring_coordination, List<monitoring_coordination>>(host + Configuration.projectResource + "/1441/addMonitorCoord?MonitorCoordId=" + RequestObj.monitoring_coordination_id, null, basicAuth);
+            Assert.IsNotNull(projMonResp, projMonResp.Count.ToString());
+
+            //PUT POSTed item
+            RequestObj.effort = "put-test";
+            monitoring_coordination putObj = this.PUTRequest<monitoring_coordination>(host + Configuration.monitorCoordResource + "/" + RequestObj.monitoring_coordination_id, RequestObj, basicAuth);
+            Assert.IsNotNull(RequestObj);
+
+            //Delete POSTed item 
+            bool projMonSuccess = this.DELETERequest<monitoring_coordination>(host + Configuration.projectResource + "/1441/removeMonitorCoord?MonitorCoordId=" + RequestObj.monitoring_coordination_id, basicAuth);
+            Assert.IsTrue(projMonSuccess);
+
+            //Delete POSTed item
+            bool success = this.DELETERequest<monitoring_coordination>(host + Configuration.monitorCoordResource + "/" + RequestObj.monitoring_coordination_id, basicAuth);
+            Assert.IsTrue(success);
+        }//end method
+        [TestMethod]
         public void ObjectiveRequest()
         {
             //GET LIST
@@ -336,7 +374,7 @@ namespace SiGLServices.Test
             Assert.IsNotNull(postObj, "ID: " + postObj.objective_type_id.ToString());
 
             //GET POSTed item
-            objective_type RequestObj = this.GETRequest<objective_type>(host + Configuration.objectiveResource + "/" + postObj.objective_type_id);
+            objective_type RequestObj = this.GETRequest<objective_type>(host + Configuration.objectiveResource + "/1");// + postObj.objective_type_id);
             Assert.IsNotNull(RequestObj);
 
             //POST projectObjective
@@ -542,6 +580,10 @@ namespace SiGLServices.Test
             List<project> ObjProjList = this.GETRequest<List<project>>(host + Configuration.objectiveResource + "/1/" + Configuration.projectResource);
             Assert.IsNotNull(ObjProjList, ObjProjList.Count.ToString());
 
+            //GetMonCoordProjects
+            List<project> MCProjList = this.GETRequest<List<project>>(host + Configuration.monitorCoordResource + "/1/" + Configuration.projectResource);
+            Assert.IsNotNull(MCProjList, MCProjList.Count.ToString());
+
             //GetFreqSiteProjects
             List<project> SiteFreqProjList = this.GETRequest<List<project>>(host + Configuration.frequencyResource + "/1/" + Configuration.projectResource);
             Assert.IsNotNull(SiteFreqProjList, SiteFreqProjList.Count.ToString());
@@ -680,6 +722,14 @@ namespace SiGLServices.Test
             List<resource_type> siteResResp;
             siteResResp = this.POSTRequest<resource_type, List<resource_type>>(host + Configuration.siteResource + "/9028/addResource?ResourceTypeId=" + RequestObj.resource_type_id, null, basicAuth);
             Assert.IsNotNull(siteResResp, siteResResp.Count.ToString());
+            
+            //POST siteResourceList
+            List<resource_type> siteResList = new List<resource_type>();
+            resource_type aRes = new resource_type(); aRes.resource_type_id = 1; aRes.resource_name = "Atmosphere";
+            resource_type bRes = new resource_type(); bRes.resource_type_id = 2; bRes.resource_name = "Beach";
+            siteResList.Add(aRes); siteResList.Add(bRes);
+            List<resource_type> responseList = this.POSTRequest<List<resource_type>, List<resource_type>>(host + Configuration.siteResource + "/15679/addResourceList", siteResList, basicAuth);
+            Assert.IsNotNull(responseList, responseList.Count.ToString());
 
             //PUT POSTed item
             RequestObj.resource_name = "put-test";
@@ -829,7 +879,7 @@ namespace SiGLServices.Test
             site postObj;
             postObj = this.POSTRequest<site>(host + Configuration.siteResource, new site()
             { 
-                name = "post-test", project_id = 561, latitude=44.43, longitude=-89.432, country="United States of America", state_province="Wisconsin", lake_type_id=2 
+                name = "post-test", project_id = 561, latitude=44.43, longitude=-89.432, country="United States", state_province="Wisconsin", lake_type_id=2 
             }, basicAuth);
             Assert.IsNotNull(postObj, "ID: " + postObj.site_id.ToString());
 

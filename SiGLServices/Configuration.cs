@@ -56,6 +56,7 @@ namespace SiGLServices
         public static string keywordResource = "Keywords";
         public static string lakeResource = "Lakes";
         public static string mediaResource = "Media";
+        public static string monitorCoordResource = "MonitorCoordinations";
         public static string objectiveResource = "Objectives";
         public static string organizationResource = "Organizations";
         public static string orgSystemResource = "OrganizationSystems";
@@ -94,6 +95,7 @@ namespace SiGLServices
                 AddKEYWORD_Resources();
                 AddLAKE_Resources();
                 AddMEDIA_Resources();
+                AddMONITORING_COORDINATION_Resources();
                 AddOBJECTIVE_Resources();
                 AddORGANIZATION_Resources();
                 AddORGANIZATION_SYSTEM_Resources();
@@ -201,6 +203,7 @@ namespace SiGLServices
             ResourceSpace.Has.ResourcesOfType<List<frequency_type>>()
                 .AtUri(frequencyResource)
                 .And.AtUri(siteResource + "/{siteId}/addFrequency?FrequencyTypeId={frequencyTypeId}").Named("AddSiteFrequency")
+                .And.AtUri(siteResource + "/{siteId}/addFrequencyList").Named("AddSiteFrequencyList")
                 .And.AtUri(siteResource + "/{siteId}/" + frequencyResource).Named("GetSiteFrequencies")
                 .HandledBy<FrequencyHandler>()
                 .TranscodedBy<UTF8EntityXmlSerializerCodec>(null).ForMediaType("application/xml;q=1").ForExtension("xml")
@@ -258,6 +261,7 @@ namespace SiGLServices
                 .AtUri(mediaResource)
                 .And.AtUri(siteResource + "/{siteId}/addMedia?MediaTypeId={mediaTypeId}").Named("AddSiteMedia")
                 .And.AtUri(siteResource + "/{siteId}/" + mediaResource).Named("GetSiteMedia")
+                .And.AtUri(siteResource + "/{siteId}/addMediaList").Named("AddSiteMediaList")
                 .HandledBy<MediaHandler>()
                 .TranscodedBy<UTF8EntityXmlSerializerCodec>(null).ForMediaType("application/xml;q=1").ForExtension("xml")
                 .And.TranscodedBy<JsonEntityDotNetCodec>(null).ForMediaType("application/json;q=0.9").ForExtension("json")
@@ -267,6 +271,25 @@ namespace SiGLServices
                 .AtUri(mediaResource + "/{entityId}")
                 .And.AtUri(siteResource + "/{siteId}/removeMediaType?MediaTypeId={mediaTypeId}").Named("removeSiteMedia")
                 .HandledBy<MediaHandler>()
+                .TranscodedBy<UTF8EntityXmlSerializerCodec>(null).ForMediaType("application/xml;q=1").ForExtension("xml")
+                .And.TranscodedBy<JsonEntityDotNetCodec>(null).ForMediaType("application/json;q=0.9").ForExtension("json")
+                .And.TranscodedBy<CsvDotNetCodec>(null).ForMediaType("text/csv").ForExtension("csv");
+        }
+        private void AddMONITORING_COORDINATION_Resources()
+        {
+            ResourceSpace.Has.ResourcesOfType<List<monitoring_coordination>>()
+                .AtUri(monitorCoordResource)
+                .And.AtUri(projectResource + "/{projectId}/addMonitorCoord?MonitorCoordId={monitorCoordId}").Named("AddProjectMonitorCoord")
+                .And.AtUri(projectResource + "/{projectId}/" + monitorCoordResource).Named("GetProjectMonitorCoords")
+                .HandledBy<MonitorCoordinationHandler>()
+                .TranscodedBy<UTF8EntityXmlSerializerCodec>(null).ForMediaType("application/xml;q=1").ForExtension("xml")
+                .And.TranscodedBy<JsonEntityDotNetCodec>(null).ForMediaType("application/json;q=0.9").ForExtension("json")
+                .And.TranscodedBy<CsvDotNetCodec>(null).ForMediaType("text/csv").ForExtension("csv");
+
+            ResourceSpace.Has.ResourcesOfType<monitoring_coordination>()
+                .AtUri(monitorCoordResource + "/{entityId}")
+                .And.AtUri(projectResource + "/{projectId}/removeMonitorCoord?MonitorCoordId={monitorCoordId}").Named("RemoveProjectMonitorCoord")
+                .HandledBy<MonitorCoordinationHandler>()
                 .TranscodedBy<UTF8EntityXmlSerializerCodec>(null).ForMediaType("application/xml;q=1").ForExtension("xml")
                 .And.TranscodedBy<JsonEntityDotNetCodec>(null).ForMediaType("application/json;q=0.9").ForExtension("json")
                 .And.TranscodedBy<CsvDotNetCodec>(null).ForMediaType("text/csv").ForExtension("csv");
@@ -333,6 +356,7 @@ namespace SiGLServices
             ResourceSpace.Has.ResourcesOfType<List<parameter_type>>()
                 .AtUri(parameterResource)
                 .And.AtUri(siteResource + "/{siteId}/addParameter?ParameterTypeId={parameterTypeId}").Named("AddSiteParameter")
+                .And.AtUri(siteResource + "/{siteId}/addParameterList").Named("AddSiteParameterList")
                 .And.AtUri(siteResource + "/{siteId}/" + parameterResource).Named("GetSiteParameters")
                 .HandledBy<ParameterHandler>()
                 .TranscodedBy<UTF8EntityXmlSerializerCodec>(null).ForMediaType("application/xml;q=1").ForExtension("xml")
@@ -398,6 +422,7 @@ namespace SiGLServices
                 .And.AtUri(keywordResource + "/{keywordId}/" + projectResource).Named("GetKeyWordProjects") //should look by 'keyword.term'
                 .And.AtUri(publicationResource + "/{publicationId}/" + projectResource).Named("GetPublicationProjects")
                 .And.AtUri(objectiveResource + "/{objectiveId}/" + projectResource).Named("GetObjectiveProjects")
+                .And.AtUri(monitorCoordResource + "/{monitorCoordId}/" + projectResource).Named("GetMonitorCoordinationProjects")
                 .And.AtUri(frequencyResource + "/{frequencyId}/" + projectResource).Named("GetFreqSiteProjects")
                 .And.AtUri(lakeResource + "/{lakeId}/" + projectResource).Named("GetLakeSiteProjects")
                 .And.AtUri(mediaResource + "/{mediaId}/" + projectResource).Named("GetMediaSiteProjects")
@@ -435,7 +460,7 @@ namespace SiGLServices
                 .AtUri(projectResource + "/{entityId}")
                 .And.AtUri(siteResource + "/{siteId}/project").Named("GetSiteProject") 
                 .And.AtUri(dataHostResource + "/{dataHostId}/project").Named("GetDataHostProject")
-                .And.AtUri("/projects/GetFullProject/{scienceBaseId}").Named("GetFullProject")
+                //.And.AtUri("/projects/GetFullProject/{scienceBaseId}").Named("GetFullProject")
                 .HandledBy<ProjectHandler>()
                 .TranscodedBy<UTF8EntityXmlSerializerCodec>(null).ForMediaType("application/xml;q=1").ForExtension("xml")
                 .And.TranscodedBy<JsonEntityDotNetCodec>(null).ForMediaType("application/json;q=0.9").ForExtension("json")
@@ -465,6 +490,7 @@ namespace SiGLServices
             ResourceSpace.Has.ResourcesOfType<List<resource_type>>()
                 .AtUri(resourceResource)
                 .And.AtUri(siteResource + "/{siteId}/addResource?ResourceTypeId={resourceTypeId}").Named("AddSiteResource")
+                .And.AtUri(siteResource + "/{siteId}/addResourceList").Named("AddSiteResourceList")
                 .And.AtUri(siteResource + "/{siteId}/" + resourceResource).Named("GetSiteResources")
                 .HandledBy<ResourceHandler>()
                 .TranscodedBy<UTF8EntityXmlSerializerCodec>(null).ForMediaType("application/xml;q=1").ForExtension("xml")

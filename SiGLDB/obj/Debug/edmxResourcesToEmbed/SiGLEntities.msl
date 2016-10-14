@@ -303,5 +303,22 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="monitoring_coordination">
+      <EntityTypeMapping TypeName="SiGLEntitiesModel.monitoring_coordination">
+        <MappingFragment StoreEntitySet="monitoring_coordination">
+          <ScalarProperty Name="effort" ColumnName="effort" />
+          <ScalarProperty Name="monitoring_coordination_id" ColumnName="monitoring_coordination_id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="project_monitor_coord">
+      <EntityTypeMapping TypeName="SiGLEntitiesModel.project_monitor_coord">
+        <MappingFragment StoreEntitySet="project_monitor_coord">
+          <ScalarProperty Name="monitoring_coordination_id" ColumnName="monitoring_coordination_id" />
+          <ScalarProperty Name="project_id" ColumnName="project_id" />
+          <ScalarProperty Name="project_monitor_coord_id" ColumnName="project_monitor_coord_id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
   </EntityContainerMapping>
 </Mapping>

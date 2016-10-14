@@ -55,5 +55,7 @@ namespace SiGLDB
         public virtual DbSet<site_parameters> site_parameters { get; set; }
         public virtual DbSet<site_resource> site_resource { get; set; }
         public virtual DbSet<status_type> status_type { get; set; }
+        public virtual DbSet<monitoring_coordination> monitoring_coordination { get; set; }
+        public virtual DbSet<project_monitor_coord> project_monitor_coord { get; set; }
     }
 }

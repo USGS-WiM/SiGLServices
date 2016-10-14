@@ -48,7 +48,7 @@ namespace SiGLServices.Handlers
             {
                 using (SiGLAgent sa = new SiGLAgent())
                 {
-                    entities = sa.Select<frequency_type>().OrderBy(e => e.frequency_type_id).ToList();
+                    entities = sa.Select<frequency_type>().OrderBy(e => e.frequency).ToList();
 
                     sm(MessageType.info, "Count: " + entities.Count());
                     sm(sa.Messages);
@@ -177,6 +177,59 @@ namespace SiGLServices.Handlers
                     }//end using
                 }//end using
                 return new OperationResult.Created { ResponseResource = freqTypeList, Description = this.MessageString };
+            }
+            catch (Exception ex)
+            { return HandleException(ex); }
+        }
+
+        [SiGLRequiresRole(new string[] { AdminRole, ManagerRole })]
+        [HttpOperation(HttpMethod.POST, ForUriName = "AddSiteFrequencyList")]
+        public OperationResult AddSiteFrequencyList(Int32 siteId, List<frequency_type> entities)
+        {
+            //site_frequency anEntity = null;
+         //   List<frequency_type> freqTypeList = null;
+            try
+            {
+                if (siteId <= 0 || entities.Count <= 0) throw new BadRequestException("Invalid input parameters");
+
+                using (EasySecureString securedPassword = GetSecuredPassword())
+                {
+                    using (SiGLAgent sa = new SiGLAgent(username, securedPassword, true))
+                    {
+                        sa.context.Configuration.AutoDetectChangesEnabled = false;
+                        //site aSite = sa.Select<site>().AsNoTracking().First(s => s.site_id == siteId);
+                        Int32 projId = sa.Select<site>().AsNoTracking().FirstOrDefault(s => s.site_id == siteId).project_id.Value;
+
+                        if (projId <= 0)
+                            throw new NotFoundRequestException();
+                        IQueryable<frequency_type> query = null;
+                        query = sa.Select<frequency_type>().AsNoTracking();
+
+                        foreach(frequency_type f in entities)
+                        {
+                            if (query.First(n => n.frequency_type_id == f.frequency_type_id) == null)
+                                throw new NotFoundRequestException();
+
+                            if (sa.Select<site_frequency>().AsNoTracking().FirstOrDefault(nt => nt.frequency_type_id == f.frequency_type_id && nt.site_id == siteId) == null)
+                            {
+                                site_frequency anEntity = new site_frequency();
+                                anEntity.site_id = siteId;
+                                anEntity.frequency_type_id = f.frequency_type_id;
+                                anEntity = sa.Add<site_frequency>(anEntity);
+                            }
+                        }//end foreach
+
+                        project aProj = sa.Select<project>().First(p => p.project_id == projId);
+                        aProj.last_edited_stamp = DateTime.Now.Date;
+                        sa.Update<project>(aProj);
+                        sm(sa.Messages);
+                        
+                        //return list of freq types
+                     //   freqTypeList = sa.Select<frequency_type>().Where(nn => nn.site_frequency.Any(nns => nns.site_id == siteId)).OrderBy(nn => nn.frequency).ToList();
+
+                    }//end using
+                }//end using
+                return new OperationResult.OK { Description = this.MessageString };
             }
             catch (Exception ex)
             { return HandleException(ex); }
