@@ -10,11 +10,11 @@ namespace SiGLDB.Test
     public class SiGLDBTest
     {
         //test
+      //  private string connectionString = "***REMOVED***";
+      //  private string password = "***REMOVED***";
+        //prod
         private string connectionString = "***REMOVED***";
         private string password = "***REMOVED***";
-        //prod
-        //private string connectionString = "***REMOVED***";
-        //private string password = "***REMOVED***";
 
         [TestMethod]
         public void SiGLDBConnectionTest()
