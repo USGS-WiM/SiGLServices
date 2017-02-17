@@ -16,9 +16,8 @@ namespace SiGLServices.Test
         #region Private Fields
         private string host = "http://localhost/";
         private string basicAuth = "Basic " + Convert.ToBase64String(Encoding.GetEncoding("ISO-8859-1").GetBytes("lampadmin:adminPa55word"));
-                              //  .GetBytes("pgadmin:szWPX9wye2CdDf9SdnDH"));
-        //private string basicAuth = "Basic " + Convert.ToBase64String(Encoding.GetEncoding("ISO-8859-1")
-        //                        .GetBytes("lampadmin:cafOR4_yR"));
+                              
+       // private string basicAuth = "Basic " + Convert.ToBase64String(Encoding.GetEncoding("ISO-8859-1").GetBytes("lampadmin:cafOR4_yR"));
 
         #endregion
         #region Constructor
@@ -47,7 +46,7 @@ namespace SiGLServices.Test
 
             //POST
             List<contact> postProjObj;
-            postProjObj = this.POSTRequest<contact, List<contact>>(host + Configuration.projectResource + "/685/addContact", new contact() { name = "post1-test", organization_system_id = 1, email = "postTest1@post.test", phone = "(222) 333-4444" }, basicAuth);
+            postProjObj = this.POSTRequest<contact, List<contact>>(host + Configuration.projectResource + "/1/addContact", new contact() { name = "Veni Kunche", organization_system_id = 38, email = "kkunche@usgs.gov", phone = "(612) 814-6384" }, basicAuth);
             Assert.IsNotNull(postProjObj, postProjObj.Count.ToString());
 
             //GET POSTed item

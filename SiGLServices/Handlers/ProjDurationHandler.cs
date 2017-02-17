@@ -52,7 +52,7 @@ namespace SiGLServices.Handlers
             {
                 using (SiGLAgent sa = new SiGLAgent())
                 {
-                    entities = sa.Select<proj_duration>().OrderBy(e => e.proj_duration_id).ToList();
+                    entities = sa.Select<proj_duration>().OrderBy(e => e.duration_value).ToList();
 
                     sm(MessageType.info, "Count: " + entities.Count());
                     sm(sa.Messages);

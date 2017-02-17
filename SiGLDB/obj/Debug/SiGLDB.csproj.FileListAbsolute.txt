@@ -15,6 +15,7 @@ D:\TMRData\WIMprojects\SiGLServices\SiGLDB\bin\Debug\ServiceStack.Text.dll
 D:\TMRData\WIMprojects\SiGLServices\SiGLDB\bin\Debug\WiMHypermedia.dll
 D:\TMRData\WIMprojects\SiGLServices\SiGLDB\bin\Debug\WiMServices.dll
 D:\TMRData\WIMprojects\SiGLServices\SiGLDB\bin\Debug\WiMServices.Test.dll
+D:\TMRData\WIMprojects\SiGLServices\SiGLDB\bin\Debug\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll
 D:\TMRData\WIMprojects\SiGLServices\SiGLDB\bin\Debug\AWSSDK.pdb
 D:\TMRData\WIMprojects\SiGLServices\SiGLDB\bin\Debug\EntityFramework.xml
 D:\TMRData\WIMprojects\SiGLServices\SiGLDB\bin\Debug\EntityFramework.SqlServer.xml

@@ -48,7 +48,7 @@ namespace SiGLServices.Handlers
             {
                 using (SiGLAgent sa = new SiGLAgent())
                 {
-                    entities = sa.Select<lake_type>().OrderBy(e => e.lake_type_id).ToList();
+                    entities = sa.Select<lake_type>().OrderBy(e => e.lake).ToList();
 
                     sm(MessageType.info, "Count: " + entities.Count());
                     sm(sa.Messages);

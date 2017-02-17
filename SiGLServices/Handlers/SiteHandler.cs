@@ -399,7 +399,7 @@ namespace SiGLServices.Handlers
         }//end HttpMethod.GET
 
         [HttpOperation(HttpMethod.GET, ForUriName = "GetFilteredSites")]
-        public OperationResult GetFilteredSites([Optional] string lakes, [Optional] string durationIDs, [Optional] string media, [Optional] string objIDs, [Optional] string orgID,
+        public OperationResult GetFilteredSites([Optional] string lakes, [Optional] string durationIDs, [Optional] string media, [Optional] string objIDs, [Optional] string monCoordIDs, [Optional] string orgID,
             [Optional] string parameters, [Optional] string resComps, [Optional] string states, [Optional] string statusIDs)
         {
             List<site> entities = null;
@@ -411,6 +411,7 @@ namespace SiGLServices.Handlers
                 List<Int32> _lakeIds = !string.IsNullOrEmpty(lakes) ? lakes.Split(delimiterChar, StringSplitOptions.RemoveEmptyEntries).Select(Int32.Parse).ToList() : null;
                 List<Int32> _mediaIds = !string.IsNullOrEmpty(media) ? media.Split(delimiterChar, StringSplitOptions.RemoveEmptyEntries).Select(Int32.Parse).ToList() : null;
                 List<Int32> _objectivesIds = !string.IsNullOrEmpty(objIDs) ? objIDs.Split(delimiterChar, StringSplitOptions.RemoveEmptyEntries).Select(Int32.Parse).ToList() : null;
+                List<Int32> _monCoordIds = !string.IsNullOrEmpty(monCoordIDs) ? monCoordIDs.Split(delimiterChar, StringSplitOptions.RemoveEmptyEntries).Select(Int32.Parse).ToList() : null;
                 List<Int32> _parameterIds = !string.IsNullOrEmpty(parameters) ? parameters.Split(delimiterChar, StringSplitOptions.RemoveEmptyEntries).Select(Int32.Parse).ToList() : null;
                 List<Int32> _resourceIds = !string.IsNullOrEmpty(resComps) ? resComps.Split(delimiterChar, StringSplitOptions.RemoveEmptyEntries).Select(Int32.Parse).ToList() : null;
                 List<string> _stateList = !string.IsNullOrEmpty(states) ? states.Split(delimiterChar, StringSplitOptions.RemoveEmptyEntries).ToList() : null;
@@ -421,8 +422,8 @@ namespace SiGLServices.Handlers
                     IQueryable<site> query;
 
                     //query = sa.Select<site>();
-                    query = sa.Select<site>().Include(s => s.project).Include(s => s.site_media).Include("project.project_objectives").Include("project.project_cooperators")
-                            .Include(s => s.site_parameters).Include(s => s.site_resource);
+                    query = sa.Select<site>().Include(s => s.project).Include(s => s.site_media).Include("project.project_objectives").Include("project.project_monitor_coord")
+                        .Include("project.project_cooperators").Include(s => s.site_parameters).Include(s => s.site_resource);
 
                     if (_durationIds != null && _durationIds.Count > 0)
                         query = query.Where(s => s.project != null && _durationIds.Contains(s.project.proj_duration_id.Value));
@@ -436,6 +437,9 @@ namespace SiGLServices.Handlers
 
                     if (_objectivesIds != null && _objectivesIds.Count > 0)
                         query = query.Where(s => s.project != null && s.project.project_objectives.Any(a => _objectivesIds.Contains(a.objective_id.Value)));
+
+                    if (_monCoordIds != null && _monCoordIds.Count > 0)
+                        query = query.Where(s => s.project != null && s.project.project_monitor_coord.Any(a => _monCoordIds.Contains(a.monitoring_coordination_id.Value)));
 
                     if (!string.IsNullOrEmpty(orgID))
                     {
@@ -486,7 +490,7 @@ namespace SiGLServices.Handlers
             {
                 using (SiGLAgent sa = new SiGLAgent())
                 {
-                    stateNames = sa.Select<site>().DistinctBy(x => x.state_province).Select(p => p.state_province).ToList();
+                    stateNames = sa.Select<site>().DistinctBy(x => x.state_province).OrderBy(x=> x.state_province).Select(p => p.state_province).ToList();
 
                     sm(MessageType.info, "Count: " + stateNames.Count());
                     sm(sa.Messages);
