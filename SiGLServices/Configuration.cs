@@ -556,7 +556,7 @@ namespace SiGLServices
                 .And.AtUri(resourceResource + "/{resourceTypeId}/"+ siteResource).Named("GetResourceSites")
                 .And.AtUri(parameterResource + "/{parameterId}/" + siteResource).Named("GetParameterSites")
                 .And.AtUri(frequencyResource + "/{frequencyId}/" + siteResource).Named("GetFrequencySites")
-                .And.AtUri("/Sites/FilteredSites?Duration={durationIDs}&Lake={lakes}&Media={media}&ProjObjs={objIDs}&ProjOrg={orgID}&Parameters={parameters}&ResComp={resComps}&State={states}&Status={statusIDs}").Named("GetFilteredSites")                                                                                                                                         
+                .And.AtUri("/Sites/FilteredSites?Duration={durationIDs}&Lake={lakes}&Media={media}&ProjObjs={objIDs}&ProjMonitorCoords={monCoordIDs}&ProjOrg={orgID}&Parameters={parameters}&ResComp={resComps}&State={states}&Status={statusIDs}").Named("GetFilteredSites")                                                                                                                                         
                 .HandledBy<SiteHandler>()//
                 .TranscodedBy<UTF8EntityXmlSerializerCodec>(null).ForMediaType("application/xml;q=1").ForExtension("xml")
                 .And.TranscodedBy<JsonEntityDotNetCodec>(null).ForMediaType("application/json;q=0.9").ForExtension("json")

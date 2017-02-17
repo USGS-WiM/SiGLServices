@@ -17,6 +17,7 @@ D:\TMRData\WIMprojects\SiGLServices\SiGLServices\bin\SiGLDB.dll
 D:\TMRData\WIMprojects\SiGLServices\SiGLServices\bin\WiMHypermedia.dll
 D:\TMRData\WIMprojects\SiGLServices\SiGLServices\bin\WiMServices.dll
 D:\TMRData\WIMprojects\SiGLServices\SiGLServices\bin\WiMServices.Test.dll
+D:\TMRData\WIMprojects\SiGLServices\SiGLServices\bin\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll
 D:\TMRData\WIMprojects\SiGLServices\SiGLServices\bin\SiGLDB.pdb
 D:\TMRData\WIMprojects\SiGLServices\SiGLServices\bin\AWSSDK.pdb
 D:\TMRData\WIMprojects\SiGLServices\SiGLServices\bin\EntityFramework.xml
