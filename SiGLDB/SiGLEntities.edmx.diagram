@@ -4,37 +4,37 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="6492cd55cbcf4aabad5a12feb57cab8b" Name="SiGLDB" ZoomLevel="72">
-        <EntityTypeShape EntityType="SiGLEntitiesModel.contact" Width="2.125" PointX="0.5" PointY="0.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="SiGLEntitiesModel.data_host" Width="1.625" PointX="0.5" PointY="3.375" />
-        <EntityTypeShape EntityType="SiGLEntitiesModel.data_manager" Width="1.5" PointX="2.875" PointY="1.75" />
-        <EntityTypeShape EntityType="SiGLEntitiesModel.division" Width="1.5" PointX="4.75" PointY="0.75" />
-        <EntityTypeShape EntityType="SiGLEntitiesModel.frequency_type" Width="1.5" PointX="4.75" PointY="3.75" />
-        <EntityTypeShape EntityType="SiGLEntitiesModel.keyword" Width="1.5" PointX="0.625" PointY="6.125" />
-        <EntityTypeShape EntityType="SiGLEntitiesModel.lake_type" Width="1.5" PointX="7.125" PointY="0.75" />
-        <EntityTypeShape EntityType="SiGLEntitiesModel.media_type" Width="1.5" PointX="2.75" PointY="6.75" />
-        <EntityTypeShape EntityType="SiGLEntitiesModel.objective_type" Width="1.5" PointX="6.75" PointY="3.75" />
-        <EntityTypeShape EntityType="SiGLEntitiesModel.organization" Width="1.5" PointX="4.75" PointY="6.75" />
-        <EntityTypeShape EntityType="SiGLEntitiesModel.organization_system" Width="1.5" PointX="6.75" PointY="6.75" />
-        <EntityTypeShape EntityType="SiGLEntitiesModel.parameter_type" Width="1.5" PointX="8.75" PointY="0.75" />
-        <EntityTypeShape EntityType="SiGLEntitiesModel.proj_duration" Width="1.5" PointX="8.75" PointY="3.75" />
-        <EntityTypeShape EntityType="SiGLEntitiesModel.proj_status" Width="1.5" PointX="8.75" PointY="6.75" />
-        <EntityTypeShape EntityType="SiGLEntitiesModel.project" Width="1.5" PointX="0.75" PointY="9.75" />
-        <EntityTypeShape EntityType="SiGLEntitiesModel.project_contacts" Width="1.5" PointX="2.75" PointY="9.75" />
-        <EntityTypeShape EntityType="SiGLEntitiesModel.project_cooperators" Width="1.5" PointX="4.75" PointY="9.75" />
-        <EntityTypeShape EntityType="SiGLEntitiesModel.project_keywords" Width="1.5" PointX="6.75" PointY="10" />
-        <EntityTypeShape EntityType="SiGLEntitiesModel.project_objectives" Width="1.5" PointX="8.75" PointY="9.75" />
-        <EntityTypeShape EntityType="SiGLEntitiesModel.project_publication" Width="1.5" PointX="10.75" PointY="0.75" />
-        <EntityTypeShape EntityType="SiGLEntitiesModel.publication" Width="1.5" PointX="10.75" PointY="3.75" />
-        <EntityTypeShape EntityType="SiGLEntitiesModel.resource_type" Width="1.5" PointX="10.75" PointY="6.75" />
-        <EntityTypeShape EntityType="SiGLEntitiesModel.role" Width="1.5" PointX="10.75" PointY="9.75" />
-        <EntityTypeShape EntityType="SiGLEntitiesModel.section" Width="1.5" PointX="14" PointY="0.75" />
-        <EntityTypeShape EntityType="SiGLEntitiesModel.site" Width="1.5" PointX="2.75" PointY="12.75" />
-        <EntityTypeShape EntityType="SiGLEntitiesModel.site_frequency" Width="1.5" PointX="12.75" PointY="3.75" />
-        <EntityTypeShape EntityType="SiGLEntitiesModel.site_media" Width="1.5" PointX="4.75" PointY="12.75" />
-        <EntityTypeShape EntityType="SiGLEntitiesModel.site_parameters" Width="1.5" PointX="12.75" PointY="6.75" />
-        <EntityTypeShape EntityType="SiGLEntitiesModel.site_resource" Width="1.5" PointX="6.75" PointY="12.75" />
-        <EntityTypeShape EntityType="SiGLEntitiesModel.status_type" Width="1.5" PointX="8.75" PointY="12.75" />
+      <Diagram DiagramId="6492cd55cbcf4aabad5a12feb57cab8b" Name="SiGLDB" ZoomLevel="82">
+        <EntityTypeShape EntityType="SiGLEntitiesModel.contact" Width="2.125" PointX="3" PointY="7" IsExpanded="false" />
+        <EntityTypeShape EntityType="SiGLEntitiesModel.data_host" Width="1.625" PointX="3.375" PointY="0.5" IsExpanded="false" />
+        <EntityTypeShape EntityType="SiGLEntitiesModel.data_manager" Width="1.75" PointX="5.625" PointY="0.5" IsExpanded="false" />
+        <EntityTypeShape EntityType="SiGLEntitiesModel.division" Width="1.5" PointX="6.875" PointY="7.25" IsExpanded="false" />
+        <EntityTypeShape EntityType="SiGLEntitiesModel.frequency_type" Width="1.5" PointX="11.375" PointY="4.375" IsExpanded="false" />
+        <EntityTypeShape EntityType="SiGLEntitiesModel.keyword" Width="1.5" PointX="5.125" PointY="2.625" IsExpanded="false" />
+        <EntityTypeShape EntityType="SiGLEntitiesModel.lake_type" Width="1.5" PointX="8.375" PointY="1.125" IsExpanded="false" />
+        <EntityTypeShape EntityType="SiGLEntitiesModel.media_type" Width="1.5" PointX="11.75" PointY="3.625" IsExpanded="false" />
+        <EntityTypeShape EntityType="SiGLEntitiesModel.objective_type" Width="1.5" PointX="3.875" PointY="4.125" IsExpanded="false" />
+        <EntityTypeShape EntityType="SiGLEntitiesModel.organization" Width="1.5" PointX="6.375" PointY="6.5" IsExpanded="false" />
+        <EntityTypeShape EntityType="SiGLEntitiesModel.organization_system" Width="2.25" PointX="5.25" PointY="5.5" IsExpanded="false" />
+        <EntityTypeShape EntityType="SiGLEntitiesModel.parameter_type" Width="1.5" PointX="11.125" PointY="5.125" IsExpanded="false" />
+        <EntityTypeShape EntityType="SiGLEntitiesModel.proj_duration" Width="1.5" PointX="0.5" PointY="0.5" IsExpanded="false" />
+        <EntityTypeShape EntityType="SiGLEntitiesModel.proj_status" Width="1.5" PointX="2.125" PointY="1" IsExpanded="false" />
+        <EntityTypeShape EntityType="SiGLEntitiesModel.project" Width="2.625" PointX="1.375" PointY="1.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="SiGLEntitiesModel.project_contacts" Width="2" PointX="0.75" PointY="5.875" IsExpanded="false" />
+        <EntityTypeShape EntityType="SiGLEntitiesModel.project_cooperators" Width="1.875" PointX="1.125" PointY="5.125" IsExpanded="false" />
+        <EntityTypeShape EntityType="SiGLEntitiesModel.project_keywords" Width="1.75" PointX="2.875" PointY="2.625" IsExpanded="false" />
+        <EntityTypeShape EntityType="SiGLEntitiesModel.project_objectives" Width="2" PointX="1.125" PointY="4.125" IsExpanded="false" />
+        <EntityTypeShape EntityType="SiGLEntitiesModel.project_publication" Width="1.875" PointX="0.5" PointY="6.625" IsExpanded="false" />
+        <EntityTypeShape EntityType="SiGLEntitiesModel.publication" Width="1.5" PointX="1.125" PointY="7.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="SiGLEntitiesModel.resource_type" Width="1.5" PointX="11.625" PointY="3" IsExpanded="false" />
+        <EntityTypeShape EntityType="SiGLEntitiesModel.role" Width="1.5" PointX="8" PointY="0.5" IsExpanded="false" />
+        <EntityTypeShape EntityType="SiGLEntitiesModel.section" Width="1.5" PointX="7.875" PointY="8.125" IsExpanded="false" />
+        <EntityTypeShape EntityType="SiGLEntitiesModel.site" Width="1.5" PointX="8.875" PointY="2" IsExpanded="false" />
+        <EntityTypeShape EntityType="SiGLEntitiesModel.site_frequency" Width="1.5" PointX="9" PointY="4.375" IsExpanded="false" />
+        <EntityTypeShape EntityType="SiGLEntitiesModel.site_media" Width="1.5" PointX="9.375" PointY="3.625" IsExpanded="false" />
+        <EntityTypeShape EntityType="SiGLEntitiesModel.site_parameters" Width="1.5" PointX="8.875" PointY="5.125" IsExpanded="false" />
+        <EntityTypeShape EntityType="SiGLEntitiesModel.site_resource" Width="1.5" PointX="9.5" PointY="3" IsExpanded="false" />
+        <EntityTypeShape EntityType="SiGLEntitiesModel.status_type" Width="1.5" PointX="11" PointY="1.25" IsExpanded="false" />
         <AssociationConnector Association="SiGLEntitiesModel.status_typesite" />
         <AssociationConnector Association="SiGLEntitiesModel.lake_typesite" />
         <AssociationConnector Association="SiGLEntitiesModel.media_typesite_media" />
@@ -63,12 +63,16 @@
         <AssociationConnector Association="SiGLEntitiesModel.divisionorganization" />
         <AssociationConnector Association="SiGLEntitiesModel.sectiondivision" />
         <AssociationConnector Association="SiGLEntitiesModel.sectionorganization_system" />
-        <AssociationConnector Association="SiGLEntitiesModel.divisionorganization_system" />
+        <AssociationConnector Association="SiGLEntitiesModel.divisionorganization_system" ManuallyRouted="true" >
+          <ConnectorPoint PointX="6.875" PointY="7.45" />
+          <ConnectorPoint PointX="5.8789065" PointY="7.45" />
+          <ConnectorPoint PointX="5.8789065" PointY="5.9" />
+        </AssociationConnector>
         <AssociationConnector Association="SiGLEntitiesModel.organization_systemproject_cooperators" />
         <AssociationConnector Association="SiGLEntitiesModel.publicationproject_publication" />
         <AssociationConnector Association="SiGLEntitiesModel.keywordproject_keywords" />
-        <EntityTypeShape EntityType="SiGLEntitiesModel.monitoring_coordination" Width="2.75" PointX="14.125" PointY="12.625" />
-        <EntityTypeShape EntityType="SiGLEntitiesModel.project_monitor_coord" Width="2.625" PointX="15" PointY="9.875" />
+        <EntityTypeShape EntityType="SiGLEntitiesModel.monitoring_coordination" Width="2.75" PointX="5.125" PointY="3.5" IsExpanded="false" />
+        <EntityTypeShape EntityType="SiGLEntitiesModel.project_monitor_coord" Width="2.625" PointX="1.875" PointY="3.375" IsExpanded="false" />
         <AssociationConnector Association="SiGLEntitiesModel.monitoring_coordinationproject_monitor_coord" />
         <AssociationConnector Association="SiGLEntitiesModel.project_monitor_coordproject" />
         </Diagram>

@@ -194,7 +194,7 @@ namespace SiGLServices.Handlers
                         {
                             projContact = new project_contacts();
                             projContact.project_id = projectId;
-                            projContact.contact_id = anEntity.contact_id;
+                            projContact.contact_id = con.contact_id;
                             projContact = sa.Add<project_contacts>(projContact);
                             sm(sa.Messages);
                         }
