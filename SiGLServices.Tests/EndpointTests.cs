@@ -7,6 +7,7 @@ using WiM.Test;
 using WiM.Hypermedia;
 using SiGLServices;
 using SiGLServices.Resources;
+using System.Configuration;
 
 namespace SiGLServices.Test
 {
@@ -15,10 +16,9 @@ namespace SiGLServices.Test
     {
         #region Private Fields
         private string host = "http://localhost/";
-        private string basicAuth = "Basic " + Convert.ToBase64String(Encoding.GetEncoding("ISO-8859-1").GetBytes("lampadmin:adminPa55word"));
+        private string basicAuth = "Basic " + ConfigurationManager.AppSettings["basicAuth"];
                               
-       // private string basicAuth = "Basic " + Convert.ToBase64String(Encoding.GetEncoding("ISO-8859-1").GetBytes("lampadmin:***REMOVED***"));
-
+       
         #endregion
         #region Constructor
         public EndpointTests() : base(new Configuration()) { }

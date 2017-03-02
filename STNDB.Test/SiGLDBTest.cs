@@ -3,28 +3,25 @@ using SiGLDB;
 using System.Data.Common;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
+using System.Configuration;
 
 namespace SiGLDB.Test
 {
     [TestClass]
     public class SiGLDBTest
     {
-        //test
-      //  private string connectionString = "***REMOVED***";
-      //  private string password = "***REMOVED***";
-        //prod
-        private string connectionString = "***REMOVED***";
-        private string password = "***REMOVED***";
-
+        //test      
+        private string connectionString = String.Format(ConfigurationManager.AppSettings["SiGLEntities"], ConfigurationManager.AppSettings["Username"], ConfigurationManager.AppSettings["Password"]);
+        
         [TestMethod]
         public void SiGLDBConnectionTest()
         {
-            using (SiGLEntities context = new SiGLEntities(string.Format(connectionString, password)))
+            using (SiGLEntities context = new SiGLEntities(connectionString))
             {
                 DbConnection conn = context.Database.Connection;
                 try
                 {
-                    if (!context.Database.Exists()) throw new Exception("db does ont exist");
+                    if (!context.Database.Exists()) throw new Exception("db does not exist");
                     conn.Open();
                     Assert.IsTrue(true);
 
@@ -44,7 +41,7 @@ namespace SiGLDB.Test
         [TestMethod]
         public void SiGLDBQueryTest()
         {
-            using (SiGLEntities context = new SiGLEntities(string.Format(connectionString, password)))
+            using (SiGLEntities context = new SiGLEntities(connectionString))
             {
                 try
                 {
