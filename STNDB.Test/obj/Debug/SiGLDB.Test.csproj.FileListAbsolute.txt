@@ -6,7 +6,6 @@ D:\TMRData\WIMprojects\SiGLServices\STNDB.Test\bin\Debug\EntityFramework.dll
 D:\TMRData\WIMprojects\SiGLServices\STNDB.Test\bin\Debug\EntityFramework.SqlServer.dll
 D:\TMRData\WIMprojects\SiGLServices\STNDB.Test\bin\Debug\EntityFramework6.Npgsql.dll
 D:\TMRData\WIMprojects\SiGLServices\STNDB.Test\bin\Debug\Ionic.Zip.dll
-D:\TMRData\WIMprojects\SiGLServices\STNDB.Test\bin\Debug\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll
 D:\TMRData\WIMprojects\SiGLServices\STNDB.Test\bin\Debug\Newtonsoft.Json.dll
 D:\TMRData\WIMprojects\SiGLServices\STNDB.Test\bin\Debug\Npgsql.dll
 D:\TMRData\WIMprojects\SiGLServices\STNDB.Test\bin\Debug\OpenRasta.dll
