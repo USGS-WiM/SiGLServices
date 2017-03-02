@@ -38,15 +38,14 @@ namespace SiGLServices.Utilities.ServiceAgent
         #region "Constructor and IDisposable Support"
         #region Constructors
         internal SiGLAgent(Boolean include = false)
-            : this("pgadmin", new EasySecureString("szWPX9wye2CdDf9SdnDH"), include)
+            : this(ConfigurationManager.AppSettings["Username"], new EasySecureString(ConfigurationManager.AppSettings["Password"]), include)            
         {
         }
         internal SiGLAgent(string username, EasySecureString password, Boolean include = false)
-            : base(ConfigurationManager.ConnectionStrings["SiGLEntities"].ConnectionString)
+            : base(ConfigurationManager.AppSettings["SiGLEntities"])
         {
-            this.context = new SiGLEntities(string.Format(connectionString, "pgadmin", new EasySecureString("szWPX9wye2CdDf9SdnDH").decryptString()));
+            this.context = new SiGLEntities(string.Format(connectionString, username, password.decryptString()));
             this.context.Configuration.ProxyCreationEnabled = include;
-
         }
         #endregion
         #region IDisposable Support
