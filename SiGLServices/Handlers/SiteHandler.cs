@@ -24,6 +24,7 @@
 using OpenRasta.Web;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Data.Entity;
 using System.Runtime.InteropServices;
@@ -542,6 +543,8 @@ namespace SiGLServices.Handlers
                     || !anEntity.project_id.HasValue || string.IsNullOrEmpty(anEntity.state_province) || !anEntity.lake_type_id.HasValue)
                     throw new BadRequestException("Invalid input parameters");
 
+                SiGLGPServiceAgent gpAgent = null;
+
                 using (EasySecureString securedPassword = GetSecuredPassword())
                 {
                     using (SiGLAgent sa = new SiGLAgent(username, securedPassword))
@@ -551,6 +554,17 @@ namespace SiGLServices.Handlers
                         aProj.last_edited_stamp = DateTime.Now.Date;
                         sa.Update<project>(aProj);
                         sm(sa.Messages);
+
+                        if (aProj.ready_flag != null)
+                        {
+                            if (aProj.ready_flag == 1)
+                            {
+                                //only if it's ready to see on the map
+                                gpAgent = new SiGLGPServiceAgent();
+                    //            gpAgent.POSTSite(ConfigurationManager.AppSettings["AGSSiglUpdate"], new List<FullSite>() { new FullSite(anEntity) });
+                            }
+                        }
+                        
                     }//end using
                 }//end using
                 return new OperationResult.Created { ResponseResource = anEntity, Description = this.MessageString };
@@ -574,6 +588,8 @@ namespace SiGLServices.Handlers
                 if (string.IsNullOrEmpty(anEntity.name) || anEntity.latitude < 0 || anEntity.longitude > 0 || string.IsNullOrEmpty(anEntity.country)
                     || anEntity.project_id < 0 || string.IsNullOrEmpty(anEntity.state_province) || !anEntity.lake_type_id.HasValue)
                     throw new BadRequestException("Invalid input parameters");
+
+                SiGLGPServiceAgent gpAgent = null;
                 using (EasySecureString securedPassword = GetSecuredPassword())
                 {
                     using (SiGLAgent sa = new SiGLAgent(username, securedPassword))
@@ -588,6 +604,18 @@ namespace SiGLServices.Handlers
                         aProj.last_edited_stamp = DateTime.Now.Date;
                         sa.Update<project>(aProj);
                         sm(sa.Messages);
+
+                        if (aProj.ready_flag != null)
+                        {
+                            if (aProj.ready_flag == 1)
+                            {
+                                //only if it's ready to see on the map                   
+                                gpAgent = new SiGLGPServiceAgent();
+                                // remove then readd
+                       //         gpAgent.DELETESite(ConfigurationManager.AppSettings["AGSSiglUpdate"], new List<FullSite>() { new FullSite(anEntity) });
+                       //         gpAgent.POSTSite(ConfigurationManager.AppSettings["AGSSiglUpdate"], new List<FullSite>() { new FullSite(anEntity) });
+                            }
+                        }
                     }//end using
                 }//end using
 
@@ -612,6 +640,8 @@ namespace SiGLServices.Handlers
             try
             {
                 if (entityId <= 0) throw new BadRequestException("Invalid input parameters");
+                
+                SiGLGPServiceAgent gpAgent = null;
                 using (EasySecureString securedPassword = GetSecuredPassword())
                 {
                     using (SiGLAgent sa = new SiGLAgent(username, securedPassword))
@@ -630,6 +660,10 @@ namespace SiGLServices.Handlers
                         project aProj = sa.Select<project>().First(p => p.project_id == projId);
                         aProj.last_edited_stamp = DateTime.Now.Date;
                         sa.Update<project>(aProj);
+
+                        //Delete to gpservices
+                        gpAgent = new SiGLGPServiceAgent();
+                 //       gpAgent.DELETESite(ConfigurationManager.AppSettings["AGSSiglUpdate"], new List<FullSite>() { new FullSite(anEntity) });
                         sm(sa.Messages);
                     }//end using
                 }//end using

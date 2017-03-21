@@ -24,6 +24,7 @@
 using OpenRasta.Web;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Data.Entity;
 using System.Runtime.InteropServices;
@@ -637,7 +638,8 @@ namespace SiGLServices.Handlers
                     if (!string.IsNullOrEmpty(scienceBaseId))
                     {
                         query = sa.Select<project>().Include(e => e.data_host).Include(e => e.project_objectives).Include("project_objectives.objective_type")
-                            .Include(e => e.project_keywords).Include("project_keywords.keyword")
+                            .Include(e => e.project_monitor_coord).Include("project_monitor_coord.monitoring_coordination")
+                            .Include(e => e.proj_status).Include(e => e.proj_duration).Include(e => e.project_keywords).Include("project_keywords.keyword")
                             .Include(e => e.project_cooperators).Include("project_cooperators.organization_system")
                             .Include("project_cooperators.organization_system.organization")
                             .Include("project_cooperators.organization_system.division")
@@ -671,10 +673,10 @@ namespace SiGLServices.Handlers
                             StartDate = p.start_date != null ? p.start_date.Value.ToString() : "",
                             EndDate = p.end_date != null ? p.end_date.Value.ToString() : "",
                             DataManagerId = p.data_manager_id,
-                            status_id = p.proj_status_id,
-                            Status = p.proj_status_id > 0 ? p.proj_status.status_value : "",
-                            duration_id = p.proj_duration_id,
-                            Duration = p.proj_duration_id > 0 ? p.proj_duration.duration_value : "",
+                            status_id = p.proj_status_id.HasValue ? p.proj_status_id : 0,
+                            Status = p.proj_status_id > 0 && p.proj_status_id.HasValue ? p.proj_status.status_value : "",
+                            duration_id = p.proj_duration_id.HasValue ? p.proj_duration_id : 0,
+                            Duration = p.proj_duration_id > 0 && p.proj_duration_id.HasValue ? p.proj_duration.duration_value : "",
                             Description = p.description,
                             AdditionalInfo = p.additional_info,
                             Objectives = p.project_objectives.Select(po => new objective_type
@@ -728,7 +730,9 @@ namespace SiGLServices.Handlers
                                 science_base_id = pp.publication.science_base_id,
                                 title = pp.publication.title,
                                 url = pp.publication.url
-                            }).ToList()
+                            }).ToList(),
+                            created_stamp = p.created_stamp,
+                            last_edited_stamp = p.last_edited_stamp
                         }).FirstOrDefault();
 
                     if (anEntity == null) throw new WiM.Exceptions.NotFoundRequestException();
@@ -758,6 +762,7 @@ namespace SiGLServices.Handlers
                 if (string.IsNullOrEmpty(anEntity.name) || anEntity.proj_duration_id <= 0 || anEntity.proj_status_id <= 0)
                     throw new BadRequestException("Invalid input parameters");
 
+                SiGLGPServiceAgent gpAgent = null;
                 using (EasySecureString securedPassword = GetSecuredPassword())
                 {
                     using (SiGLAgent sa = new SiGLAgent(username, securedPassword))
@@ -770,6 +775,29 @@ namespace SiGLServices.Handlers
                         anEntity.created_stamp = DateTime.Now.Date; anEntity.last_edited_stamp = DateTime.Now.Date;
                         anEntity = sa.Add<project>(anEntity);
                         sm(sa.Messages);
+
+                        //flagged ready
+                        gpAgent = new SiGLGPServiceAgent();
+                        List<FullSite> projSites = anEntity.sites.Select(x => new FullSite(x)).ToList();
+
+                        if (projSites.Count > 0)
+                        {
+                            //there's sites, now see if we are adding them or removing them
+                            if (anEntity.ready_flag != null)
+                            {
+                                if (anEntity.ready_flag > 0)
+                                {
+                                    //remove then add
+                         //           gpAgent.DELETESite(ConfigurationManager.AppSettings["AGSSiglUpdate"], projSites);
+                         //           gpAgent.POSTSite(ConfigurationManager.AppSettings["AGSSiglUpdate"], projSites);
+                                }
+                                else
+                                {
+                                    //ready flag is 0 - remove them 
+                         //           gpAgent.DELETESite(ConfigurationManager.AppSettings["AGSSiglUpdate"], projSites);
+                                }
+                            }
+                        }
                     }//end using
                 }//end using
                 return new OperationResult.Created { ResponseResource = anEntity, Description = this.MessageString };
@@ -793,6 +821,7 @@ namespace SiGLServices.Handlers
                 if (string.IsNullOrEmpty(anEntity.name) || anEntity.proj_duration_id <= 0 || anEntity.proj_status_id <= 0)
                     throw new BadRequestException("Invalid input parameters");
 
+                SiGLGPServiceAgent gpAgent = null;
                 using (EasySecureString securedPassword = GetSecuredPassword())
                 {
                     using (SiGLAgent sa = new SiGLAgent(username, securedPassword))
@@ -817,6 +846,30 @@ namespace SiGLServices.Handlers
 
                         anEntity = sa.Update<project>(entityId, objectToBeUpdated);
                         sm(sa.Messages);
+
+                        //flagged ready
+                        gpAgent = new SiGLGPServiceAgent();
+                        List<FullSite> projSites = objectToBeUpdated.sites.Select(x => new FullSite(x)).ToList();
+
+                        if (projSites.Count > 0)
+                        {
+                            //there's sites, now see if we are adding them or removing them
+                            if (objectToBeUpdated.ready_flag != null)
+                            {
+                                if (objectToBeUpdated.ready_flag > 0)
+                                {
+                                    // remove then add
+                       //             gpAgent.DELETESite(ConfigurationManager.AppSettings["AGSSiglUpdate"], projSites);
+                       //             gpAgent.POSTSite(ConfigurationManager.AppSettings["AGSSiglUpdate"], projSites);
+                                }
+                                else
+                                {
+                                    //ready flag is 0 - remove them 
+                        //            gpAgent.DELETESite(ConfigurationManager.AppSettings["AGSSiglUpdate"], projSites);
+                                }
+                            }
+                        }
+
                     }//end using
                 }//end using
 
@@ -839,6 +892,8 @@ namespace SiGLServices.Handlers
             try
             {
                 if (entityId <= 0) throw new BadRequestException("Invalid input parameters");
+                
+                SiGLGPServiceAgent gpAgent = null;
                 using (EasySecureString securedPassword = GetSecuredPassword())
                 {
                     using (SiGLAgent sa = new SiGLAgent(username, securedPassword))
@@ -856,8 +911,18 @@ namespace SiGLServices.Handlers
                         sa.Select<project_keywords>().Where(k => k.project_id == entityId).ToList().ForEach(x => sa.Delete<project_keywords>(x));
                         sa.Select<project_objectives>().Where(o => o.project_id == entityId).ToList().ForEach(x => sa.Delete<project_objectives>(x));
                         sa.Select<project_publication>().Where(p => p.project_id == entityId).ToList().ForEach(x => sa.Delete<project_publication>(x));
+                        
+                     //   sa.Select<site>().Where(s => s.project_id == entityId).ToList().ForEach(x => sa.Delete<site>(x));
+                        //delete all sites for this project
+                        List<site> projSites = sa.Select<site>().Where(s => s.project_id == entityId).ToList();
+                        if (projSites.Count >= 1)
+                        {
+                            //first Delete to gpservices
+                            gpAgent = new SiGLGPServiceAgent();
+                            List<FullSite> fullSites = projSites.Select(x => new FullSite(x)).ToList();
+                     //       gpAgent.DELETESite(ConfigurationManager.AppSettings["AGSSiglUpdate"], fullSites);
+                        }
                         sa.Select<site>().Where(s => s.project_id == entityId).ToList().ForEach(x => sa.Delete<site>(x));
-
                         sm(sa.Messages);
                     }//end using
                 }//end using

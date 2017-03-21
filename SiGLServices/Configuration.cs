@@ -315,6 +315,13 @@ namespace SiGLServices
         }
         private void AddORGANIZATION_Resources() //(10)
         {
+            ResourceSpace.Has.ResourcesOfType<List<full_organization>>()
+                .AtUri(organizationResource+"/fullOrganizations").Named("GetFullOrgList")
+                .HandledBy<OrganizationHandler>()
+                .TranscodedBy<UTF8EntityXmlSerializerCodec>(null).ForMediaType("application/xml;q=1").ForExtension("xml")
+                .And.TranscodedBy<JsonEntityDotNetCodec>(null).ForMediaType("application/json;q=0.9").ForExtension("json")
+                .And.TranscodedBy<CsvDotNetCodec>(null).ForMediaType("text/csv").ForExtension("csv");
+
             ResourceSpace.Has.ResourcesOfType<List<organization>>()
                 .AtUri(organizationResource)                
                 .HandledBy<OrganizationHandler>()

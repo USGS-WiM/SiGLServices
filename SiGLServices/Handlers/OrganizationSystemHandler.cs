@@ -307,9 +307,36 @@ namespace SiGLServices.Handlers
         #endregion
 
         #region DeleteMethods
-        /// 
-        /// Force the user to provide authentication and authorization 
-        /// Won't be any delete because this same organization_system can be used on many projects (project_cooperators table)
+        
+        [SiGLRequiresRole(AdminRole)]
+        [HttpOperation(HttpMethod.DELETE)]
+        public OperationResult Delete(Int32 entityId)
+        {
+            organization_system anEntity = null;
+            try
+            {
+                if (entityId <= 0) throw new BadRequestException("Invalid input parameters");
+         
+                using (EasySecureString securedPassword = GetSecuredPassword())
+                {
+                    using (SiGLAgent sa = new SiGLAgent(username, securedPassword))
+                    {
+                        anEntity = sa.Select<organization_system>().Include(i=> i.project_cooperators).FirstOrDefault(i => i.organization_system_id == entityId);
+                        if (anEntity.project_cooperators.Count > 0) throw new WiM.Exceptions.BadRequestException("Cannot delete when related to Projects. Remove relationship first.");
+                        
+                        if (anEntity == null) throw new WiM.Exceptions.NotFoundRequestException();
+
+                        sa.Delete<organization_system>(anEntity);
+                        sm(sa.Messages);
+                       
+                    }//end using
+                }//end using
+                return new OperationResult.OK { Description = this.MessageString };
+            }
+            catch (Exception ex)
+            { return HandleException(ex); }
+        }//end HTTP.DELETE
+
         [SiGLRequiresRole(new string[] { AdminRole, ManagerRole })]
         [HttpOperation(HttpMethod.DELETE, ForUriName = "RemoveProjectOrganization")]
         public OperationResult RemoveProjectOrganization(Int32 projectId, Int32 orgSystemId)

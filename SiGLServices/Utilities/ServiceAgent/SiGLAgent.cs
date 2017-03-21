@@ -44,7 +44,7 @@ namespace SiGLServices.Utilities.ServiceAgent
         internal SiGLAgent(string username, EasySecureString password, Boolean include = false)
             : base(ConfigurationManager.AppSettings["SiGLEntities"])
         {
-            this.context = new SiGLEntities(string.Format(connectionString, username, password.decryptString()));
+            this.context = new SiGLEntities(string.Format(connectionString, ConfigurationManager.AppSettings["Username"], new EasySecureString(ConfigurationManager.AppSettings["Password"]).decryptString()));
             this.context.Configuration.ProxyCreationEnabled = include;
         }
         #endregion
@@ -123,6 +123,12 @@ namespace SiGLServices.Utilities.ServiceAgent
                             FROM lampadmin.site s
                             LEFT JOIN lampadmin.status_type st ON st.status_id = s.status_type_id
                             LEFT JOIN lampadmin.lake_type l ON l.lake_type_id = s.lake_type_id;";
+                case "full_organization":
+                    return @"SELECT o.organization_id, o.organization_name, d.division_id, d.division_name, s.section_id, s.section_name
+                            FROM lampadmin.organization o
+                            LEFT JOIN lampadmin.division d on o.organization_id = d.org_id 
+                            LEFT JOIN lampadmin.section s on d.division_id = s.div_id
+                            ORDER BY o.organization_name, d.division_name, s.section_name;";
                 default:
                     throw new Exception("No sql for table " + type);
             }//end switch;

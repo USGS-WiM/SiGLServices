@@ -436,7 +436,7 @@ namespace SiGLServices.Test
 
             //POST (projectOrganization)
             List<organization_system> postProjOrg;
-            postProjOrg = this.POSTRequest<organization_system, List<organization_system>>(host + Configuration.projectResource + "/1/addOrganization?OrganizationId=1&DivisionId=44&SectionId=1", null, basicAuth);
+            postProjOrg = this.POSTRequest<organization_system,List<organization_system>>(host + Configuration.projectResource + "/2116/addOrganization?OrganizationId=1404&DivisionId=0&SectionId=0", null, basicAuth);
             Assert.IsNotNull(postProjOrg, postProjOrg.Count.ToString());
 
             //GET POSTed item (organization_system)
@@ -446,11 +446,13 @@ namespace SiGLServices.Test
             //GET item (organizationResource) Test in browser instead         
 
             // NO PUT            
-            // No Delete POSTed item
+            // Delete POSTed item
+            bool success = this.DELETERequest<organization_system>(host + Configuration.orgSystemResource + "/183", basicAuth);
+            Assert.IsTrue(success);
 
             //Delete projectCooperator
-            bool success = this.DELETERequest<organization_system>(host + Configuration.projectResource + "/1/removeOrganization?OrgSystemId=" + postProjOrg[1].organization_system_id, basicAuth);
-            Assert.IsTrue(success);
+            bool success1 = this.DELETERequest<organization_system>(host + Configuration.projectResource + "/1/removeOrganization?OrgSystemId=" + postProjOrg[1].organization_system_id, basicAuth);
+            Assert.IsTrue(success1);
         }//end method
         [TestMethod]
         public void ParameterRequest()

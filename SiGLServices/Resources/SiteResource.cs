@@ -56,5 +56,28 @@ namespace SiGLServices.Resources
         public List<media_type> Media { get; set; }
         public List<frequency_type> Frequencies { get; set; }
         public List<parameter_type> Parameters { get; set; }
+
+        public FullSite() { }
+
+        public FullSite(site s)
+        {
+            this.SiteId = s.site_id;
+            this.StartDate = s.start_date.ToString();
+            this.EndDate = s.end_date.ToString();
+            this.ProjectId = s.project_id;
+            this.SamplePlatform = s.sample_platform;
+            this.AdditionalInfo = s.additional_info;
+            this.Name = s.name;
+            this.Description = s.description;
+            this.latitude = s.latitude;
+            this.longitude = s.longitude;
+            this.Waterbody = s.waterbody;
+            this.status_type_id = s.status_type_id;
+            this.lake_type_id = s.lake_type_id;
+            this.Country = s.country;
+            this.State = s.state_province;
+            this.Watershed = s.watershed_huc8;
+            this.url = s.url;
+        }
     }
 }

@@ -222,8 +222,8 @@ namespace SiGLDB
         public bool Equals(organization_system other)
         {
             return (other.org_id <= 0 || this.org_id == other.org_id) &&
-                    (!other.div_id.HasValue || other.div_id <= 0 || this.div_id == other.div_id) &&
-                    (!other.sec_id.HasValue || other.sec_id <= 0 || this.sec_id == other.sec_id);
+                    (!other.div_id.HasValue || this.div_id == other.div_id) &&
+                    (!other.sec_id.HasValue || this.sec_id == other.sec_id);
         }
 
         public override bool Equals(object obj)

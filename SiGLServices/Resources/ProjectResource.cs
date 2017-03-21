@@ -44,5 +44,7 @@ namespace SiGLServices.Resources
         public List<OrganizationResource> Organizations { get; set; }
         public List<contactResource> Contacts { get; set; }
         public List<publication> Publications { get; set; }
+        public Nullable<DateTime> last_edited_stamp { get; set; }
+        public Nullable<DateTime> created_stamp { get; set; }
     }
 }

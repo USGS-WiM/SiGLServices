@@ -91,6 +91,29 @@ namespace SiGLServices.Handlers
             }
         }//end HttpMethod.GET
 
+        [HttpOperation(HttpMethod.GET, ForUriName="GetFullOrgList")]
+        public OperationResult GetFullOrganizations()
+        {
+            List<full_organization> entities = null;
+
+            try
+            {
+                using (SiGLAgent sa = new SiGLAgent())
+                {
+                    entities = sa.getTable<full_organization>(new Object[1] { null }).ToList();
+
+                    sm(MessageType.info, "Count: " + entities.Count());
+                    sm(sa.Messages);
+
+                }//end using
+                return new OperationResult.OK { ResponseResource = entities, Description = this.MessageString };
+            }
+            catch (Exception ex)
+            {
+                return HandleException(ex);
+            }
+        }//end HttpMethod.GET
+        //entities = 
         #endregion
         
         #region PostMethods
@@ -170,7 +193,7 @@ namespace SiGLServices.Handlers
                         anEntity = sa.Select<organization>().FirstOrDefault(i => i.organization_id == entityId);
                         if (anEntity == null) throw new WiM.Exceptions.NotFoundRequestException();
 
-                        sa.Delete<organization>(anEntity);
+                        sa.Delete<organization>(anEntity);                        
                         sm(sa.Messages);
                     }//end using
                 }//end using
