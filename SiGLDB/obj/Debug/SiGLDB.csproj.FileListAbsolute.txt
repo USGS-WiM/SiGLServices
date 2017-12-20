@@ -12,9 +12,11 @@ D:\TMRData\WIMprojects\SiGLServices\SiGLDB\bin\Debug\OpenRasta.dll
 D:\TMRData\WIMprojects\SiGLServices\SiGLDB\bin\Debug\OpenRasta.Hosting.AspNet.dll
 D:\TMRData\WIMprojects\SiGLServices\SiGLDB\bin\Debug\RestSharp.dll
 D:\TMRData\WIMprojects\SiGLServices\SiGLDB\bin\Debug\ServiceStack.Text.dll
+D:\TMRData\WIMprojects\SiGLServices\SiGLDB\bin\Debug\System.Threading.Tasks.Extensions.dll
 D:\TMRData\WIMprojects\SiGLServices\SiGLDB\bin\Debug\WiMHypermedia.dll
 D:\TMRData\WIMprojects\SiGLServices\SiGLDB\bin\Debug\WiMServices.dll
 D:\TMRData\WIMprojects\SiGLServices\SiGLDB\bin\Debug\WiMServices.Test.dll
+D:\TMRData\WIMprojects\SiGLServices\SiGLDB\bin\Debug\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll
 D:\TMRData\WIMprojects\SiGLServices\SiGLDB\bin\Debug\AWSSDK.pdb
 D:\TMRData\WIMprojects\SiGLServices\SiGLDB\bin\Debug\EntityFramework.xml
 D:\TMRData\WIMprojects\SiGLServices\SiGLDB\bin\Debug\EntityFramework.SqlServer.xml
@@ -24,6 +26,8 @@ D:\TMRData\WIMprojects\SiGLServices\SiGLDB\bin\Debug\Newtonsoft.Json.xml
 D:\TMRData\WIMprojects\SiGLServices\SiGLDB\bin\Debug\Npgsql.xml
 D:\TMRData\WIMprojects\SiGLServices\SiGLDB\bin\Debug\RestSharp.xml
 D:\TMRData\WIMprojects\SiGLServices\SiGLDB\bin\Debug\ServiceStack.Text.xml
+D:\TMRData\WIMprojects\SiGLServices\SiGLDB\bin\Debug\System.Threading.Tasks.Extensions.xml
 D:\TMRData\WIMprojects\SiGLServices\SiGLDB\obj\Debug\SiGLDB.csprojResolveAssemblyReference.cache
+D:\TMRData\WIMprojects\SiGLServices\SiGLDB\obj\Debug\SiGLDB.csproj.CoreCompileInputs.cache
 D:\TMRData\WIMprojects\SiGLServices\SiGLDB\obj\Debug\SiGLDB.dll
 D:\TMRData\WIMprojects\SiGLServices\SiGLDB\obj\Debug\SiGLDB.pdb

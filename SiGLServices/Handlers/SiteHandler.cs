@@ -38,6 +38,11 @@ using OpenRasta.Security;
 using WiM.Security;
 using SiGLServices.Security;
 using SiGLServices.Resources;
+using RestSharp;
+using System.Net;
+using Newtonsoft.Json;
+using OpenRasta.IO;
+using System.IO;
 
 
 namespace SiGLServices.Handlers
@@ -417,7 +422,7 @@ namespace SiGLServices.Handlers
                 List<Int32> _resourceIds = !string.IsNullOrEmpty(resComps) ? resComps.Split(delimiterChar, StringSplitOptions.RemoveEmptyEntries).Select(Int32.Parse).ToList() : null;
                 List<string> _stateList = !string.IsNullOrEmpty(states) ? states.Split(delimiterChar, StringSplitOptions.RemoveEmptyEntries).ToList() : null;
                 List<Int32> _statusIds = !string.IsNullOrEmpty(statusIDs) ? statusIDs.Split(delimiterChar, StringSplitOptions.RemoveEmptyEntries).Select(Int32.Parse).ToList() : null;
-                
+
                 using (SiGLAgent sa = new SiGLAgent())
                 {
                     IQueryable<site> query;
@@ -433,7 +438,7 @@ namespace SiGLServices.Handlers
                     if (_lakeIds != null && _lakeIds.Count > 0)
                         query = query.Where(s => _lakeIds.Any(lt => lt == s.lake_type_id));
 
-                    if (_mediaIds != null && _mediaIds.Count > 0) 
+                    if (_mediaIds != null && _mediaIds.Count > 0)
                         query = query.Where(s => s.site_media.Any(sp => _mediaIds.Contains(sp.media_type_id)));
 
                     if (_objectivesIds != null && _objectivesIds.Count > 0)
@@ -457,7 +462,7 @@ namespace SiGLServices.Handlers
                     }
 
                     if (_parameterIds != null && _parameterIds.Count > 0)
-                        query = query.Where(s => s.site_parameters.Any(a => _parameterIds.Contains(a.parameter_type_id)));  
+                        query = query.Where(s => s.site_parameters.Any(a => _parameterIds.Contains(a.parameter_type_id)));
 
                     if (_resourceIds != null && _resourceIds.Count > 0)
                         query = query.Where(s => s.site_resource.Any(a => _resourceIds.Contains(a.resource_type_id)));
@@ -466,7 +471,7 @@ namespace SiGLServices.Handlers
                         query = query.Where(s => _stateList.Any(x => x == s.state_province));
 
                     if (_statusIds != null && _statusIds.Count > 0)
-                        query = query.Where(s => s.project != null && _statusIds.Contains(s.project.proj_status_id.Value));                                                            
+                        query = query.Where(s => s.project != null && _statusIds.Contains(s.project.proj_status_id.Value));
 
                     entities = query.ToList();
                     sm(MessageType.info, "Count: " + entities.Count());
@@ -481,7 +486,7 @@ namespace SiGLServices.Handlers
             }
         }
         
-       // .AtUri(siteResource + "/StatesWithSites").Named("GetStatesThatHaveSites")
+        // .AtUri(siteResource + "/StatesWithSites").Named("GetStatesThatHaveSites")
         [HttpOperation(HttpMethod.GET, ForUriName = "GetStatesThatHaveSites")]
         public OperationResult GetStatesThatHaveSites()
         {
@@ -506,29 +511,57 @@ namespace SiGLServices.Handlers
         }//end HttpMethod.GET
 
         //not sure that I really need this (going to make a getFullSite instead, using a siteResource)
-        //[HttpOperation(HttpMethod.GET, ForUriName = "GetSitesView")]
-        //public OperationResult GetSitesView()
-        //{
-        //    List<site_list_view> entities = null;
-        //    try
-        //    {
-        //        using (SiGLAgent sa = new SiGLAgent())
-        //        {
-        //            entities = sa.getTable<site_list_view>(new Object[1] { null }).ToList();
-        //            sm(MessageType.info, "Count: " + entities.Count());
-        //            sm(sa.Messages);
-        //        }//end using
+        [HttpOperation(HttpMethod.GET, ForUriName = "GetSitesView")]
+        public OperationResult GetSitesView()
+        {
+            List<site_list_view> entities = null;
+            try
+            {
+                using (SiGLAgent sa = new SiGLAgent())
+                {
+
+                    entities = sa.getTable<site_list_view>(new Object[1] { null }).ToList();
+                    sm(MessageType.info, "Count: " + entities.Count());
+                    sm(sa.Messages);
+                }//end using
                 
-        //        return new OperationResult.OK { ResponseResource = entities, Description = this.MessageString };
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return HandleException(ex);
-        //    }
-        //}//end HttpMethod.GET
-    
+                return new OperationResult.OK { ResponseResource = entities, Description = this.MessageString };
+            }
+            catch (Exception ex)
+            {
+                return HandleException(ex);
+            }
+        }//end HttpMethod.GET
+
+        [HttpOperation(HttpMethod.GET, ForUriName = "GetSimpleSites")]
+        public OperationResult GetSimpleSites()
+        {
+            List<SimpleSite> entities = null;
+            try
+            {
+                using (SiGLAgent sa = new SiGLAgent())
+                {
+                    entities = sa.Select<site>().Select(s => new SimpleSite()
+                    {
+                        site_id = s.site_id,
+                        latitude = s.latitude,
+                        longitude = s.longitude,
+                        name = s.name,
+                        project_id = s.project_id.Value
+                    }).ToList();
+                    sm(MessageType.info, "Count: " + entities.Count());
+                    sm(sa.Messages);
+                }//end using
+
+                return new OperationResult.OK { ResponseResource = entities, Description = this.MessageString };
+            }
+            catch (Exception ex)
+            {
+                return HandleException(ex);
+            }
+        }//end HttpMethod.GET
         #endregion
-        
+
         #region PostMethods
         /// 
         /// Force the user to provide authentication and authorization 
@@ -543,7 +576,7 @@ namespace SiGLServices.Handlers
                     || !anEntity.project_id.HasValue || string.IsNullOrEmpty(anEntity.state_province) || !anEntity.lake_type_id.HasValue)
                     throw new BadRequestException("Invalid input parameters");
 
-                SiGLGPServiceAgent gpAgent = null;
+        //        SiGLGPServiceAgent gpAgent = null;
 
                 using (EasySecureString securedPassword = GetSecuredPassword())
                 {
@@ -555,16 +588,16 @@ namespace SiGLServices.Handlers
                         sa.Update<project>(aProj);
                         sm(sa.Messages);
 
-                        if (aProj.ready_flag != null)
+             /*           if (aProj.ready_flag != null)
                         {
                             if (aProj.ready_flag == 1)
                             {
                                 //only if it's ready to see on the map
                                 gpAgent = new SiGLGPServiceAgent();
-                    //            gpAgent.POSTSite(ConfigurationManager.AppSettings["AGSSiglUpdate"], new List<FullSite>() { new FullSite(anEntity) });
+                                gpAgent.POSTSite(ConfigurationManager.AppSettings["AGSSiglUpdate"], new List<FullSite>() { new FullSite(anEntity) });
                             }
                         }
-                        
+               */         
                     }//end using
                 }//end using
                 return new OperationResult.Created { ResponseResource = anEntity, Description = this.MessageString };
@@ -589,7 +622,7 @@ namespace SiGLServices.Handlers
                     || anEntity.project_id < 0 || string.IsNullOrEmpty(anEntity.state_province) || !anEntity.lake_type_id.HasValue)
                     throw new BadRequestException("Invalid input parameters");
 
-                SiGLGPServiceAgent gpAgent = null;
+       //         SiGLGPServiceAgent gpAgent = null;
                 using (EasySecureString securedPassword = GetSecuredPassword())
                 {
                     using (SiGLAgent sa = new SiGLAgent(username, securedPassword))
@@ -605,17 +638,17 @@ namespace SiGLServices.Handlers
                         sa.Update<project>(aProj);
                         sm(sa.Messages);
 
-                        if (aProj.ready_flag != null)
+         /*               if (aProj.ready_flag != null)
                         {
                             if (aProj.ready_flag == 1)
                             {
                                 //only if it's ready to see on the map                   
                                 gpAgent = new SiGLGPServiceAgent();
                                 // remove then readd
-                       //         gpAgent.DELETESite(ConfigurationManager.AppSettings["AGSSiglUpdate"], new List<FullSite>() { new FullSite(anEntity) });
-                       //         gpAgent.POSTSite(ConfigurationManager.AppSettings["AGSSiglUpdate"], new List<FullSite>() { new FullSite(anEntity) });
+                                gpAgent.DELETESite(ConfigurationManager.AppSettings["AGSSiglUpdate"], new List<FullSite>() { new FullSite(anEntity) });
+                                gpAgent.POSTSite(ConfigurationManager.AppSettings["AGSSiglUpdate"], new List<FullSite>() { new FullSite(anEntity) });
                             }
-                        }
+                        }*/
                     }//end using
                 }//end using
 
@@ -641,7 +674,7 @@ namespace SiGLServices.Handlers
             {
                 if (entityId <= 0) throw new BadRequestException("Invalid input parameters");
                 
-                SiGLGPServiceAgent gpAgent = null;
+      //          SiGLGPServiceAgent gpAgent = null;
                 using (EasySecureString securedPassword = GetSecuredPassword())
                 {
                     using (SiGLAgent sa = new SiGLAgent(username, securedPassword))
@@ -650,6 +683,10 @@ namespace SiGLServices.Handlers
                         if (anEntity == null) throw new WiM.Exceptions.NotFoundRequestException();
                         projId = anEntity.project_id.Value;
 
+                        //Delete to gpservices
+           //             gpAgent = new SiGLGPServiceAgent();
+           //             gpAgent.DELETESite(ConfigurationManager.AppSettings["AGSSiglUpdate"], new List<FullSite>() { new FullSite(anEntity) });
+                       
                         sa.Delete<site>(anEntity);
 
                         sa.Select<site_frequency>().Where(freq => freq.site_id == entityId).ToList().ForEach(x=> sa.Delete<site_frequency>(x));
@@ -659,11 +696,7 @@ namespace SiGLServices.Handlers
 
                         project aProj = sa.Select<project>().First(p => p.project_id == projId);
                         aProj.last_edited_stamp = DateTime.Now.Date;
-                        sa.Update<project>(aProj);
-
-                        //Delete to gpservices
-                        gpAgent = new SiGLGPServiceAgent();
-                 //       gpAgent.DELETESite(ConfigurationManager.AppSettings["AGSSiglUpdate"], new List<FullSite>() { new FullSite(anEntity) });
+                        sa.Update<project>(aProj);                        
                         sm(sa.Messages);
                     }//end using
                 }//end using

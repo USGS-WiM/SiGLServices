@@ -35,6 +35,7 @@ using SiGLDB;
 using WiM.Exceptions;
 using WiM.Resources;
 using WiM.Security;
+using OpenRasta.Collections;
 
 namespace SiGLServices.Handlers
 {
@@ -637,7 +638,7 @@ namespace SiGLServices.Handlers
                 {
                     if (!string.IsNullOrEmpty(scienceBaseId))
                     {
-                        query = sa.Select<project>().Include(e => e.data_host).Include(e => e.project_objectives).Include("project_objectives.objective_type")
+                        query = sa.Select<project>().Include(e => e.data_host).Include(e=>e.sites).Include(e => e.project_objectives).Include("project_objectives.objective_type")
                             .Include(e => e.project_monitor_coord).Include("project_monitor_coord.monitoring_coordination")
                             .Include(e => e.proj_status).Include(e => e.proj_duration).Include(e => e.project_keywords).Include("project_keywords.keyword")
                             .Include(e => e.project_cooperators).Include("project_cooperators.organization_system")
@@ -652,7 +653,7 @@ namespace SiGLServices.Handlers
                     if (!string.IsNullOrEmpty(projectId))
                     {
                         Int32 projId = Convert.ToInt32(projectId);
-                        query = sa.Select<project>().Include(e => e.data_host).Include(e => e.project_objectives).Include("project_objectives.objective_type")
+                        query = sa.Select<project>().Include(e => e.data_host).Include(e => e.sites).Include(e => e.project_objectives).Include("project_objectives.objective_type")
                             .Include(e => e.project_monitor_coord).Include("project_monitor_coord.monitoring_coordination")
                             .Include(e=>e.proj_status).Include(e=>e.proj_duration)
                             .Include(e => e.project_keywords).Include("project_keywords.keyword")
@@ -731,6 +732,14 @@ namespace SiGLServices.Handlers
                                 title = pp.publication.title,
                                 url = pp.publication.url
                             }).ToList(),
+                            projectSites = p.sites.Select(s=> new SimpleSite
+                            {
+                                name = s.name,
+                                latitude = s.latitude,
+                                longitude = s.longitude,
+                                site_id = s.site_id,
+                                project_id = s.project_id.Value
+                            }).ToList<SimpleSite>(),
                             created_stamp = p.created_stamp,
                             last_edited_stamp = p.last_edited_stamp
                         }).FirstOrDefault();
@@ -746,9 +755,106 @@ namespace SiGLServices.Handlers
             {
                 return HandleException(ex);
             }
-        }        
+        }
+
+        [HttpOperation(HttpMethod.GET, ForUriName = "GetFilteredProjects")]
+        public OperationResult GetFilteredProjects([Optional] string lakes, [Optional] string durationIDs, [Optional] string media, [Optional] string objIDs, [Optional] string monCoordIDs, [Optional] string orgID,
+            [Optional] string parameters, [Optional] string resComps, [Optional] string states, [Optional] string statusIDs)
+        {
+            List<FilteredProject> entities = null;
+            try
+            {
+                char[] delimiterChar = { ',' };
+
+                List<Int32> _durationIds = !string.IsNullOrEmpty(durationIDs) ? durationIDs.Split(delimiterChar, StringSplitOptions.RemoveEmptyEntries).Select(Int32.Parse).ToList() : null;
+                List<Int32> _lakeIds = !string.IsNullOrEmpty(lakes) ? lakes.Split(delimiterChar, StringSplitOptions.RemoveEmptyEntries).Select(Int32.Parse).ToList() : null;
+                List<Int32> _mediaIds = !string.IsNullOrEmpty(media) ? media.Split(delimiterChar, StringSplitOptions.RemoveEmptyEntries).Select(Int32.Parse).ToList() : null;
+                List<Int32> _objectivesIds = !string.IsNullOrEmpty(objIDs) ? objIDs.Split(delimiterChar, StringSplitOptions.RemoveEmptyEntries).Select(Int32.Parse).ToList() : null;
+                List<Int32> _monCoordIds = !string.IsNullOrEmpty(monCoordIDs) ? monCoordIDs.Split(delimiterChar, StringSplitOptions.RemoveEmptyEntries).Select(Int32.Parse).ToList() : null;
+                List<Int32> _parameterIds = !string.IsNullOrEmpty(parameters) ? parameters.Split(delimiterChar, StringSplitOptions.RemoveEmptyEntries).Select(Int32.Parse).ToList() : null;
+                List<Int32> _resourceIds = !string.IsNullOrEmpty(resComps) ? resComps.Split(delimiterChar, StringSplitOptions.RemoveEmptyEntries).Select(Int32.Parse).ToList() : null;
+                List<string> _stateList = !string.IsNullOrEmpty(states) ? states.Split(delimiterChar, StringSplitOptions.RemoveEmptyEntries).ToList() : null;
+                List<Int32> _statusIds = !string.IsNullOrEmpty(statusIDs) ? statusIDs.Split(delimiterChar, StringSplitOptions.RemoveEmptyEntries).Select(Int32.Parse).ToList() : null;
+
+                using (SiGLAgent sa = new SiGLAgent())
+                {
+                    IQueryable<project> query;
+
+                    //query = sa.Select<site>();
+                    query = sa.Select<project>().Include(p => p.project_objectives).Include(p => p.project_monitor_coord).Include(p => p.project_cooperators)
+                        .Include(p => p.sites);//.Include("sites.site_media").Include("sites.site_parameters").Include("sites.site_resource");
+
+                    if (_durationIds != null && _durationIds.Count > 0)
+                        query = query.Where(p => _durationIds.Contains(p.proj_duration_id.Value));
+
+
+                    if (_lakeIds != null && _lakeIds.Count > 0)
+                        query = query.Where(p => p.sites.Any(s => _lakeIds.Any(lt => lt == s.lake_type_id)));
+                    
+                    if (_mediaIds != null && _mediaIds.Count > 0)
+                        query = query.Include("sites.site_media").Where(p => p.sites.Any(s => s.site_media.Any(sp => _mediaIds.Contains(sp.media_type_id))));
+
+                    if (_objectivesIds != null && _objectivesIds.Count > 0)
+                        query = query.Where(p => p.project_objectives.Any(a => _objectivesIds.Contains(a.objective_id.Value)));
+
+                    if (_monCoordIds != null && _monCoordIds.Count > 0)
+                        query = query.Where(p => p.project_monitor_coord.Any(a => _monCoordIds.Contains(a.monitoring_coordination_id.Value)));
+
+                    if (!string.IsNullOrEmpty(orgID))
+                    {
+                        if (Convert.ToInt32(orgID) > 0)
+                        {
+                            //sites where project_cooperators have the org NAME that is this OrgID passed
+                            List<Int32> _orgs = new List<Int32>();
+                            Int32 _orgId = Convert.ToInt32(orgID);
+                            List<organization_system> orgSystemsWithThisOrg = sa.Select<organization_system>().Where(b => b.org_id == _orgId).ToList();
+                            //add all the ids to the list of dec
+                            orgSystemsWithThisOrg.ForEach(no => _orgs.Add(Convert.ToInt32(no.organization_system_id)));
+                            query = query.Where(p => p.project_cooperators.Any(a => _orgs.Contains(a.organization_system_id.Value)));
+                        }
+                    }
+
+                    if (_parameterIds != null && _parameterIds.Count > 0)
+                        query = query.Include("sites.site_parameters").Where(p => p.sites.Any(s => s.site_parameters.Any(a => _parameterIds.Contains(a.parameter_type_id))));
+
+                    if (_resourceIds != null && _resourceIds.Count > 0)
+                        query = query.Include("sites.site_resource").Where(p => p.sites.Any(s => s.site_resource.Any(a => _resourceIds.Contains(a.resource_type_id))));
+
+                    if (_stateList != null && _stateList.Count > 0)
+                        query = query.Where(p => p.sites.Any(s => _stateList.Any(x => x == s.state_province)));
+
+                    if (_statusIds != null && _statusIds.Count > 0)
+                        query = query.Where(p => _statusIds.Contains(p.proj_status_id.Value));
+
+                    entities = query.AsEnumerable().Select(p => new FilteredProject()
+                    {
+                        name = p.name,
+                        project_id = p.project_id,
+                        projectSites = p.sites.Select(s => new SimpleSite()
+                        {
+                            site_id = s.site_id,
+                            latitude = s.latitude,
+                            longitude = s.longitude,
+                            name = s.name,
+                            project_id = s.project_id.Value
+                        }).ToList()
+                    }).ToList();
+
+                    sm(MessageType.info, "Count: " + entities.Count());
+                    sm(sa.Messages);
+
+                }//end using
+                return new OperationResult.OK { ResponseResource = entities, Description = this.MessageString };
+            }
+            catch (Exception ex)
+            {
+                return HandleException(ex);
+            }
+        }
+
+
         #endregion
-        
+
         #region PostMethods
         /// 
         /// Force the user to provide authentication and authorization 
@@ -931,7 +1037,38 @@ namespace SiGLServices.Handlers
             catch (Exception ex)
             { return HandleException(ex); }
         }//end HTTP.DELETE
-        
+
+        [SiGLRequiresRole(new string[] { AdminRole, ManagerRole })]
+        [HttpOperation(HttpMethod.DELETE)]//projectResource + "/{scienceBaseId}/ClearParts").Named("ClearProjectParts")
+        public OperationResult ClearProjectParts(string scienceBaseId)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(scienceBaseId)) throw new BadRequestException("Invalid input parameters");
+
+                using (EasySecureString securedPassword = GetSecuredPassword())
+                {
+                    using (SiGLAgent sa = new SiGLAgent(username, securedPassword))
+                    {
+                        project anEntity = sa.Select<project>().SingleOrDefault(p => p.science_base_id.ToUpper() == scienceBaseId.ToUpper());
+                        if (anEntity == null) throw new WiM.Exceptions.NotFoundRequestException();
+                        Int32 projId = anEntity.project_id;
+                        
+                        sa.Select<project_contacts>().Where(c => c.project_id == projId).ToList().ForEach(x => sa.Delete<project_contacts>(x));
+                        sa.Select<project_cooperators>().Where(coop => coop.project_id == projId).ToList().ForEach(x => sa.Delete<project_cooperators>(x));
+                        sa.Select<project_keywords>().Where(k => k.project_id == projId).ToList().ForEach(x => sa.Delete<project_keywords>(x));
+                        sa.Select<project_objectives>().Where(o => o.project_id == projId).ToList().ForEach(x => sa.Delete<project_objectives>(x));
+                        sa.Select<project_publication>().Where(p => p.project_id == projId).ToList().ForEach(x => sa.Delete<project_publication>(x));
+                        
+                        sm(sa.Messages);
+                    }//end using
+                }//end using
+                return new OperationResult.OK { Description = this.MessageString };
+            }
+            catch (Exception ex)
+            { return HandleException(ex); }
+        }//end HTTP.DELETE
+
         [SiGLRequiresRole(AdminRole)]
         [HttpOperation(HttpMethod.DELETE, ForUriName = "DeleteAllDMProjects")]
         public OperationResult DeleteAllDMProjects(Int32 dataManagerId)

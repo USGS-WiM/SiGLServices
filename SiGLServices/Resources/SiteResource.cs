@@ -10,24 +10,22 @@ namespace SiGLServices.Resources
     public class site_list_view
     {
         public Int32 site_id { get; set; }
-        public Nullable<DateTime> start_date { get; set; }
-        public Nullable<DateTime> end_date { get; set; }
-        public Nullable<Int32> project_id { get; set; }
-        public string sample_platform { get; set; }
-        public string additional_info { get; set; }
         public string name { get; set; }
-        public string description { get; set; }       
+        public Nullable<Int32> project_id { get; set; }
         public Nullable<double> latitude { get; set; }
         public Nullable<double> longitude { get; set; }
-        public string waterbody { get; set; }
-        public Nullable<Int32> status_type_id { get; set; }
-        public string status { get; set; }
+        public dynamic geom { get; set; }
         public Nullable<Int32> lake_type_id { get; set; }
-        public string lake { get; set; }
-        public string country { get; set; }
         public string state_province { get; set; }
-        public string watershed_huc8 { get; set; }
-        public string url { get; set; }
+        public string proj_duration_id { get; set; }
+        public string proj_status_id { get; set; }
+        public string project_name { get; set; }
+        public string organization_system_id { get; set; }
+        public string objective_id { get; set; }
+        public string monitoring_coordination_id { get; set; }
+        public string media_type_id { get; set; }
+        public string resource_type_id { get; set; }
+        public string parameter_type_id { get; set; }
     }
 
 
@@ -80,4 +78,15 @@ namespace SiGLServices.Resources
             this.url = s.url;
         }
     }
+
+    public class SimpleSite
+    {
+        public Int32 site_id { get; set; }
+        public string name { get; set; }
+        public double latitude { get; set; }
+        public double longitude { get; set; }
+        public Int32 project_id { get; set; }
+    }
+
+
 }

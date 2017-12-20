@@ -11,5 +11,10 @@ namespace SiGLServices.Resources
     public class contactResource : contact
     {
         public string ContactOrgName { get; set; }
+        public string ContactDivName { get; set; }
+        public string ContactSecName { get; set; }
+        public Int32 org_id { get; set; }
+        public Int32 div_id { get; set; }
+        public Int32 sec_id { get; set; }
     }
 }

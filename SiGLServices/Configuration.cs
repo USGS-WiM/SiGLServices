@@ -456,8 +456,16 @@ namespace SiGLServices
                 .And.TranscodedBy<CsvDotNetCodec>(null).ForMediaType("text/csv").ForExtension("csv");
 
             //fullProject
-            ResourceSpace.Has.ResourcesOfType<List<FullProject>>()
+            ResourceSpace.Has.ResourcesOfType<FullProject>()
                 .AtUri(projectResource + "/GetFullProject?ByScienceBase={scienceBaseId}&ByProject={projectId}").Named("GetFullProject")
+                .HandledBy<ProjectHandler>()
+                .TranscodedBy<UTF8EntityXmlSerializerCodec>(null).ForMediaType("application/xml;q=1").ForExtension("xml")
+                .And.TranscodedBy<JsonDotNetCodec>(null).ForMediaType("application/json;q=0.9").ForExtension("json")
+                .And.TranscodedBy<CsvDotNetCodec>(null).ForMediaType("text/csv").ForExtension("csv");
+
+            //FilteredProject
+            ResourceSpace.Has.ResourcesOfType<List<FilteredProject>>()
+                .AtUri("/Projects/FilteredProjects?Duration={durationIDs}&Lake={lakes}&Media={media}&ProjObjs={objIDs}&ProjMonitorCoords={monCoordIDs}&ProjOrg={orgID}&Parameters={parameters}&ResComp={resComps}&State={states}&Status={statusIDs}").Named("GetFilteredProjects")
                 .HandledBy<ProjectHandler>()
                 .TranscodedBy<UTF8EntityXmlSerializerCodec>(null).ForMediaType("application/xml;q=1").ForExtension("xml")
                 .And.TranscodedBy<JsonDotNetCodec>(null).ForMediaType("application/json;q=0.9").ForExtension("json")
@@ -467,6 +475,7 @@ namespace SiGLServices
                 .AtUri(projectResource + "/{entityId}")
                 .And.AtUri(siteResource + "/{siteId}/project").Named("GetSiteProject") 
                 .And.AtUri(dataHostResource + "/{dataHostId}/project").Named("GetDataHostProject")
+                .And.AtUri(projectResource + "/{scienceBaseId}/ClearParts").Named("ClearProjectParts")
                 //.And.AtUri("/projects/GetFullProject/{scienceBaseId}").Named("GetFullProject")
                 .HandledBy<ProjectHandler>()
                 .TranscodedBy<UTF8EntityXmlSerializerCodec>(null).ForMediaType("application/xml;q=1").ForExtension("xml")
@@ -547,6 +556,10 @@ namespace SiGLServices
         }
         private void AddSITE_Resources() //(20)
         {
+            ResourceSpace.Has.ResourcesOfType<object>()
+                .AtUri("/Sites/GeoServerSites?Duration={durationIDs}&Lake={lakes}&Media={media}&ProjObjs={objIDs}&ProjMonitorCoords={monCoordIDs}&ProjOrg={orgID}&Parameters={parameters}&ResComp={resComps}&State={states}&Status={statusIDs}").Named("GetGeoServerSites")
+                .HandledBy<SiteHandler>();
+                
             ResourceSpace.Has.ResourcesOfType<List<string>>()
                 .AtUri(siteResource + "/StatesWithSites").Named("GetStatesThatHaveSites")
                 .HandledBy<SiteHandler>()//
@@ -563,7 +576,7 @@ namespace SiGLServices
                 .And.AtUri(resourceResource + "/{resourceTypeId}/"+ siteResource).Named("GetResourceSites")
                 .And.AtUri(parameterResource + "/{parameterId}/" + siteResource).Named("GetParameterSites")
                 .And.AtUri(frequencyResource + "/{frequencyId}/" + siteResource).Named("GetFrequencySites")
-                .And.AtUri("/Sites/FilteredSites?Duration={durationIDs}&Lake={lakes}&Media={media}&ProjObjs={objIDs}&ProjMonitorCoords={monCoordIDs}&ProjOrg={orgID}&Parameters={parameters}&ResComp={resComps}&State={states}&Status={statusIDs}").Named("GetFilteredSites")                                                                                                                                         
+                .And.AtUri("/Sites/FilteredSites?Duration={durationIDs}&Lake={lakes}&Media={media}&ProjObjs={objIDs}&ProjMonitorCoords={monCoordIDs}&ProjOrg={orgID}&Parameters={parameters}&ResComp={resComps}&State={states}&Status={statusIDs}").Named("GetFilteredSites")
                 .HandledBy<SiteHandler>()//
                 .TranscodedBy<UTF8EntityXmlSerializerCodec>(null).ForMediaType("application/xml;q=1").ForExtension("xml")
                 .And.TranscodedBy<JsonEntityDotNetCodec>(null).ForMediaType("application/json;q=0.9").ForExtension("json")
@@ -595,6 +608,17 @@ namespace SiGLServices
                 .And.TranscodedBy<JsonDotNetCodec>(null).ForMediaType("application/json;q=0.9").ForExtension("json")
                 .And.TranscodedBy<CsvDotNetCodec>(null).ForMediaType("text/csv").ForExtension("csv")
                 .And.TranscodedBy<SiGLGeoJsonDotNetCodec>().ForMediaType("application/geojson;q=0.5").ForExtension("geojson");
+
+            ResourceSpace.Has.ResourcesOfType<site_list_view>()
+                .AtUri(siteResource + "/GetSiteView").Named("GetSitesView")
+                .HandledBy<SiteHandler>()
+                .TranscodedBy<SiGLGeoJsonDotNetCodec>().ForMediaType("application/geojson;q=0.5").ForExtension("geojson");
+            //.And.TranscodedBy<JsonDotNetCodec>(null).ForMediaType("application/json;q=0.9").ForExtension("json");
+
+            ResourceSpace.Has.ResourcesOfType<SimpleSite>()
+                .AtUri(siteResource + "/GetSimpleSites").Named("GetSimpleSites")
+                .HandledBy<SiteHandler>()
+                .TranscodedBy<SiGLGeoJsonDotNetCodec>().ForMediaType("application/geojson;q=0.5").ForExtension("geojson");
         }
         private void AddSTATUS_Resources() //(21)
         {

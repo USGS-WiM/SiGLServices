@@ -87,7 +87,7 @@ namespace SiGLServices.Utilities.ServiceAgent
             //http://54.84.124.192:6080/arcgis/rest/services/SIGL/SIGLUpdate/GPServer/SIGLUpdate/execute
             RestRequest request = new RestRequest(URI);
             request.AddHeader("Content-Type", "application/x-www-form-urlencoded");
-            request.AddParameter("application/x-www-form-urlencoded", bodyName + JsonConvert.SerializeObject(Body, settings) + "&removeFeatures=" + remove.ToString() + "&f=pjson", ParameterType.RequestBody);
+            request.AddParameter("application/x-www-form-urlencoded", bodyName + JsonConvert.SerializeObject(Body, settings) + "&removeFeature=" + remove.ToString() + "&f=pjson", ParameterType.RequestBody);
             request.Method = Method.POST;
 
             return request;

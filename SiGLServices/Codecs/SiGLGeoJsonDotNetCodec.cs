@@ -49,7 +49,7 @@ namespace SiGLServices.Codecs.json
     [MediaType("application/geojson;q=0.5", "geojson")]
     public class SiGLGeoJsonDotNetCodec : JsonDotNetCodec
     {
-        private Type[] extraTypes = new Type[2] { typeof(site), typeof(FullSite) };
+        private Type[] extraTypes = new Type[4] { typeof(site), typeof(FullSite), typeof(site_list_view), typeof(SimpleSite) };
 
         public override void WriteTo(object entity, IHttpEntity response, string[] parameters)
         {

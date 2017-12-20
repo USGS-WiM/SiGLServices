@@ -22,7 +22,10 @@ using OpenRasta.Web;
 
 //using SiGLServices.Resources;
 using Ionic.Zip;
-
+using RestSharp;
+using System.Net;
+using System.IO;
+using System.Xml;
 
 namespace SiGLServices.Utilities.ServiceAgent
 {
@@ -97,6 +100,7 @@ namespace SiGLServices.Utilities.ServiceAgent
                 throw;
             }
         }
+       
         private string getSQLStatement(string type)
         {
             string sql = string.Empty;
@@ -118,11 +122,7 @@ namespace SiGLServices.Utilities.ServiceAgent
                             LEFT JOIN lampadmin.organization o ON orgS.org_id = o.organization_id
                             GROUP BY p.project_id, p.name, p.data_manager_id, dm.lname, dm.fname, o.organization_name;";
                 case "site_list_view":
-                    return @"SELECT s.site_id, s.start_date, s.end_date, s.project_id, s.sample_platform, s.additional_info, s.name, s.description, s.latitude, s.longitude, s.waterbody, 
-                            s.status_type_id, st.status, s.lake_type_id, l.lake, s.country, s.state_province, s.watershed_huc8, s.url
-                            FROM lampadmin.site s
-                            LEFT JOIN lampadmin.status_type st ON st.status_id = s.status_type_id
-                            LEFT JOIN lampadmin.lake_type l ON l.lake_type_id = s.lake_type_id;";
+                    return @"SELECT * FROM lampadmin.site_view_full;";
                 case "full_organization":
                     return @"SELECT o.organization_id, o.organization_name, d.division_id, d.division_name, s.section_id, s.section_name
                             FROM lampadmin.organization o
@@ -134,7 +134,33 @@ namespace SiGLServices.Utilities.ServiceAgent
             }//end switch;
 
         }
-
+        private class cqlBody { 
+            public string CQL_Filter { get; set; } 
+        };
+        public object GetGeoServerImage(string siteids)
+        {
+           // InMemoryFile fileItem = null;
+          //  IRestResponse response = null;
+            var client = new RestClient("http://52.21.226.149:8080/geoserver/wms?layers=SIGL:sigl_site_view&format=image/png&styles=&Transparency=true&service=wms&version=1.3.0&request=GetMap&srs=EPSG:4269&bbox=40.6275405,-92.967804,48.71331024,-76.7691727&width=684&height=330");
+            
+            var request = new RestRequest(Method.POST);
+            request.AddHeader("Authentication", "Basic YWRtaW46RFFBNE01VEgxWnExYzVGNXd0V1Y=");
+            request.AddHeader("Content-Type", "application/x-www-form-urlencoded");
+         
+            cqlBody bod = new cqlBody();
+            bod.CQL_Filter = "site_id IN ("+ siteids + ")";
+            
+            request.AddParameter("CQL_Filter", bod.CQL_Filter);
+            
+            //without this, get ssl/tsl error
+            System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+            ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
+            
+            var response = client.Execute(request);
+            var bitmap = response.RawBytes;            
+            
+            return bitmap;
+        }
         #endregion
 
         #region "Structures"

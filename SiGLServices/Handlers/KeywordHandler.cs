@@ -183,7 +183,7 @@ namespace SiGLServices.Handlers
                         if (aProj == null)
                             throw new NotFoundRequestException();
 
-                        newKey = sa.Select<keyword>().FirstOrDefault(n => n.term == term);
+                        newKey = sa.Select<keyword>().FirstOrDefault(n => n.term.ToLower() == term.ToLower());
                         if (newKey == null)
                         {
                             newKey = new keyword();

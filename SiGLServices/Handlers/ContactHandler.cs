@@ -190,7 +190,7 @@ namespace SiGLServices.Handlers
                             con = sa.Add<contact>(anEntity);
                         }
 
-                        if (sa.Select<project_contacts>().FirstOrDefault(nt => nt.contact_id == anEntity.contact_id && nt.project_id == projectId) == null)
+                        if (sa.Select<project_contacts>().FirstOrDefault(nt => nt.contact_id == con.contact_id && nt.project_id == projectId) == null)
                         {
                             projContact = new project_contacts();
                             projContact.project_id = projectId;

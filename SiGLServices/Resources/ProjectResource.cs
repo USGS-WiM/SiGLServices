@@ -46,5 +46,14 @@ namespace SiGLServices.Resources
         public List<publication> Publications { get; set; }
         public Nullable<DateTime> last_edited_stamp { get; set; }
         public Nullable<DateTime> created_stamp { get; set; }
+        public Nullable<Int32> ready_flag { get; set; }
+        public List<SimpleSite> projectSites { get; set; }
+    }
+
+    public class FilteredProject
+    {
+        public string name {get; set;}
+        public Int32 project_id { get; set; }
+        public List<SimpleSite> projectSites { get; set; }
     }
 }
