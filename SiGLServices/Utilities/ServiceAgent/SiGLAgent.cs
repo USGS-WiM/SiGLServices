@@ -92,10 +92,21 @@ namespace SiGLServices.Utilities.ServiceAgent
         {
             try
             {
-                string sql = String.Format(getSQLStatement(typeof(T).Name), args);
+                string sql = string.Empty;
+
+                if (args[0] != null)
+                {
+                    string where = args[0].ToString();
+                    sql = getFilteredProjectIDsList(where);
+                }
+                else
+                {
+                    sql = String.Format(getSQLStatement(typeof(T).Name), args);
+                }
+
                 return context.Database.SqlQuery<T>(sql).AsQueryable();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 throw;
             }
@@ -134,6 +145,21 @@ namespace SiGLServices.Utilities.ServiceAgent
             }//end switch;
 
         }
+
+        private string getFilteredProjectIDsList(string wherePart)
+        {           
+            return @"SELECT DISTINCT p.project_id
+                    FROM lampadmin.project p
+                    left join lampadmin.site s on p.project_id = s.project_id
+                    left join lampadmin.project_cooperators pc on p.project_id = pc.project_id
+                    left join lampadmin.project_monitor_coord pm on p.project_id = pm.project_id
+                    left join lampadmin.project_objectives po on p.project_id = po.project_id
+                    left join lampadmin.site_parameters sp on s.site_id = sp.site_id
+                    left join lampadmin.site_resource sr on s.site_id = sr.site_id
+                    left join lampadmin.site_media sm on s.site_id = sm.site_id
+                    where " + wherePart + ";";
+        }
+
         private class cqlBody { 
             public string CQL_Filter { get; set; } 
         };

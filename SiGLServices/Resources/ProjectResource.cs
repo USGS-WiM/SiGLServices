@@ -9,6 +9,10 @@ using SiGLDB;
 
 namespace SiGLServices.Resources
 {
+    public class project_list
+    {
+        public Int32 project_id { get; set; }
+    }
     public class project_sitecount_view
     {
         public Int32 project_id { get; set; }
