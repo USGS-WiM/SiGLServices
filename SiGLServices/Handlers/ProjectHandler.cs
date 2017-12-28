@@ -764,150 +764,8 @@ namespace SiGLServices.Handlers
             List<FilteredProject> entities = new List<FilteredProject>();
             try
             {
-                char[] delimiterChar = { ',' };
-
-                List<Int32> _durationIds = !string.IsNullOrEmpty(durationIDs) ? durationIDs.Split(delimiterChar, StringSplitOptions.RemoveEmptyEntries).Select(Int32.Parse).ToList() : null;
-                List<Int32> _lakeIds = !string.IsNullOrEmpty(lakes) ? lakes.Split(delimiterChar, StringSplitOptions.RemoveEmptyEntries).Select(Int32.Parse).ToList() : null;
-                List<Int32> _mediaIds = !string.IsNullOrEmpty(media) ? media.Split(delimiterChar, StringSplitOptions.RemoveEmptyEntries).Select(Int32.Parse).ToList() : null;
-                List<Int32> _objectivesIds = !string.IsNullOrEmpty(objIDs) ? objIDs.Split(delimiterChar, StringSplitOptions.RemoveEmptyEntries).Select(Int32.Parse).ToList() : null;
-                List<Int32> _monCoordIds = !string.IsNullOrEmpty(monCoordIDs) ? monCoordIDs.Split(delimiterChar, StringSplitOptions.RemoveEmptyEntries).Select(Int32.Parse).ToList() : null;
-                List<Int32> _parameterIds = !string.IsNullOrEmpty(parameters) ? parameters.Split(delimiterChar, StringSplitOptions.RemoveEmptyEntries).Select(Int32.Parse).ToList() : null;
-                List<Int32> _resourceIds = !string.IsNullOrEmpty(resComps) ? resComps.Split(delimiterChar, StringSplitOptions.RemoveEmptyEntries).Select(Int32.Parse).ToList() : null;
-                List<string> _stateList = !string.IsNullOrEmpty(states) ? states.Split(delimiterChar, StringSplitOptions.RemoveEmptyEntries).ToList() : null;
-                List<Int32> _statusIds = !string.IsNullOrEmpty(statusIDs) ? statusIDs.Split(delimiterChar, StringSplitOptions.RemoveEmptyEntries).Select(Int32.Parse).ToList() : null;
-
                 using (SiGLAgent sa = new SiGLAgent())
-                {
-                    #region option 2
-                    /* another option
-                     *IQueryable<project> projQuery = null;
-                     if (_durationIds != null || _statusIds != null || _objectivesIds != null || _monCoordIds != null || !string.IsNullOrEmpty(orgID))
-                     {
-                         projQuery = sa.Select<project>().Include(p => p.project_objectives).Include(p => p.project_monitor_coord).Include(p => p.project_cooperators)
-                             .Include(p => p.sites);
-
-                         if (_durationIds != null && _durationIds.Count > 0)
-                             projQuery = projQuery.Where(s => _durationIds.Any(d => d == s.proj_duration_id));
-
-                         if (_statusIds != null && _statusIds.Count > 0)
-                             projQuery = projQuery.Where(p => _statusIds.Any(s => s == p.proj_status_id.Value));
-
-                         if (_objectivesIds != null && _objectivesIds.Count > 0)
-                             projQuery = projQuery.Where(p => p.project_objectives.Any(a => _objectivesIds.Contains(a.objective_id.Value)));
-
-                         if (_monCoordIds != null && _monCoordIds.Count > 0)
-                             projQuery = projQuery.Where(p => p.project_monitor_coord.Any(a => a.monitoring_coordination_id != null && _monCoordIds.Contains(a.monitoring_coordination_id.Value)));
-
-                         if (!string.IsNullOrEmpty(orgID))
-                         {
-                             if (Convert.ToInt32(orgID) > 0)
-                             {
-                                 //sites where project_cooperators have the org NAME that is this OrgID passed
-                                 List<Int32> _orgs = new List<Int32>();
-                                 Int32 _orgId = Convert.ToInt32(orgID);
-                                 List<organization_system> orgSystemsWithThisOrg = sa.Select<organization_system>().Where(b => b.org_id == _orgId).ToList();
-                                 //add all the ids to the list of dec
-                                 orgSystemsWithThisOrg.ForEach(no => _orgs.Add(Convert.ToInt32(no.organization_system_id)));
-                                 projQuery = projQuery.Where(p => p.project_cooperators.Any(a => _orgs.Contains(a.organization_system_id.Value)));
-                             }
-                         }
-                     }
-
-                     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                     // if any projQuerys have been done, these need to the ones used from here on
-                     IQueryable<site> siteQuery = null;
-                     if (_lakeIds != null || _mediaIds != null || _parameterIds != null || _resourceIds != null || _stateList != null)
-                     {
-                         siteQuery = sa.Select<site>().Include(s => s.project).Include(s => s.site_media).Include(s => s.site_parameters).Include(s => s.site_resource);
-
-                         if (_lakeIds != null && _lakeIds.Count > 0)
-                             siteQuery = siteQuery.Where(s => _lakeIds.Any(lt => lt == s.lake_type_id));
-                         if (_mediaIds != null && _mediaIds.Count > 0)
-                             siteQuery = siteQuery.Where(s => s.site_media.Any(sp => _mediaIds.Contains(sp.media_type_id)));
-                         if (_parameterIds != null && _parameterIds.Count > 0)
-                             siteQuery = siteQuery.Where(s => s.site_parameters.Any(a => _parameterIds.Contains(a.parameter_type_id)));
-
-                         if (_resourceIds != null && _resourceIds.Count > 0)
-                             siteQuery = siteQuery.Where(s => s.site_resource.Any(a => _resourceIds.Contains(a.resource_type_id)));
-
-                         if (_stateList != null && _stateList.Count > 0)
-                             siteQuery = siteQuery.Where(s => _stateList.Any(x => x == s.state_province));
-                     }
-                      List<Int32> siteProjectList = new List<Int32>();
-                     List<Int32> projectList = new List<Int32>();
-                     List<Int32> allFilteredList = new List<Int32>();
-
-                     siteQuery.ForEach(s =>
-                     { 
-                         if (siteProjectList.IndexOf(s.project_id.Value) < 0)
-                             siteProjectList.Add(s.project_id.Value);                           
-                     });
-
-                     projQuery.ForEach(p =>
-                     {
-                         projectList.Add(p.project_id);
-                     });
-
-                     // now find where they both have values (to make sure all is getting filtered) --- almost there... this only works if both arrays have values...
-                     if (siteProjectList.Count > 0 && projectList.Count > 0)
-                     {                        
-                         allFilteredList = projectList.Where(x => siteProjectList.Contains(x)).ToList();
-                     } else
-                     {
-                         // only 1 has contents, get it and continue
-                         if (siteProjectList.Count > 0)
-                             allFilteredList = siteProjectList;
-                         else
-                             allFilteredList = projectList;
-                     }
-                      */
-                    #endregion
-
-                    #region commented out stuff
-                    /*
-                if (_lakeIds != null && _lakeIds.Count > 0)
-                {
-                    Int32 lakeId = _lakeIds[0];
-
-                    IQueryable<site> lakeSites = sa.Select<site>().Where(x => x.lake_type_id == lakeId);                        
-                    query = query.Where(p => p.sites.Any(s => lakeSites.Any(ls => ls.site_id == s.site_id)));
-                    //query = query.Where(p => p.sites.Any(s => s != null && _lakeIds.Contains(s.lake_type_id.Value)));
-                }
-
-                if (_stateList != null && _stateList.Count > 0)
-                {
-                    string stateName = _stateList[0];
-                    IQueryable<site> stateSites = sa.Select<site>().Where(s => s.state_province.ToUpper() == stateName.ToUpper());
-                    query = query.Where(p => p.sites.Any(s => stateSites.Any(st => st.site_id == s.site_id)));
-//                        query = query.Where(p => p.sites.Any(s => _stateList.Contains(s.state_province)));
-                }
-                if (_mediaIds != null && _mediaIds.Count > 0)
-                {
-                   // IQueryable<site> matchingMedSites = sa.Select<site>().Include(s => s.site_media).Where(s => s.site_media.Any(sm => _mediaIds.Contains(sm.media_type_id)));
-                   // query = query.Where(p => p.sites.Any(s => s != null && matchingMedSites.Any(msite => msite.site_id == s.site_id)));
-                    query = query.Include("sites.site_media").Where(p => p.sites.Any(s => s.site_media.Any(sm => _mediaIds.Contains(sm.media_type_id))));                    
-                }
-                if (_parameterIds != null && _parameterIds.Count > 0)
-                {
-                    Int32 paramId = _parameterIds[0];
-                    IQueryable<site> matchingParamSites = sa.Select<site>().Include(s => s.site_parameters).Where(s => s.site_parameters.Any(sp => sp.parameter_type_id == paramId));
-                //    IQueryable<site> matchingParamSites = sa.Select<site>().Include(s => s.site_parameters).Where(s => s.site_parameters.Any(sp => _parameterIds.Any(p => p == sp.parameter_type_id)));
-                     query = query.Where(p => p.sites.Any(s => matchingParamSites.Any(psite => psite.site_id == s.site_id)));
-                   // query = query.Include("sites.site_parameters").Where(p => p.sites.Any(s => s.site_parameters.Any(a => _parameterIds.Contains(a.parameter_type_id))));
-                }
-                if (_resourceIds != null && _resourceIds.Count > 0)
-                {
-                    Int32 resId = _resourceIds[0];
-                    IQueryable<site> matchingResSites = sa.Select<site>().Include(s => s.site_resource).Where(s => s.site_resource.Any(sr => sr.resource_type_id == resId));
-                    //IQueryable<site> matchingResSites = sa.Select<site_resource>().Include(st => st.site).Where(sr => _resourceIds.Contains(sr.resource_type_id)).Select(cm => cm.site);
-                    //  IQueryable<site> matchingResSites = sa.Select<site>().Include(s => s.site_resource).Where(s => s.site_resource.Any(sr => _resourceIds.Contains(sr.resource_type_id)));
-                    query = query.Where(p => p.sites.Any(s => s != null && matchingResSites.Any(rsite => rsite.site_id == s.site_id)));
-                    //query = query.Include("sites.site_resource").Where(p => p.sites.Any(s => s.site_resource.Any(a => _resourceIds.Contains(a.resource_type_id))));
-                }                  
-                */
-                    #endregion
-
-                    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                {                   
                     // create where statement to pass
                     string wherePart = "";
                     if (!string.IsNullOrEmpty(durationIDs))
@@ -973,6 +831,26 @@ namespace SiGLServices.Handlers
                         else
                             wherePart += " AND p.proj_status_id = ANY('{" + statusIDs + "}'::int[])";
                     }
+                    if (!string.IsNullOrEmpty(orgID))
+                    {
+                        if (Convert.ToInt32(orgID) > 0)
+                        {
+                            //sites where project_cooperators have the org NAME that is this OrgID passed
+                            List<Int32> _orgs = new List<Int32>();
+                            string orgsysIds = "";
+                            Int32 _orgId = Convert.ToInt32(orgID);
+                            List<organization_system> orgSystemsWithThisOrg = sa.Select<organization_system>().Where(b => b.org_id == _orgId).ToList();
+                            //add all the ids to the list of dec
+                            orgSystemsWithThisOrg.ForEach(no => _orgs.Add(Convert.ToInt32(no.organization_system_id)));
+                            orgsysIds = string.Join(",", _orgs);
+
+                            if (wherePart == "")
+                                wherePart += "pc.organization_system_id = ANY('{" + orgsysIds + "}'::int[])";
+                            else
+                                wherePart += " AND pc.organization_system_id = ANY('{" + orgsysIds + "}'::int[])";
+                        }
+                    }
+
 
                     List<project_list> query = sa.getTable<project_list>(new Object[1] { wherePart }).ToList();
                     List<Int32> projIDs = new List<Int32>();
@@ -990,23 +868,7 @@ namespace SiGLServices.Handlers
                             name = s.name,
                             project_id = s.project_id.Value
                         }).ToList()
-                    }).ToList();
-                    /*
-                    entities = query.AsEnumerable().Select(p => new FilteredProject()
-                    {
-                        name = p.name,
-                        project_id = p.project_id,
-                        projectSites = p.sites.Select(s => new SimpleSite()
-                        {
-                            site_id = s.site_id,
-                            latitude = s.latitude,
-                            longitude = s.longitude,
-                            name = s.name,
-                            project_id = s.project_id.Value
-                        }).ToList()
-                    }).ToList();
-                    */
-                    #endregion
+                    }).ToList();                                      
 
                     sm(MessageType.info, "Count: " + entities.Count());
                     sm(sa.Messages);
@@ -1019,6 +881,8 @@ namespace SiGLServices.Handlers
                 return HandleException(ex);
             }
         }
+        
+        #endregion
         
         #region PostMethods
         /// 
