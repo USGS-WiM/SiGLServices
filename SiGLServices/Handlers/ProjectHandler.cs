@@ -647,6 +647,8 @@ namespace SiGLServices.Handlers
                             .Include("project_cooperators.organization_system.section")
                             .Include(e => e.project_contacts).Include("project_contacts.contact")
                             .Include("project_contacts.contact.organization_system.organization")
+                            .Include("project_contacts.contact.organization_system.division")
+                            .Include("project_contacts.contact.organization_system.section")
                             .Include(e => e.project_publication).Include("project_publication.publication")
                             .Where(e => e.science_base_id == scienceBaseId);
                     }
@@ -663,6 +665,8 @@ namespace SiGLServices.Handlers
                             .Include("project_cooperators.organization_system.section")
                             .Include(e => e.project_contacts).Include("project_contacts.contact")
                             .Include("project_contacts.contact.organization_system.organization")
+                            .Include("project_contacts.contact.organization_system.division")
+                            .Include("project_contacts.contact.organization_system.section")
                             .Include(e => e.project_publication).Include("project_publication.publication")
                             .Where(e => e.project_id == projId);
                     }
@@ -722,7 +726,9 @@ namespace SiGLServices.Handlers
                                 name = pc.contact.name,
                                 email = pc.contact.email,
                                 phone = pc.contact.phone,
-                                ContactOrgName = pc.contact.organization_system.organization.organization_name
+                                ContactOrgName = pc.contact.organization_system.organization.organization_name,
+                                ContactDivName = pc.contact.organization_system.div_id > 0 ? pc.contact.organization_system.division.division_name : "",
+                                ContactSecName = pc.contact.organization_system.sec_id > 0 ? pc.contact.organization_system.section.section_name : ""
                             }).ToList(),
                             Publications = p.project_publication.Select(pp => new publication
                             {

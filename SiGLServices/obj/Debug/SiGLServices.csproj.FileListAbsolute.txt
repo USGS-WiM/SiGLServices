@@ -1,7 +1,7 @@
+D:\TMRData\WIMprojects\SiGLServices\SiGLServices\bin\AWSSDK.dll
 D:\TMRData\WIMprojects\SiGLServices\SiGLServices\bin\SiGLServices.dll.config
 D:\TMRData\WIMprojects\SiGLServices\SiGLServices\bin\SiGLServices.dll
 D:\TMRData\WIMprojects\SiGLServices\SiGLServices\bin\SiGLServices.pdb
-D:\TMRData\WIMprojects\SiGLServices\SiGLServices\bin\AWSSDK.dll
 D:\TMRData\WIMprojects\SiGLServices\SiGLServices\bin\EntityFramework.dll
 D:\TMRData\WIMprojects\SiGLServices\SiGLServices\bin\EntityFramework.SqlServer.dll
 D:\TMRData\WIMprojects\SiGLServices\SiGLServices\bin\EntityFramework6.Npgsql.dll
