@@ -1,0 +1,46 @@
+[
+  {
+    "name": "SiGLServices",
+    "organization": "U.S. Geological Survey",
+    "description": "REST services pointing to a PostgreSQL DB for SiGL (Science in the Great Lakes",
+    "version": "v2.0.1",
+    "status": "Production"
+
+    "permissions": {
+      "usageType": "openSource",
+      "licenses": [
+        {
+          "name": "Public Domain",
+          "URL": "https://github.com/usgs/SiGLServices/blob/master/LICENSE.md"
+        }
+      ]
+    },
+
+    "homepageURL": "https://sigldev.wim.usgs.gov/SiGLServices",
+    "downloadURL": "https://github.com/USGS-WiM/SiGLServices/archive/master.zip",
+    "disclaimerURL": "https://github.com/USGS-WiM/SiGLServices/blob/master/DISCLAIMER.md",
+    "repositoryUrl": "https://github.com/USGS-WiM/SiGLServices",
+    "vcs": "git",
+
+    "laborHours": null,
+
+    "tags": [
+      "sigl",
+      "services",
+      "great lakes"
+    ],
+
+    "languages": [
+      "c#"
+    ],
+
+    "contact": {
+      "name": "tonia roddick",
+      "email": "troddick@usgs.gov"
+    },
+
+    "date": {
+      "metadataLastUpdated": "2018-02-20"
+    }
+  }
+]
