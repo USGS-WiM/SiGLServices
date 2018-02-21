@@ -8,11 +8,7 @@ REST services pointing to a PostgreSQL DB for Science in the Great Lakes (SiGL) 
 ### Prerequisites
 
 What things you need to install the software and how to install them
-
-```
-[Visual Studio 2017](https://www.visualstudio.com/)
-
-```
+* [Visual Studio 2017](https://www.visualstudio.com/)
 
 ## Getting Started
 
