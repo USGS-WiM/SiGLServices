@@ -4,7 +4,7 @@
     "organization": "U.S. Geological Survey",
     "description": "REST services pointing to a PostgreSQL DB for SiGL (Science in the Great Lakes",
     "version": "v2.0.1",
-    "status": "Production"
+    "status": "Production",
 
     "permissions": {
       "usageType": "openSource",
