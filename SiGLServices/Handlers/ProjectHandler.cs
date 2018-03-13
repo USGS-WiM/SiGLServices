@@ -638,7 +638,7 @@ namespace SiGLServices.Handlers
                 {
                     if (!string.IsNullOrEmpty(scienceBaseId))
                     {
-                        query = sa.Select<project>().Include(e => e.data_host).Include(e=>e.sites).Include(e => e.project_objectives).Include("project_objectives.objective_type")
+                        query = sa.Select<project>().Include(e => e.data_host).Include(e=>e.sites).Include("sites.lake_type").Include(e => e.project_objectives).Include("project_objectives.objective_type")
                             .Include(e => e.project_monitor_coord).Include("project_monitor_coord.monitoring_coordination")
                             .Include(e => e.proj_status).Include(e => e.proj_duration).Include(e => e.project_keywords).Include("project_keywords.keyword")
                             .Include(e => e.project_cooperators).Include("project_cooperators.organization_system")
@@ -655,7 +655,7 @@ namespace SiGLServices.Handlers
                     if (!string.IsNullOrEmpty(projectId))
                     {
                         Int32 projId = Convert.ToInt32(projectId);
-                        query = sa.Select<project>().Include(e => e.data_host).Include(e => e.sites).Include(e => e.project_objectives).Include("project_objectives.objective_type")
+                        query = sa.Select<project>().Include(e => e.data_host).Include(e => e.sites).Include("sites.lake_type").Include(e => e.project_objectives).Include("project_objectives.objective_type")
                             .Include(e => e.project_monitor_coord).Include("project_monitor_coord.monitoring_coordination")
                             .Include(e=>e.proj_status).Include(e=>e.proj_duration)
                             .Include(e => e.project_keywords).Include("project_keywords.keyword")
@@ -744,7 +744,10 @@ namespace SiGLServices.Handlers
                                 latitude = s.latitude,
                                 longitude = s.longitude,
                                 site_id = s.site_id,
-                                project_id = s.project_id.Value
+                                project_id = s.project_id.Value,
+                                Lake = s.lake_type.lake,
+                                State = s.state_province,
+                                Country = s.country
                             }).ToList<SimpleSite>(),
                             created_stamp = p.created_stamp,
                             last_edited_stamp = p.last_edited_stamp
