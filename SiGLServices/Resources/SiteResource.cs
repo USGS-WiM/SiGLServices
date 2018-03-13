@@ -86,7 +86,10 @@ namespace SiGLServices.Resources
         public double latitude { get; set; }
         public double longitude { get; set; }
         public Int32 project_id { get; set; }
-    }
+		public string Lake { get; set; }
+		public string Country { get; set; }
+		public string State { get; set; }
+	}
 
 
 }

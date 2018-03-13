@@ -541,13 +541,16 @@ namespace SiGLServices.Handlers
             {
                 using (SiGLAgent sa = new SiGLAgent())
                 {
-                    entities = sa.Select<site>().Select(s => new SimpleSite()
+                    entities = sa.Select<site>().Include(s => s.lake_type).Select(s => new SimpleSite()
                     {
                         site_id = s.site_id,
                         latitude = s.latitude,
                         longitude = s.longitude,
                         name = s.name,
-                        project_id = s.project_id.Value
+                        project_id = s.project_id.Value,
+						Country = s.country,
+						State = s.state_province,
+						Lake = s.lake_type.lake
                     }).ToList();
                     sm(MessageType.info, "Count: " + entities.Count());
                     sm(sa.Messages);
