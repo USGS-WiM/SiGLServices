@@ -861,11 +861,10 @@ namespace SiGLServices.Handlers
                     }
 
 
-                    List<project_list> query = sa.getTable<project_list>(new Object[1] { wherePart }).ToList();
-                    List<Int32> projIDs = new List<Int32>();
-                    query.ForEach(p => projIDs.Add(p.project_id));                        
+                    List<Int32> projIDs = sa.getTable<project_list>(new Object[1] { wherePart }).Select(p => p.project_id).ToList();
+                                          
 
-                    entities = sa.Select<project>().Include(p=> p.sites).Where(p => projIDs.Any(projInt => projInt  == p.project_id)).Select(p => new FilteredProject()
+                    entities = sa.Select<project>().Include(p=> p.sites).Include("sites.lake_type").Where(p => projIDs.Contains(p.project_id)).Select(p => new FilteredProject()
                     {
                         name = p.name,
                         project_id = p.project_id,
@@ -875,7 +874,10 @@ namespace SiGLServices.Handlers
                             latitude = s.latitude,
                             longitude = s.longitude,
                             name = s.name,
-                            project_id = s.project_id.Value
+                            project_id = s.project_id.Value,
+                            Lake = s.lake_type.lake,
+                            State = s.state_province,
+                            Country = s.country
                         }).ToList()
                     }).ToList();                                      
 

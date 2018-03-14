@@ -96,7 +96,8 @@ namespace SiGLServices.Utilities.ServiceAgent
 
                 if (args[0] != null)
                 {
-                    string where = args[0].ToString();
+                    
+                    string where = string.IsNullOrEmpty(args[0].ToString()) ? true.ToString() : args[0].ToString();
                     sql = getFilteredProjectIDsList(where);
                 }
                 else
