@@ -58,6 +58,7 @@ namespace SiGLServices.Resources
     {
         public string name {get; set;}
         public Int32 project_id { get; set; }
+        public IEnumerable <string> Organizations { get; set; }
         public List<SimpleSite> projectSites { get; set; }
     }
 }

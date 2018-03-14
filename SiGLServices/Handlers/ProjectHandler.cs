@@ -864,10 +864,15 @@ namespace SiGLServices.Handlers
                     List<Int32> projIDs = sa.getTable<project_list>(new Object[1] { wherePart }).Select(p => p.project_id).ToList();
                                           
 
-                    entities = sa.Select<project>().Include(p=> p.sites).Include("sites.lake_type").Where(p => projIDs.Contains(p.project_id)).Select(p => new FilteredProject()
+                    entities = sa.Select<project>().Include(p=> p.sites).Include("sites.lake_type").Where(p => projIDs.Contains(p.project_id))
+                        .Include(e => e.project_cooperators).Include("project_cooperators.organization_system")
+                        .Include("project_cooperators.organization_system.organization").Select(p => new FilteredProject()
                     {
                         name = p.name,
                         project_id = p.project_id,
+                        Organizations = p.project_cooperators.Where(pc => pc.organization_system_id > 0).Select(c =>
+                            c.organization_system.organization.organization_name
+                        ),
                         projectSites = p.sites.Select(s => new SimpleSite()
                         {
                             site_id = s.site_id,
