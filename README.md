@@ -22,7 +22,12 @@ Open the solution file (.sln) using perfered IDE.
 
 ## Building and testing
 
-No testing files are currently available for this repository
+To test locally:
+
+1) Update the webconfig to you local file paths
+2) Delete the file called "applicationhost.config" in `C:\Users\lprivette\Documents\projects\SiGLServices\.vs\config`
+3) In Visual Studio 2017, under "Project" > "SiGLServices Properties" > click "Create Virtual Directly"
+4) Click "IIS Express" button
 
 ## Deployment on IIS
 
