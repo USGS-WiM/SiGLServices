@@ -165,7 +165,7 @@ namespace SiGLServices
 
             ResourceSpace.Has.ResourcesOfType<data_manager>()
                 .AtUri(dataManagerResource + "/{entityId}")
-                .And.AtUri("/login").Named("GetLoggedUser")
+                .And.AtUri("/login").Named("PostLoggedUser")
                 .And.AtUri(projectResource + "/{projectId}/dataManager").Named("GetProjectDataManager")
                 .HandledBy<DataManagerHandler>()
                 .TranscodedBy<UTF8EntityXmlSerializerCodec>(null).ForMediaType("application/xml;q=1").ForExtension("xml")
