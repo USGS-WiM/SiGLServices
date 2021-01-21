@@ -98,8 +98,8 @@ namespace SiGLServices.Handlers
         }//end HttpMethod.GET
 
         [RequiresAuthentication]
-        [HttpOperation(HttpMethod.GET, ForUriName = "GetLoggedUser")]
-        public OperationResult GetLoggedUser()
+        [HttpOperation(HttpMethod.POST, ForUriName = "PostLoggedUser")]
+        public OperationResult PostLoggedUser()
         {
             data_manager aMember = null;
             try
